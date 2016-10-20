@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_definicoes"
+        android:orderInCategory="100"
+        android:title="Defnicões"
+        app:showAsAction="never" />
+    <item android:title="Área Pessoal"
+        android:orderInCategory="101"
+        android:id="@+id/action_area_pessoal" />
+</menu>
