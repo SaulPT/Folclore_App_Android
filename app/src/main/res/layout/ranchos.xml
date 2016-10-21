@@ -10,10 +10,28 @@
     android:paddingBottom="20dp">
     >
 
-    <TextView
+    <Button
+        android:text="Rancho 1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RANCHOS"
-        android:textSize="30sp" />
+        android:id="@+id/btn_rancho_x"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Rancho 2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_rancho_x"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btn_rancho_xx" />
+
+    <Button
+        android:text="Rancho 3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/btn_rancho_xxx" />
 
 </RelativeLayout>

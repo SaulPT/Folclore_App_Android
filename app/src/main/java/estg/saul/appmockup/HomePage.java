@@ -8,7 +8,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.Layout;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +24,9 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.security.acl.Group;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,6 +40,8 @@ public class HomePage extends AppCompatActivity
     View conteudo;
     //
 
+
+    MenuItem abc;
 
 
     @Override
@@ -59,10 +66,14 @@ public class HomePage extends AppCompatActivity
 
         //DEFINE O CONTEUDO NOTICIAS NO ARRANQUE
         layout_principal = ((CoordinatorLayout)findViewById(R.id.app_bar_layout));
-        conteudo = View.inflate(this,R.layout.noticias,null);
+        conteudo = View.inflate(getApplicationContext(),R.layout.noticias,null);
 
         layout_principal.addView(conteudo);
         //
+
+
+
+
     }
 
     @Override
@@ -95,7 +106,7 @@ public class HomePage extends AppCompatActivity
             case R.id.action_definicoes:
                 break;
             case R.id.action_area_pessoal:
-                conteudo=View.inflate(this,R.layout.area_pessoal,null);
+                conteudo=View.inflate(getApplicationContext(),R.layout.area_pessoal,null);
                 break;
         }
 
@@ -116,22 +127,50 @@ public class HomePage extends AppCompatActivity
         // Handle navigation view item clicks here.
 
 
+
         layout_principal.removeView(conteudo);
 
         switch (item.getItemId()){
-            case R.id.nav_noticias:
-                conteudo=View.inflate(this,R.layout.noticias,null);
+            case R.id.menu_noticias:
+                conteudo=View.inflate(getApplicationContext(),R.layout.noticias,null);
                 break;
-            case R.id.nav_eventos:
-                conteudo=View.inflate(this,R.layout.eventos,null);
+            case R.id.menu_eventos:
+                conteudo=View.inflate(getApplicationContext(),R.layout.eventos,null);
                 break;
-            case R.id.nav_parcerias:
-                conteudo=View.inflate(this,R.layout.parcerias,null);
+            case R.id.menu_parcerias:
+                conteudo=View.inflate(getApplicationContext(),R.layout.parcerias,null);
                 break;
-            case R.id.nav_ranchos:
-                conteudo=View.inflate(this,R.layout.ranchos,null);
+            case R.id.menu_ranchos:
+                conteudo=View.inflate(getApplicationContext(),R.layout.ranchos,null);
+
+
+                //AÇÃO DO BOTAO DUMA VISTA CARREGADA POSTERIORMENTE
+                ((Button)conteudo.findViewById(R.id.btn_rancho_x)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+
+                        NavigationView lol =(NavigationView)findViewById(R.id.nav_view);
+                        Menu menu = lol.getMenu();
+                        menu.setGroupEnabled(R.id.grupo_menu_rancho,true);
+
+
+                        layout_principal.removeView(conteudo);
+
+
+                        conteudo=View.inflate(getApplicationContext(),R.layout.rancho_inicio,null);
+
+                    }
+                });
+                //
+
+
                 break;
         }
+
+
+
 
         layout_principal.addView(conteudo);
 
@@ -140,4 +179,6 @@ public class HomePage extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
