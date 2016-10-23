@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:id="@+id/layout_parcerias"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:paddingTop="76dp"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingBottom="20dp">
+    android:paddingTop="76dp">
     >
 
     <TextView

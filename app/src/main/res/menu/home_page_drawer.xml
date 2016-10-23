@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/menu_portal">
+    <group android:id="@+id/grupo_menus_portal">
         <item
             android:id="@+id/menu_noticias"
             android:title="Notícias" />
@@ -17,52 +16,53 @@
             android:title="Ranchos" />
     </group>
 
-    <group android:id="@+id/grupo_menu_rancho"
+    <group
+        android:id="@+id/grupo_menus_rancho"
         android:enabled="false">
         <item
-            android:id="@+id/menu_inicio_rancho"
+            android:id="@+id/menu_rancho_inicio"
             android:title="Início" />
         <item
-            android:id="@+id/menu_fundacao_rancho"
+            android:id="@+id/menu_rancho_fundacao"
             android:title="Fundação" />
         <item
-            android:id="@+id/menu_corpos_gerentes_rancho"
+            android:id="@+id/menu_rancho_corpos_gerentes"
             android:title="Corpos Gerentes" />
         <item
-            android:id="@+id/menu_media_rancho"
+            android:id="@+id/menu_rancho_media"
             android:title="Videos e Imagens" />
         <item
-            android:id="@+id/menu_agenda_rancho"
+            android:id="@+id/menu_rancho_agenda"
             android:title="Agenda" />
         <item
-            android:id="@+id/menu_instrumentos_rancho"
+            android:id="@+id/menu_rancho_instrumentos"
             android:title="Instrumentos" />
         <item
-            android:id="@+id/menu_dancas_rancho"
+            android:id="@+id/menu_rancho_dancas"
             android:title="Danças tradicionais" />
         <item
-            android:id="@+id/menu_trajes_rancho"
+            android:id="@+id/menu_rancho_trajes"
             android:title="Trajes" />
         <item
-            android:id="@+id/menu_utensilios_rancho"
+            android:id="@+id/menu_rancho_utensilios"
             android:title="Utensílios" />
         <item
-            android:id="@+id/menu_recolhas_rancho"
+            android:id="@+id/menu_rancho_recolhas"
             android:title="Recolhas/Pesquisas" />
         <item
-            android:id="@+id/menu_concelho_rancho"
+            android:id="@+id/menu_rancho_concelho"
             android:title="Concelho" />
         <item
-            android:id="@+id/menu_gastronomia_rancho"
+            android:id="@+id/menu_rancho_gastronomia"
             android:title="Gastronomia" />
         <item
-            android:id="@+id/menu_patrimonio_rancho"
+            android:id="@+id/menu_rancho_patrimonio"
             android:title="Patrmónio" />
         <item
-            android:id="@+id/menu_proverbios_rancho"
+            android:id="@+id/menu_rancho_proverbios"
             android:title="Proverbios" />
         <item
-            android:id="@+id/menu_contactos_rancho"
+            android:id="@+id/menu_rancho_contactos"
             android:title="Contactos" />
     </group>
 

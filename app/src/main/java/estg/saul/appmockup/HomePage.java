@@ -1,17 +1,7 @@
 package estg.saul.appmockup;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.print.PrintAttributes;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Layout;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,28 +10,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.ViewStub;
+import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import java.security.acl.Group;
 
 public class HomePage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-
     //LAYOUT PRINCIPAL DA ACTIVITY
     CoordinatorLayout layout_principal;
-    //
+
     //VIEW COM O LAYOUT DE CONTEUDO
     View conteudo;
-    //
+
+    //OBTEM ESTAS VIEW COMO GLOBAIS PARA MANIPULAR DEPOIS
+    Menu action_menu;
+    NavigationView navigationView;
 
 
-    MenuItem abc;
+    Boolean logado;
 
 
     @Override
@@ -53,25 +40,24 @@ public class HomePage extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
         //DEFINE O CONTEUDO NOTICIAS NO ARRANQUE
-        layout_principal = ((CoordinatorLayout)findViewById(R.id.app_bar_layout));
-        conteudo = View.inflate(getApplicationContext(),R.layout.noticias,null);
+        layout_principal = ((CoordinatorLayout) findViewById(R.id.app_bar_layout));
+        conteudo = View.inflate(getApplicationContext(), R.layout.noticias, null);
 
         layout_principal.addView(conteudo);
         //
 
-
+        logado = false;
 
 
     }
@@ -90,11 +76,18 @@ public class HomePage extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home_page, menu);
+
+
+        //PARA OBTER O MENU DA ACTION BAR
+        action_menu = menu;
+        //
+
+
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -102,23 +95,45 @@ public class HomePage extends AppCompatActivity
 
         layout_principal.removeView(conteudo);
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_definicoes:
                 break;
+
             case R.id.action_area_pessoal:
-                conteudo=View.inflate(getApplicationContext(),R.layout.area_pessoal,null);
+                if (logado) {
+                    conteudo = View.inflate(getApplicationContext(), R.layout.area_pessoal, null);
+                    layout_principal.addView(conteudo);
+                } else {
+                    conteudo = View.inflate(getApplicationContext(), R.layout.login, null);
+                    layout_principal.addView(conteudo);
+
+                    ((Button) conteudo.findViewById(R.id.btn_login)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            layout_principal.removeView(conteudo);
+                            conteudo = View.inflate(getApplicationContext(), R.layout.area_pessoal, null);
+                            layout_principal.addView(conteudo);
+
+                            action_menu.findItem(R.id.action_terminar_sessao).setVisible(true);
+                            logado = true;
+                        }
+                    });
+                }
+                break;
+
+            case R.id.action_terminar_sessao:
+                if (conteudo.getId() == View.inflate(getApplicationContext(), R.layout.area_pessoal, null).getId()) {
+                    layout_principal.removeView(conteudo);
+                    conteudo = View.inflate(getApplicationContext(), R.layout.login, null);
+                }
+                layout_principal.addView(conteudo);
+                item.setVisible(false);
+                logado = false;
                 break;
         }
 
-        layout_principal.addView(conteudo);
-
-
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -127,52 +142,40 @@ public class HomePage extends AppCompatActivity
         // Handle navigation view item clicks here.
 
 
-
         layout_principal.removeView(conteudo);
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_noticias:
-                conteudo=View.inflate(getApplicationContext(),R.layout.noticias,null);
+                conteudo = View.inflate(getApplicationContext(), R.layout.noticias, null);
+                layout_principal.addView(conteudo);
                 break;
             case R.id.menu_eventos:
-                conteudo=View.inflate(getApplicationContext(),R.layout.eventos,null);
+                conteudo = View.inflate(getApplicationContext(), R.layout.eventos, null);
+                layout_principal.addView(conteudo);
                 break;
             case R.id.menu_parcerias:
-                conteudo=View.inflate(getApplicationContext(),R.layout.parcerias,null);
+                conteudo = View.inflate(getApplicationContext(), R.layout.parcerias, null);
+                layout_principal.addView(conteudo);
                 break;
             case R.id.menu_ranchos:
-                conteudo=View.inflate(getApplicationContext(),R.layout.ranchos,null);
-
+                conteudo = View.inflate(getApplicationContext(), R.layout.ranchos, null);
+                layout_principal.addView(conteudo);
 
                 //AÇÃO DO BOTAO DUMA VISTA CARREGADA POSTERIORMENTE
-                ((Button)conteudo.findViewById(R.id.btn_rancho_x)).setOnClickListener(new View.OnClickListener() {
+                ((Button) conteudo.findViewById(R.id.btn_rancho_x)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
-
-                        NavigationView lol =(NavigationView)findViewById(R.id.nav_view);
-                        Menu menu = lol.getMenu();
-                        menu.setGroupEnabled(R.id.grupo_menu_rancho,true);
-
+                        navigationView.getMenu().setGroupEnabled(R.id.grupo_menus_rancho, true);
 
                         layout_principal.removeView(conteudo);
-
-
-                        conteudo=View.inflate(getApplicationContext(),R.layout.rancho_inicio,null);
-
+                        conteudo = View.inflate(getApplicationContext(), R.layout.rancho_inicio, null);
+                        layout_principal.addView(conteudo);
                     }
                 });
                 //
 
-
                 break;
         }
-
-
-
-
-        layout_principal.addView(conteudo);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

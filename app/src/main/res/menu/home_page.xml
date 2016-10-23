@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_definicoes"
-        android:orderInCategory="100"
-        android:title="Defnicões"
-        app:showAsAction="never" />
-    <item android:title="Área Pessoal"
-        android:orderInCategory="101"
-        android:id="@+id/action_area_pessoal" />
+        android:title="Defnicões" />
+    <item
+        android:id="@+id/action_area_pessoal"
+        android:title="Área Pessoal" />
+    <item
+        android:id="@+id/action_terminar_sessao"
+        android:title="Terminar Sessão"
+        android:visible="false" />
 </menu>
