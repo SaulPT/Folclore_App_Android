@@ -23,10 +23,37 @@
         </activity>
         <activity
             android:name=".Eventos"
-            android:label="@string/title_activity_eventos"
+            android:label="@string/nav_eventos"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="eventos" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Parcerias"
+            android:label="@string/nav_parcerias"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="parcerias" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Grupos"
+            android:label="@string/nav_grupos"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="grupos" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".GrupoInfo"
+            android:label="Grupo Info"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="grupo_info" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

@@ -14,11 +14,16 @@ import android.view.MenuItem;
 public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    //VARIAVEL GLOBAL PARA SABER O GRUPO SELECCIONADO?????
+    protected String grupo_selecionado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home);
 
+        //CARREGA O LAYOUT PRINCIPAL
+        setContentView(R.layout.home);
+        //
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,7 +37,6 @@ public class Base extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
     }
 
@@ -58,13 +62,13 @@ public class Base extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        switch (id){
+        switch (item.getItemId()) {
             case R.id.action_definicoes:
                 break;
             case R.id.action_area_pessoal:
+                break;
+            case R.id.action_logout:
                 break;
         }
 
@@ -75,29 +79,53 @@ public class Base extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
+        Intent intente = new Intent();
 
-        Intent intente=new Intent();
-
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.nav_noticias:
                 intente = new Intent("noticias");
+
                 break;
             case R.id.nav_eventos:
                 intente = new Intent("eventos");
                 break;
+            case R.id.parcerias:
+                intente = new Intent("parcerias");
+                break;
+            case R.id.nav_grupos:
+                intente = new Intent("grupos");
+                break;
+            default:
+                intente = new Intent("grupo_info");
+                break;
         }
 
+        if (grupo_selecionado != null) {
+            intente.putExtra("grupo", grupo_selecionado);
+        }
         startActivity(intente);
 
 
-        /* NÃO É NECESSÁRIO???
+        /* É NECESSÁRIO?????
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         */
 
         return true;
+    }
+
+    protected void checkar_estado_navigation_view() {
+        //DEINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
+
+        grupo_selecionado = getIntent().getStringExtra("grupo");
+
+        Menu m = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
+        if (grupo_selecionado == null) {
+            m.setGroupEnabled(R.id.menu_grupo, false);
+        } else {
+            m.setGroupEnabled(R.id.menu_grupo, true);
+        }
     }
 }
 

@@ -9,9 +9,12 @@ public class HomeNoticias extends Base {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ViewStub viewstub = (ViewStub)findViewById(R.id.viewstub);
-        viewstub.setLayoutResource(R.layout.content_noticias);
+        ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
+        viewstub.setLayoutResource(R.layout.noticias);
         viewstub.inflate();
+
+
+        checkar_estado_navigation_view();
     }
 
 }

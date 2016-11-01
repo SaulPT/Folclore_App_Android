@@ -4,12 +4,56 @@
     <group>
         <item
             android:id="@+id/nav_noticias"
-            android:title="Notícias" />
+            android:title="@string/nav_noticias" />
         <item
             android:id="@+id/nav_eventos"
-            android:title="Eventos" />
+            android:title="@string/nav_eventos" />
+        <item
+            android:id="@+id/parcerias"
+            android:title="@string/nav_parcerias" />
+        <item
+            android:id="@+id/nav_grupos"
+            android:title="@string/nav_grupos" />
     </group>
 
+    <group
+        android:id="@+id/menu_grupo"
+        android:enabled="false">
+
+        <item
+            android:id="@+id/nav_grupo_historial"
+            android:title="@string/nav_grupo_historial" />
+        <item
+            android:id="@+id/nav_grupo_corposgerentes"
+            android:title="@string/nav_grupo_corposgerentes" />
+        <item
+            android:id="@+id/nav_grupo_galeria"
+            android:title="@string/nav_grupo_galeria" />
+        <item
+            android:id="@+id/nav_grupo_eventos"
+            android:title="@string/nav_grupo_agenda" />
+        <item
+            android:id="@+id/nav_grupo_instrumentos"
+            android:title="@string/nav_grupo_instrumentos" />
+        <item
+            android:id="@+id/nav_grupo_dancas"
+            android:title="@string/nav_grupo_dancas" />
+        <item
+            android:id="@+id/nav_grupo_trajes"
+            android:title="@string/nav_grupo_trajes" />
+        <item
+            android:id="@+id/nav_grupo_utensilios"
+            android:title="@string/nav_grupo_utensilios" />
+        <item
+            android:id="@+id/nav_grupo_gastronomia"
+            android:title="@string/nav_grupo_gastronomia" />
+        <item
+            android:id="@+id/nav_grupo_patrimonio"
+            android:title="@string/nav_grupo_patrimonio" />
+        <item
+            android:id="@+id/nav_grupo_contactos"
+            android:title="@string/nav_grupo_contactos" />
+    </group>
 
 
 </menu>
