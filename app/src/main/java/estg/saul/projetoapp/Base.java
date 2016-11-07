@@ -16,6 +16,7 @@ public class Base extends AppCompatActivity
 
     //VARIAVEL GLOBAL PARA SABER O GRUPO SELECCIONADO?????
     protected String grupo_selecionado;
+    protected boolean logado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +25,6 @@ public class Base extends AppCompatActivity
         //CARREGA O LAYOUT PRINCIPAL
         setContentView(R.layout.home);
         //
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,6 +41,18 @@ public class Base extends AppCompatActivity
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkar_estado_grupo_login();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -54,6 +66,11 @@ public class Base extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
+
+        if (logado) {
+            menu.findItem(R.id.action_logout).setVisible(true);
+        }
+
         return true;
     }
 
@@ -63,14 +80,27 @@ public class Base extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        Intent intente = new Intent();
+
         switch (item.getItemId()) {
             case R.id.action_definicoes:
                 break;
             case R.id.action_area_pessoal:
+                if (logado) {
+                    intente = new Intent("area_pessoal");
+                } else {
+                    intente = new Intent("login");
+                }
                 break;
             case R.id.action_logout:
                 break;
         }
+
+
+        intente.putExtra("grupo", grupo_selecionado);
+        intente.putExtra("logado", logado);
+        startActivity(intente);
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -85,7 +115,6 @@ public class Base extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.nav_noticias:
                 intente = new Intent("noticias");
-
                 break;
             case R.id.nav_eventos:
                 intente = new Intent("eventos");
@@ -101,24 +130,24 @@ public class Base extends AppCompatActivity
                 break;
         }
 
-        if (grupo_selecionado != null) {
-            intente.putExtra("grupo", grupo_selecionado);
-        }
-        startActivity(intente);
 
-
-        /* É NECESSÁRIO?????
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        */
+
+
+        intente.putExtra("grupo", grupo_selecionado);
+        intente.putExtra("logado", logado);
+
+        startActivity(intente);
 
         return true;
     }
 
-    protected void checkar_estado_navigation_view() {
+    protected void checkar_estado_grupo_login() {
         //DEINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
 
         grupo_selecionado = getIntent().getStringExtra("grupo");
+        logado = getIntent().getBooleanExtra("logado", false);
 
         Menu m = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
         if (grupo_selecionado == null) {
@@ -127,5 +156,7 @@ public class Base extends AppCompatActivity
             m.setGroupEnabled(R.id.menu_grupo, true);
         }
     }
+
+
 }
 

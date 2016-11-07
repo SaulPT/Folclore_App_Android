@@ -18,13 +18,14 @@ public class GrupoInfo extends Base {
         viewstub.setLayoutResource(R.layout.grupo_info);
         viewstub.inflate();
 
-        //RECEBE A INFO DA ATIVIDADE ANTERIOR PELO INTENT
-        ((TextView) findViewById(R.id.txt_info)).setText(getIntent().getStringExtra("grupo"));
-
-        //VOLTA A COLOCAR ESSA INFO NA VARIAVEL GLOBAL (há outra forma)?????
-        grupo_selecionado = (getIntent()).getStringExtra("grupo");
-
-
-        checkar_estado_navigation_view();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //RECEBE A INFO DA ATIVIDADE ANTERIOR PELO INTENT
+        ((TextView) findViewById(R.id.txt_info)).setText(grupo_selecionado);
+    }
+
 }

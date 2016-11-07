@@ -20,8 +20,6 @@ public class Grupos extends Base {
         viewstub.setLayoutResource(R.layout.grupos);
         viewstub.inflate();
 
-        checkar_estado_navigation_view();
-
 
         View.OnClickListener cliques = new View.OnClickListener() {
             @Override
@@ -46,6 +44,7 @@ public class Grupos extends Base {
         ((Button) findViewById(R.id.btn_grupo1)).setOnClickListener(cliques);
         ((Button) findViewById(R.id.btn_grupo2)).setOnClickListener(cliques);
         ((Button) findViewById(R.id.btn_grupo3)).setOnClickListener(cliques);
+
     }
 
 }

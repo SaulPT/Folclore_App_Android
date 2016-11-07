@@ -13,7 +13,6 @@ public class Eventos extends Base {
         viewstub.setLayoutResource(R.layout.eventos);
         viewstub.inflate();
 
-        checkar_estado_navigation_view();
     }
 
 }
