@@ -96,10 +96,7 @@ public class Base extends AppCompatActivity
                 break;
             case R.id.action_logout:
                 logado = false;
-
-                String lol = "lol";
-                //PORQUE NAO FUNCIONA ?!!!!!!!!!!
-                if (getClass().getSimpleName().compareTo("AreaPessoal") == 0) {
+                if (getClass().getSimpleName().equals("AreaPessoal")) {
                     intente = new Intent("login");
                 }
                 break;

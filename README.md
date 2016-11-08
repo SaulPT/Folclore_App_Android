@@ -1,1 +1,0 @@
-LER FICHEIRO local.properties
