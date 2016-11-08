@@ -9,7 +9,7 @@
         android:title="@string/action_area_pessoal" />
     <item
         android:id="@+id/action_logout"
-        android:title="@string/action_definicoes"
+        android:title="@string/action_logout"
         android:visible="false" />
 
 </menu>

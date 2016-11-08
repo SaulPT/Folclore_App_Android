@@ -67,9 +67,11 @@ public class Base extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
 
+
         if (logado) {
             menu.findItem(R.id.action_logout).setVisible(true);
         }
+
 
         return true;
     }
@@ -80,7 +82,7 @@ public class Base extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        Intent intente = new Intent();
+        Intent intente = null;
 
         switch (item.getItemId()) {
             case R.id.action_definicoes:
@@ -93,13 +95,24 @@ public class Base extends AppCompatActivity
                 }
                 break;
             case R.id.action_logout:
+                logado = false;
+
+                String lol = "lol";
+                //PORQUE NAO FUNCIONA ?!!!!!!!!!!
+                if (getClass().getSimpleName().compareTo("AreaPessoal") == 0) {
+                    intente = new Intent("login");
+                }
                 break;
         }
 
 
-        intente.putExtra("grupo", grupo_selecionado);
-        intente.putExtra("logado", logado);
-        startActivity(intente);
+        if (intente != null) {
+            intente.putExtra("grupo", grupo_selecionado);
+            intente.putExtra("logado", logado);
+            startActivity(intente);
+        } else {
+            invalidateOptionsMenu();
+        }
 
 
         return super.onOptionsItemSelected(item);
@@ -155,6 +168,10 @@ public class Base extends AppCompatActivity
         } else {
             m.setGroupEnabled(R.id.menu_grupo, true);
         }
+
+        //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIAR O MENU
+        invalidateOptionsMenu();
+
     }
 
 
