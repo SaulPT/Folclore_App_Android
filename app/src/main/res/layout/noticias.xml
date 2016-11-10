@@ -1,18 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+
+    android:id="@+id/layout_noticias"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_width="match_parent"
+    android:paddingTop="20dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NOTICIAS"
-        android:textSize="30sp" />
+        android:text="Notícias"
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="serif"
+        android:id="@+id/textView4" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp"
+        android:weightSum="1">
+
+        <TextView
+            android:text="Titulo:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewTituloNoticias"
+            android:textSize="18sp"
+            android:fontFamily="serif" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:text="Texto"
+            android:ems="10"
+            android:id="@+id/editTextTextoNoticias"
+            android:layout_weight="0.44"
+            android:textAlignment="center"
+            android:layout_height="200dp" />
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/GridViewNoticias" />
+    </LinearLayout>
 
 </RelativeLayout>
