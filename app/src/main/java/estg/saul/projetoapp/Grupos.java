@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.view.View;
 import android.view.ViewStub;
-import android.widget.Button;
 
 /**
  * Created by SaulPT on 01/11/2016.
@@ -19,7 +18,6 @@ public class Grupos extends Base {
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
         viewstub.setLayoutResource(R.layout.grupos);
         viewstub.inflate();
-
 
         View.OnClickListener cliques = new View.OnClickListener() {
             @Override
@@ -41,9 +39,9 @@ public class Grupos extends Base {
             }
         };
 
-        ((Button) findViewById(R.id.btn_grupo1)).setOnClickListener(cliques);
-        ((Button) findViewById(R.id.btn_grupo2)).setOnClickListener(cliques);
-        ((Button) findViewById(R.id.btn_grupo3)).setOnClickListener(cliques);
+        findViewById(R.id.btn_grupo1).setOnClickListener(cliques);
+        findViewById(R.id.btn_grupo2).setOnClickListener(cliques);
+        findViewById(R.id.btn_grupo3).setOnClickListener(cliques);
 
     }
 

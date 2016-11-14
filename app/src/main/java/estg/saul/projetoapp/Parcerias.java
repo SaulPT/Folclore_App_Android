@@ -5,6 +5,8 @@ import android.view.ViewStub;
 
 public class Parcerias extends Base {
 
+    private static final String TAG = "PARCERIAS";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

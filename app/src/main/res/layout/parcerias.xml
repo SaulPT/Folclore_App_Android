@@ -1,79 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-
-    android:id="@+id/layout_parcerias"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:paddingTop="20dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="20dp">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Parcerias"
-        android:textSize="30sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:fontFamily="serif"
-        android:id="@+id/textView2" />
+        android:text="Parcerias"
+        android:textSize="30sp" />
 
     <Space
+        android:id="@id/space"
         android:layout_width="match_parent"
+        android:layout_height="20dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewTituloParcerias"
-        android:layout_height="20dp" />
+        android:layout_below="@+id/textViewTituloParcerias" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/space"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="104dp">
+        android:layout_below="@+id/space"
+        android:layout_marginTop="104dp"
+        android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/editTextTextoParcerias"
             android:layout_width="wrap_content"
             android:layout_height="263dp"
+            android:ems="10"
             android:inputType="textPersonName"
             android:text="Texto"
-            android:ems="10"
-            android:id="@+id/editTextTextoParcerias"
             android:textAlignment="center" />
 
         <GridView
+            android:id="@+id/GridViewParcerias"
             android:layout_width="match_parent"
-            android:layout_height="262dp"
-            android:id="@+id/GridViewParcerias" />
+            android:layout_height="262dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="20dp"
-        android:layout_height="75dp">
+        android:orientation="vertical">
 
         <Button
-            android:text="Visitar Página"
+            android:id="@+id/buttonVisitarPag"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonVisitarPag" />
+            android:text="Visitar Página" />
     </LinearLayout>
 
     <TextView
-        android:text="Titulo:"
+        android:id="@+id/textViewTituloParcerias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:id="@+id/textViewTituloParcerias"
-        android:textSize="18sp"
-        android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
-        android:fontFamily="serif" />
+        android:layout_below="@+id/textView2"
+        android:layout_marginTop="18dp"
+        android:fontFamily="serif"
+        android:text="Titulo:"
+        android:textSize="18sp" />
 
 </RelativeLayout>
