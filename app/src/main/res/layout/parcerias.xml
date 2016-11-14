@@ -19,7 +19,7 @@
         android:textSize="30sp" />
 
     <Space
-        android:id="@id/space"
+        android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentStart="true"
