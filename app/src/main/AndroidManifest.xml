@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".HomeNoticias"
-            android:label="@string/app_name"
+            android:label="@string/nav_noticias"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

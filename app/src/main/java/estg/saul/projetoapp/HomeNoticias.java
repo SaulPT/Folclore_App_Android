@@ -3,6 +3,8 @@ package estg.saul.projetoapp;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.ViewStub;
 
 public class HomeNoticias extends Base {
@@ -37,6 +39,16 @@ public class HomeNoticias extends Base {
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            finishAffinity();
+        }
     }
 
 }

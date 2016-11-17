@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,6 +81,13 @@ public class Base extends AppCompatActivity
         }
 
 
+        //MOSTRA A PESQUISA EM CERTAS ATIVIDADES
+        if (getClass().getSimpleName().equals("Login") ||
+                getClass().getSimpleName().equals("AreaPessoal")) {
+            menu.findItem(R.id.action_search).setVisible(false);
+        }
+
+
         return true;
     }
 
@@ -126,6 +135,7 @@ public class Base extends AppCompatActivity
         } else {
             //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
             invalidateOptionsMenu();
+            checkar_estado_grupo_login();
         }
 
 
@@ -193,6 +203,13 @@ public class Base extends AppCompatActivity
         //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
         if (!logado) {
             logado = getIntent().getBooleanExtra("logado", false);
+        }
+        View navview = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
+        TextView txtusername = (TextView) navview.findViewById(R.id.txt_username);
+        if (logado) {
+            txtusername.setText("username");
+        } else {
+            txtusername.setText("desconhecido");
         }
         invalidateOptionsMenu();
 
