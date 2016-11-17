@@ -32,7 +32,7 @@ public class HomeNoticias extends Base {
     public void onDestroy() {
         //APAGA O GRUPO SELECIONADO NAS PREFERENCES SE A OPÇÃO ESTIVER DESATIVADA
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
-        if (definicoes.getBoolean("grupo_selecionado", false)) {
+        if (!definicoes.getBoolean("grupo_selecionado", false)) {
             definicoes.edit().remove("grupo_selecionado_nome").apply();
         }
 
