@@ -1,6 +1,8 @@
 package estg.saul.projetoapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.view.View;
 import android.view.ViewStub;
@@ -33,6 +35,14 @@ public class Grupos extends Base {
                         grupo_selecionado = "Grupo 3";
                         break;
                 }
+
+
+                //GUARDA O GRUPO SELECIONADO NAS PREFERENCES SE A OPÇÃO ESTIVER ATIVA
+                SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                if (definicoes.getBoolean("grupo_selecionado", false)) {
+                    definicoes.edit().putString("grupo_selecionado_nome", grupo_selecionado).apply();
+                }
+
 
                 //ACIONA O BOTAO HISTORIAL DO MENU
                 onNavigationItemSelected(((NavigationView) findViewById(R.id.nav_view)).getMenu().findItem(R.id.nav_grupo_historial));

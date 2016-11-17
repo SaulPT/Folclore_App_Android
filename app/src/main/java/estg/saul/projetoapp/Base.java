@@ -37,12 +37,12 @@ public class Base extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        //drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Base extends AppCompatActivity
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         checkar_estado_grupo_login();
     }
@@ -93,6 +93,7 @@ public class Base extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_definicoes:
                 intente = new Intent("definicoes");
+
                 break;
             case R.id.action_area_pessoal:
                 if (logado) {
@@ -173,15 +174,14 @@ public class Base extends AppCompatActivity
 
 
     protected void checkar_estado_grupo_login() {
-        //DEINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
-
-        if (grupo_selecionado == null) {
+        //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
+        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
+        if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
+            definicoes.edit().putBoolean("grupo_auto", false).apply();
+        } else {
             grupo_selecionado = getIntent().getStringExtra("grupo_selecionado");
         }
 
-        if (!logado) {
-            logado = getIntent().getBooleanExtra("logado", false);
-        }
 
         Menu m = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
         if (grupo_selecionado == null) {
@@ -191,6 +191,9 @@ public class Base extends AppCompatActivity
         }
 
         //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
+        if (!logado) {
+            logado = getIntent().getBooleanExtra("logado", false);
+        }
         invalidateOptionsMenu();
 
     }

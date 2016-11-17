@@ -20,26 +20,22 @@ public class Login extends Base {
         viewstub.setLayoutResource(R.layout.login);
         viewstub.inflate();
 
-
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN
                 guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
-
 
                 Intent intente = new Intent("area_pessoal");
                 intente.putExtra("grupo_selecionado", grupo_selecionado);
                 intente.putExtra("logado", true);
 
-
                 intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
 
                 startActivity(intente);
             }
         });
+
     }
+
 }
