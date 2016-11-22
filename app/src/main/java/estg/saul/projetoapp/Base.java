@@ -133,9 +133,7 @@ public class Base extends AppCompatActivity
 
             startActivity(intente);
         } else {
-            //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
-            invalidateOptionsMenu();
-            checkar_estado_grupo_login();
+            atualizar_nav_header();
         }
 
 
@@ -192,7 +190,6 @@ public class Base extends AppCompatActivity
             grupo_selecionado = getIntent().getStringExtra("grupo_selecionado");
         }
 
-
         Menu m = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
         if (grupo_selecionado == null) {
             m.setGroupEnabled(R.id.menu_grupo, false);
@@ -204,6 +201,12 @@ public class Base extends AppCompatActivity
         if (!logado) {
             logado = getIntent().getBooleanExtra("logado", false);
         }
+
+        atualizar_nav_header();
+    }
+
+
+    protected void atualizar_nav_header() {
         View navview = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         TextView txtusername = (TextView) navview.findViewById(R.id.txt_username);
         if (logado) {
@@ -211,8 +214,9 @@ public class Base extends AppCompatActivity
         } else {
             txtusername.setText("desconhecido");
         }
-        invalidateOptionsMenu();
 
+        //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
+        invalidateOptionsMenu();
     }
 
 
