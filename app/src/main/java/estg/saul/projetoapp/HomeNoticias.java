@@ -12,6 +12,7 @@ public class HomeNoticias extends Base {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.nav_noticias);
 
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);

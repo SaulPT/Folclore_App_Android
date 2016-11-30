@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="estg.saul.projetoapp">
 
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".HomeNoticias"
-            android:label="@string/nav_noticias"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,8 +39,7 @@
         <activity
             android:name=".Parcerias"
             android:label="@string/nav_parcerias"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="parcerias" />
 
