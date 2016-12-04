@@ -21,7 +21,7 @@ public class Base extends AppCompatActivity
     //VARIAVEL GLOBAL PARA SABER O GRUPO SELECCIONADO?????
     //VS
     //SHARED PREFERENCES??????
-    protected String grupo_selecionado;
+    protected String grupo_selecionado, username, token;
     protected boolean logado;
 
 
@@ -114,10 +114,10 @@ public class Base extends AppCompatActivity
             case R.id.action_logout:
                 logado = false;
 
-                //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN
+                //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
                 guardar_definicoes_logado(logado);
 
-
+                //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
                 if (getClass().getSimpleName().equals("AreaPessoal")) {
                     intente = new Intent("login");
                 }
@@ -126,12 +126,7 @@ public class Base extends AppCompatActivity
 
 
         if (intente != null) {
-            intente.putExtra("grupo_selecionado", grupo_selecionado);
-            intente.putExtra("logado", logado);
-
-            intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-            startActivity(intente);
+            iniciar_intente_extras(intente);
         } else {
             atualizar_nav_header();
         }
@@ -170,22 +165,22 @@ public class Base extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
 
-        intente.putExtra("grupo_selecionado", grupo_selecionado);
-        intente.putExtra("logado", logado);
-
-        intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-        startActivity(intente);
+        iniciar_intente_extras(intente);
 
         return true;
     }
+
+
+    ////////////////////////
+    //FUNÇÕES PERSONALIZADAS
+    ////////////////////////
 
 
     protected void checkar_estado_grupo_login() {
         //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
         if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
-            definicoes.edit().putBoolean("grupo_auto", false).apply();
+            definicoes.edit().remove("grupo_auto").apply();
         } else {
             grupo_selecionado = getIntent().getStringExtra("grupo_selecionado");
         }
@@ -197,10 +192,13 @@ public class Base extends AppCompatActivity
             m.setGroupEnabled(R.id.menu_grupo, true);
         }
 
-        //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
+        //VERIFICA O ESTADO DO LOGIN
         if (!logado) {
             logado = getIntent().getBooleanExtra("logado", false);
+            username = getIntent().getStringExtra("username");
+            token = getIntent().getStringExtra("token");
         }
+
 
         atualizar_nav_header();
     }
@@ -210,9 +208,9 @@ public class Base extends AppCompatActivity
         View navview = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         TextView txtusername = (TextView) navview.findViewById(R.id.txt_username);
         if (logado) {
-            txtusername.setText("username");
+            txtusername.setText(username);
         } else {
-            txtusername.setText("desconhecido");
+            txtusername.setText("público");
         }
 
         //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
@@ -220,10 +218,33 @@ public class Base extends AppCompatActivity
     }
 
 
-    protected boolean guardar_definicoes_logado(boolean estado_login) {
+    protected boolean guardar_definicoes_logado(boolean lembrar_login) {
         SharedPreferences.Editor definicoes = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        definicoes.putBoolean("logado", estado_login);
+        if (lembrar_login) {
+            definicoes.putBoolean("logado", lembrar_login);
+            definicoes.putString("username", username);
+            definicoes.putString("token", token);
+        } else {
+            definicoes.remove("logado");
+            definicoes.remove("username");
+            definicoes.remove("token");
+        }
         return definicoes.commit();
+    }
+
+
+    protected void iniciar_intente_extras(Intent intente) {
+        intente.putExtra("grupo_selecionado", grupo_selecionado);
+        intente.putExtra("logado", logado);
+
+        if (logado) {
+            intente.putExtra("username", username);
+            intente.putExtra("token", token);
+        }
+
+        intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+
+        startActivity(intente);
     }
 
 }

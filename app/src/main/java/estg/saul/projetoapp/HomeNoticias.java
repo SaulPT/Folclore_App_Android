@@ -21,13 +21,16 @@ public class HomeNoticias extends Base {
 
 
         //OBTEM O LOGIN E O GRUPO SELECIONADO PELAS DEFINICOES GRAVADAS
-        logado = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("logado", false);
-        grupo_selecionado = PreferenceManager.getDefaultSharedPreferences(this).getString("grupo_selecionado_nome", null);
+        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
+        logado = definicoes.getBoolean("logado", false);
+        username = definicoes.getString("username", null);
+        token = definicoes.getString("token", null);
+        grupo_selecionado = definicoes.getString("grupo_selecionado_nome", null);
 
 
         //APENAS PARA NA FUNÇÃO "checkar_estado_grupo_login" SABER SE DEVE CARREGAR O
         //GRUPO SELECIONADO PELAS PREFERENCES (1º ARRANQUE) OU PELA VARIÁVEL
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("grupo_auto", true).apply();
+        definicoes.edit().putBoolean("grupo_auto", true).apply();
     }
 
 

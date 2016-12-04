@@ -40,13 +40,6 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/black" />
-
     <CheckBox
         android:id="@+id/chkbox_lembrar_login"
         android:layout_width="wrap_content"
@@ -60,4 +53,12 @@
         android:layout_height="wrap_content"
         android:text="Entrar"
         android:textSize="25sp" />
+
+    <ProgressBar
+        android:id="@+id/progressloading"
+        style="@android:style/Widget.Material.Light.ProgressBar.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
 </LinearLayout>
