@@ -15,15 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import estg.saul.projetoapp.database.CacheDB;
+
 public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    //VARIAVEL GLOBAL PARA SABER O GRUPO SELECCIONADO?????
-    //VS
-    //SHARED PREFERENCES??????
     protected String grupo_selecionado, username, token;
     protected boolean logado;
-
+    CacheDB BD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +173,6 @@ public class Base extends AppCompatActivity
     ////////////////////////
     //FUNÇÕES PERSONALIZADAS
     ////////////////////////
-
 
     protected void checkar_estado_grupo_login() {
         //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL

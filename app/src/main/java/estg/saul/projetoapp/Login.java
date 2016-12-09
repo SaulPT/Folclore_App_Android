@@ -42,6 +42,7 @@ public class Login extends Base {
                 final String txt_username = ((EditText) findViewById(R.id.login_username)).getText().toString();
                 String password = ((EditText) findViewById(R.id.login_password)).getText().toString();
 
+
                 //ENVIAR GET PARA URL DA API
                 Ion.with(getApplicationContext())
                         .load("GET", "http://10.0.2.2:80/Folclore_API/api/user/login")
@@ -57,7 +58,6 @@ public class Login extends Base {
                                 //EM CASO DE ERRO NA LIGAÇÃO
                                 if (e != null) {
                                     Toast.makeText(Login.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
-
                                 } else {
                                     //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                                     if (result.getHeaders().code() != 200) {
