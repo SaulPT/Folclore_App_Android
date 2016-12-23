@@ -5,9 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import estg.saul.projetoapp.model.Noticia;
 
@@ -38,50 +45,74 @@ public class CacheDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void inserir_noticias(List<Noticia> noticias){
+    public void inserir_noticias(List<Noticia> noticias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
-        getWritableDatabase().delete("noticia",null,null);
+        getWritableDatabase().delete("noticia", null, null);
 
         //E INSERE OS DADOS QUE RECEBEU DA API
         for (Noticia noticia : noticias) {
             ContentValues valores = new ContentValues();
-            valores.put("id",noticia.id);
-            valores.put("titulo",noticia.titulo);
-            valores.put("conteudo",noticia.conteudo);
-            valores.put("data_criacao",noticia.data_criacao);
-            valores.put("data_edicao",noticia.data_edicao);
-            valores.put("autor_id",noticia.autor_id);
-            valores.put("imagem",noticia.imagem);
-            valores.put("ativo",noticia.ativo);
+            valores.put("id", noticia.id);
+            valores.put("titulo", noticia.titulo);
+            valores.put("conteudo", noticia.conteudo);
+            valores.put("data_criacao", noticia.data_criacao);
+            valores.put("data_edicao", noticia.data_edicao);
+            valores.put("autor_id", noticia.autor_id);
+            valores.put("imagem", noticia.imagem);
+            valores.put("ativo", noticia.ativo);
 
-            getWritableDatabase().insert("noticia",null,valores);
+            getWritableDatabase().insert("noticia", null, valores);
         }
     }
 
-    public List<Noticia> obter_noticias(){
-        Cursor query_cursor = getReadableDatabase().query("noticia",null,"ativo = 1",null,null,null,null);
+    public List<Noticia> obter_noticias() {
+        Cursor query_cursor = getReadableDatabase().query("noticia", null, "ativo = 1", null, null, null, null);
 
-        List<Noticia> noticias_list=new ArrayList<>();
+        List<Noticia> noticias_list = new ArrayList<>();
         Noticia noticia;
-        for (query_cursor.moveToFirst();!query_cursor.isAfterLast();query_cursor.moveToNext()){
-            noticia=new Noticia();
-            noticia.id=query_cursor.getInt(query_cursor.getColumnIndex("id"));
-            noticia.titulo=query_cursor.getString(query_cursor.getColumnIndex("titulo"));
-            noticia.conteudo=query_cursor.getString(query_cursor.getColumnIndex("conteudo"));
-            noticia.data_criacao=query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
-            noticia.data_edicao=query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
-            noticia.autor_id=query_cursor.getInt(query_cursor.getColumnIndex("autor_id"));
-            noticia.imagem=query_cursor.getString(query_cursor.getColumnIndex("imagem"));
-            noticia.ativo=query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
+        for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
+            noticia = new Noticia();
+            noticia.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
+            noticia.titulo = query_cursor.getString(query_cursor.getColumnIndex("titulo"));
+            noticia.conteudo = query_cursor.getString(query_cursor.getColumnIndex("conteudo"));
+            noticia.data_criacao = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+            noticia.data_edicao = query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
+            noticia.autor_id = query_cursor.getInt(query_cursor.getColumnIndex("autor_id"));
+            noticia.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
+            noticia.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
             noticias_list.add(noticia);
         }
         query_cursor.close();
 
+
+        //PARA ORDENAR AS NOTICIAS POR ORDEM DECRESCENTE DA DATA
+        Collections.sort(noticias_list, new Comparator<Noticia>() {
+            @Override
+            public int compare(Noticia n1, Noticia n2) {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                Date data1 = new Date();
+                Date data2 = new Date();
+                try {
+                    data1 = df.parse(n1.data_criacao);
+                    data2 = df.parse(n2.data_criacao);
+                } catch (ParseException e) {
+                    Log.e("DateParse", e.getMessage());
+                }
+                if (data1.after(data2)) {
+                    return -1;
+                } else if (data1.before(data2)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
         return noticias_list;
     }
 
-    public void apagar_noticias(){
-        getWritableDatabase().delete("noticia",null,null);
+    public void apagar_noticias() {
+        getWritableDatabase().delete("noticia", null, null);
     }
 
 }

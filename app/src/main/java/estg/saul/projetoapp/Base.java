@@ -15,14 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import estg.saul.projetoapp.database.CacheDB;
-
 public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
+    protected static final String API_URL = "http://10.0.2.2/FolcloreOnline/api";
+    //protected static final String API_URL = "http://www.folcloreonline.pt/api";
+    //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     protected String grupo_selecionado, username, token;
     protected boolean logado;
-    CacheDB BD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

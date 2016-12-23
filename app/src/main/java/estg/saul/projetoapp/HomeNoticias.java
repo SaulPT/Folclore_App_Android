@@ -71,8 +71,8 @@ public class HomeNoticias extends Base {
             ((ListView) findViewById(R.id.listview_noticias)).setAdapter(noticias_adapter);
         } else {
             //OBTEM AS NOTICIAS ATRAVES DA API
-            Ion.with(getApplicationContext())
-                    .load("GET", "http://10.0.2.2/FolcloreOnline/api/noticias")
+            Ion.with(this)
+                    .load("GET", API_URL + "/noticias")
                     .setTimeout(10000)
                     .asJsonArray()
                     .withResponse()

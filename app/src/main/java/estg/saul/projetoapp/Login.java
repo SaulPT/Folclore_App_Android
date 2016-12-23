@@ -41,8 +41,8 @@ public class Login extends Base {
 
 
                 //ENVIAR GET PARA URL DA API
-                Ion.with(getApplicationContext())
-                        .load("GET", "http://10.0.2.2:80/Folclore_API/api/user/login")
+                Ion.with(Login.this)
+                        .load("GET", API_URL + "/user/login")
                         .setTimeout(10000)
                         .addHeader("username", txt_username)
                         .addHeader("password", password)
