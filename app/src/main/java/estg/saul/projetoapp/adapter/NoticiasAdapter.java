@@ -1,8 +1,10 @@
 package estg.saul.projetoapp.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,14 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
 
         ((TextView) convertView.findViewById(R.id.text_noticia_titulo)).setText(noticia.titulo);
         ((TextView) convertView.findViewById(R.id.text_noticia_data)).setText(noticia.data_criacao);
-        ((TextView) convertView.findViewById(R.id.text_noticia_conteudo)).setText(noticia.conteudo);
+        TextView text_conteudo = (TextView) convertView.findViewById(R.id.text_noticia_conteudo);
+
+        //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
+        if (Build.VERSION.SDK_INT >= 24) {
+            text_conteudo.setText(Html.fromHtml(noticia.conteudo, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            text_conteudo.setText(Html.fromHtml(noticia.conteudo));
+        }
 
         Ion.with(getContext())
                 .load(Base.IMG_URL + "noticias/" + noticia.imagem)
