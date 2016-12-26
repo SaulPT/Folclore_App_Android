@@ -25,24 +25,18 @@
         android:id="@+id/btn_grupo1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
         android:text="Grupo1" />
 
     <Button
         android:id="@+id/btn_grupo2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
         android:text="Grupo2" />
 
     <Button
         android:id="@+id/btn_grupo3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/btn_grupo2"
         android:text="Grupo3" />
 
 

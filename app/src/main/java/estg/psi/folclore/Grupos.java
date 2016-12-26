@@ -1,4 +1,4 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,8 +34,10 @@ public class Grupos extends Base {
 
                 //GUARDA O GRUPO SELECIONADO NAS PREFERENCES SE A OPÇÃO ESTIVER ATIVA
                 SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(Grupos.this);
-                if (definicoes.getBoolean("grupo_selecionado", false)) {
+                if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
                     definicoes.edit().putString("grupo_selecionado_nome", grupo_selecionado).apply();
+                } else {
+                    definicoes.edit().remove("grupo_selecionado_nome").apply();
                 }
 
                 //ACIONA O BOTAO HISTORIAL DO MENU

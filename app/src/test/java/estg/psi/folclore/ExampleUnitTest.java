@@ -1,4 +1,4 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import org.junit.Test;
 

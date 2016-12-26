@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="estg.saul.projetoapp">
+    package="estg.psi.folclore">
 
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -8,92 +8,74 @@
 
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".HomeNoticias"
-            android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name="estg.psi.folclore.HomeNoticias">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="noticias" />
-
+                <action android:name="estg.psi.folclore.NOTICIAS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Eventos"
-            android:label="@string/nav_eventos"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.Eventos"
+            android:label="@string/nav_eventos">
             <intent-filter>
-                <action android:name="eventos" />
-
+                <action android:name="estg.psi.folclore.EVENTOS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Parcerias"
-            android:label="@string/nav_parcerias"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.Parcerias"
+            android:label="@string/nav_parcerias">
             <intent-filter>
-                <action android:name="parcerias" />
-
+                <action android:name="estg.psi.folclore.PARCERIAS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Grupos"
-            android:label="@string/nav_grupos"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.Grupos"
+            android:label="@string/nav_grupos">
             <intent-filter>
-                <action android:name="grupos" />
-
+                <action android:name="estg.psi.folclore.GRUPOS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".GrupoInfo"
-            android:label="Grupo Info"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.GrupoInfo"
+            android:label="Grupo Info">
             <intent-filter>
-                <action android:name="grupo_info" />
-
+                <action android:name="estg.psi.folclore.GRUPOINFO" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".AreaPessoal"
-            android:label="Área pessoal"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.AreaPessoal"
+            android:label="@string/action_area_pessoal">
             <intent-filter>
-                <action android:name="area_pessoal" />
-
+                <action android:name="estg.psi.folclore.AREAPESSOAL" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
-            android:label="Login"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.Login"
+            android:label="@string/action_login">
             <intent-filter>
-                <action android:name="login" />
-
+                <action android:name="estg.psi.folclore.LOGIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Definicoes"
-            android:label="Definições"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name="estg.psi.folclore.Definicoes"
+            android:label="@string/action_definicoes">
             <intent-filter>
-                <action android:name="definicoes" />
-
+                <action android:name="estg.psi.folclore.DEFINICOES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

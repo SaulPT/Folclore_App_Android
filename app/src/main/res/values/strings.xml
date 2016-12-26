@@ -1,15 +1,13 @@
 <resources>
+
     <string name="app_name">Folclore Online</string>
 
+
+    <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Abrir menu de navegação</string>
     <string name="navigation_drawer_close">Fechar menu de navegação</string>
-
-    <string name="title_activity_eventos">Eventos</string>
-
-    <string name="action_definicoes">Definições</string>
-    <string name="action_area_pessoal">Área Pessoal</string>
-    <string name="action_logout">Terminar sessão</string>
-
+    <string name="nav_image_description">Logotipo do utilizador</string>
+    <string name="nav_no_username">Público</string>
     <string name="nav_noticias">Notícias</string>
     <string name="nav_eventos">Eventos</string>
     <string name="nav_parcerias">Parcerias</string>
@@ -25,5 +23,16 @@
     <string name="nav_grupo_patrimonio">Património</string>
     <string name="nav_grupo_trajes">Trajes</string>
     <string name="nav_grupo_utensilios">Utensilios</string>
+
+
+    <!-- ACTION MENU -->
+    <string name="action_definicoes">Definições</string>
+    <string name="action_area_pessoal">Área Pessoal</string>
+    <string name="action_login">Iniciar Sessão</string>
+    <string name="action_logout">Terminar sessão</string>
+
+
+    <!-- ACTIVIDADE NOTÍCIAS -->
+    <string name="activity_noticias_image_description">Imagem da notícia</string>
 
 </resources>

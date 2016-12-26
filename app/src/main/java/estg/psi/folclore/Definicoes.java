@@ -1,8 +1,10 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -43,7 +45,17 @@ public class Definicoes extends AppCompatActivity {
 
     }
 
-    //NECESSÀRIO USAR A CLASSE "frangemt"
+    @Override
+    public void onBackPressed() {
+        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!definicoes.getBoolean("guardar_grupo_selecionado", false)) {
+            definicoes.edit().remove("grupo_selecionado_nome").apply();
+        }
+
+        super.onBackPressed();
+    }
+
+    //NECESSÀRIO USAR A CLASSE "fragment"
     //PORQUE O MÉTODO "addPreferencesFromResource" DEXOU SE SER
     //SUPORTADO NA CLASS "PreferenceActivity"
     public static class Definicoes_Fragment extends PreferenceFragment {
@@ -53,6 +65,4 @@ public class Definicoes extends AppCompatActivity {
             addPreferencesFromResource(R.xml.definicoes);
         }
     }
-
-
 }

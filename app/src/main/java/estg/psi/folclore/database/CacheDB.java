@@ -1,4 +1,4 @@
-package estg.saul.projetoapp.database;
+package estg.psi.folclore.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import estg.saul.projetoapp.model.Noticia;
+import estg.psi.folclore.model.Noticia;
 
 public class CacheDB extends SQLiteOpenHelper {
 
-    private static int VERSAO = 1;
-    private static String NOME = "folclore.db";
+    private static final int VERSAO = 1;
+    private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
         super(context, NOME, null, VERSAO);

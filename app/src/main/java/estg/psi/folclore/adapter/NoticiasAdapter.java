@@ -1,4 +1,4 @@
-package estg.saul.projetoapp.adapter;
+package estg.psi.folclore.adapter;
 
 import android.content.Context;
 import android.os.Build;
@@ -16,15 +16,15 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
-import estg.saul.projetoapp.Base;
-import estg.saul.projetoapp.R;
-import estg.saul.projetoapp.model.Noticia;
+import estg.psi.folclore.Base;
+import estg.psi.folclore.R;
+import estg.psi.folclore.model.Noticia;
 
 
 public class NoticiasAdapter extends ArrayAdapter<Noticia> {
 
-    private Context context;
-    private List<Noticia> noticias;
+    private final Context context;
+    private final List<Noticia> noticias;
 
     public NoticiasAdapter(Context context, int layout, List<Noticia> noticias) {
         super(context, layout, noticias);

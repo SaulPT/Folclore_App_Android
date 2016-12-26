@@ -1,9 +1,10 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +20,7 @@ public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
-    protected static final String API_URL = "http://10.0.2.2/FolcloreOnline/api";
+    public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api";
     //protected static final String API_URL = "http://www.folcloreonline.pt/api";
     //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     protected String grupo_selecionado, username, token;
@@ -101,14 +102,13 @@ public class Base extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.action_definicoes:
-                intente = new Intent("definicoes");
-
+                intente = new Intent("estg.psi.folclore.DEFINICOES");
                 break;
             case R.id.action_area_pessoal:
                 if (logado) {
-                    intente = new Intent("area_pessoal");
+                    intente = new Intent("estg.psi.folclore.AREAPESSOAL");
                 } else {
-                    intente = new Intent("login");
+                    intente = new Intent("estg.psi.folclore.LOGIN");
                 }
                 break;
             case R.id.action_logout:
@@ -119,7 +119,7 @@ public class Base extends AppCompatActivity
 
                 //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
                 if (getClass().getSimpleName().equals("AreaPessoal")) {
-                    intente = new Intent("login");
+                    intente = new Intent("LOGIN");
                 }
                 break;
         }
@@ -137,26 +137,26 @@ public class Base extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
 
-        Intent intente = new Intent();
+        Intent intente;
 
         switch (item.getItemId()) {
             case R.id.nav_noticias:
-                intente = new Intent("noticias");
+                intente = new Intent("estg.psi.folclore.NOTICIAS");
                 break;
             case R.id.nav_eventos:
-                intente = new Intent("eventos");
+                intente = new Intent("estg.psi.folclore.EVENTOS");
                 break;
             case R.id.parcerias:
-                intente = new Intent("parcerias");
+                intente = new Intent("estg.psi.folclore.PARCERIAS");
                 break;
             case R.id.nav_grupos:
-                intente = new Intent("grupos");
+                intente = new Intent("estg.psi.folclore.GRUPOS");
                 break;
             default:
-                intente = new Intent("grupo_info");
+                intente = new Intent("estg.psi.folclore.GRUPOINFO");
                 break;
         }
 
@@ -171,11 +171,11 @@ public class Base extends AppCompatActivity
     }
 
 
-    ////////////////////////
-    //FUNÇÕES PERSONALIZADAS
-    ////////////////////////
+    //////////////////////////
+    //FUNÇÕES PERSONALIZADAS//
+    //////////////////////////
 
-    protected void checkar_estado_grupo_login() {
+    private void checkar_estado_grupo_login() {
         //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
         if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
@@ -203,13 +203,13 @@ public class Base extends AppCompatActivity
     }
 
 
-    protected void atualizar_nav_header() {
+    private void atualizar_nav_header() {
         View navview = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         TextView txtusername = (TextView) navview.findViewById(R.id.txt_username);
         if (logado) {
             txtusername.setText(username);
         } else {
-            txtusername.setText("público");
+            txtusername.setText(R.string.nav_no_username);
         }
 
         //PARA VOLTAR A CHAMAR A FUNÇÃO QUE CRIA O MENU (onCreateOptionsMenu)
@@ -217,7 +217,7 @@ public class Base extends AppCompatActivity
     }
 
 
-    protected boolean guardar_definicoes_logado(boolean lembrar_login) {
+    protected void guardar_definicoes_logado(boolean lembrar_login) {
         SharedPreferences.Editor definicoes = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (lembrar_login) {
             definicoes.putBoolean("logado", lembrar_login);
@@ -228,7 +228,7 @@ public class Base extends AppCompatActivity
             definicoes.remove("username");
             definicoes.remove("token");
         }
-        return definicoes.commit();
+        definicoes.apply();
     }
 
 

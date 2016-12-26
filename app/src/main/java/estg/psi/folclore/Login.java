@@ -1,4 +1,4 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,7 +67,7 @@ public class Login extends Base {
                                         //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
                                         guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
-                                        Intent intente = new Intent("area_pessoal");
+                                        Intent intente = new Intent("estg.psi.folclore.AREAPESSOAL");
                                         iniciar_intente_extras(intente);
 
                                         //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
@@ -76,7 +76,7 @@ public class Login extends Base {
                                 }
 
                                 botao_login.setEnabled(true);
-                                loading.setVisibility(View.INVISIBLE);
+                                loading.setVisibility(View.GONE);
                             }
                         });
 

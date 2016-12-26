@@ -1,4 +1,4 @@
-package estg.saul.projetoapp.model;
+package estg.psi.folclore.model;
 
 
 public class Noticia {

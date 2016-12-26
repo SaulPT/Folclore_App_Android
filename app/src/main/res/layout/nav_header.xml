@@ -12,6 +12,7 @@
         android:id="@+id/imageView"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="?attr/actionBarSize"
+        android:contentDescription="@string/nav_image_description"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 

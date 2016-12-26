@@ -3,7 +3,7 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="grupo_selecionado"
+        android:key="guardar_grupo_selecionado"
         android:title="Guardar grupo selecionado" />
 
 </PreferenceScreen>

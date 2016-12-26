@@ -1,12 +1,8 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import android.os.Bundle;
 import android.view.ViewStub;
 import android.widget.TextView;
-
-/**
- * Created by SaulPT on 01/11/2016.
- */
 
 public class GrupoInfo extends Base {
 

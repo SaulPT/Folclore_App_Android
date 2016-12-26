@@ -1,4 +1,4 @@
-package estg.saul.projetoapp;
+package estg.psi.folclore;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,9 +21,9 @@ import com.koushikdutta.ion.Response;
 
 import java.util.List;
 
-import estg.saul.projetoapp.adapter.NoticiasAdapter;
-import estg.saul.projetoapp.database.CacheDB;
-import estg.saul.projetoapp.model.Noticia;
+import estg.psi.folclore.adapter.NoticiasAdapter;
+import estg.psi.folclore.database.CacheDB;
+import estg.psi.folclore.model.Noticia;
 
 public class HomeNoticias extends Base {
 
@@ -116,18 +116,6 @@ public class HomeNoticias extends Base {
                         }
                     });
         }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        //APAGA O GRUPO SELECIONADO NAS PREFERENCES SE A OPÇÃO ESTIVER DESATIVADA
-        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!definicoes.getBoolean("grupo_selecionado", false)) {
-            definicoes.edit().remove("grupo_selecionado_nome").apply();
-        }
-
-        super.onDestroy();
     }
 
     @Override

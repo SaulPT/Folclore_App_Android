@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="password"
+        android:inputType="textPassword"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -58,6 +59,7 @@
         android:id="@+id/progressloading"
         style="@android:style/Widget.Material.ProgressBar.Large"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </LinearLayout>
