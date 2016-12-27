@@ -12,7 +12,7 @@ import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
@@ -97,8 +97,9 @@ public class HomeNoticias extends Base {
 
                                 } else {
                                     //SE A API DEVOLVEU COM SUCESSO AS NOTICIAS
-                                    List<Noticia> noticias;
-                                    noticias = new Gson().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
+                                    GsonBuilder gson = new GsonBuilder();
+                                    gson.setDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
                                     }.getType());
 
                                     //ACTUALIZA A BD COM OS DADOS RECEBIDOS
@@ -116,6 +117,7 @@ public class HomeNoticias extends Base {
                         }
                     });
         }
+        bd.close();
     }
 
     @Override

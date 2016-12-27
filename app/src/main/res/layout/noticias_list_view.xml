@@ -28,11 +28,11 @@
     <ImageView
         android:id="@+id/imagem_noticia"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/noticia_listview_imagesize"
+        android:layout_height="150dp"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:contentDescription="@string/activity_noticias_image_description"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@drawable/default_noticias" />
 
     <TextView
         android:id="@+id/text_noticia_conteudo"

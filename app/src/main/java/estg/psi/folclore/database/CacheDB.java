@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,6 +19,7 @@ import estg.psi.folclore.model.Noticia;
 
 public class CacheDB extends SQLiteOpenHelper {
 
+    public static final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     private static final int VERSAO = 1;
     private static final String NOME = "folclore.db";
 
@@ -36,7 +36,8 @@ public class CacheDB extends SQLiteOpenHelper {
                 " data_edicao TEXT," +
                 " autor_id INT," +
                 " imagem TEXT," +
-                " ativo INT)";
+                " ativo INT," +
+                " aprovado INT)";
         db.execSQL(comando);
     }
 
@@ -55,11 +56,12 @@ public class CacheDB extends SQLiteOpenHelper {
             valores.put("id", noticia.id);
             valores.put("titulo", noticia.titulo);
             valores.put("conteudo", noticia.conteudo);
-            valores.put("data_criacao", noticia.data_criacao);
-            valores.put("data_edicao", noticia.data_edicao);
+            valores.put("data_criacao", dateformat.format(noticia.data_criacao));
+            valores.put("data_edicao", dateformat.format(noticia.data_edicao));
             valores.put("autor_id", noticia.autor_id);
             valores.put("imagem", noticia.imagem);
             valores.put("ativo", noticia.ativo);
+            valores.put("aprovado", noticia.aprovado);
 
             getWritableDatabase().insert("noticia", null, valores);
         }
@@ -69,38 +71,37 @@ public class CacheDB extends SQLiteOpenHelper {
         Cursor query_cursor = getReadableDatabase().query("noticia", null, "ativo = 1", null, null, null, null);
 
         List<Noticia> noticias_list = new ArrayList<>();
-        Noticia noticia;
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
-            noticia = new Noticia();
+            Noticia noticia = new Noticia();
             noticia.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
             noticia.titulo = query_cursor.getString(query_cursor.getColumnIndex("titulo"));
             noticia.conteudo = query_cursor.getString(query_cursor.getColumnIndex("conteudo"));
-            noticia.data_criacao = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
-            noticia.data_edicao = query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                noticia.data_criacao = dateformat.parse(data);
+                data = query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
+                noticia.data_edicao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+
             noticia.autor_id = query_cursor.getInt(query_cursor.getColumnIndex("autor_id"));
             noticia.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
             noticia.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
+            noticia.aprovado = query_cursor.getInt(query_cursor.getColumnIndex("aprovado"));
             noticias_list.add(noticia);
         }
         query_cursor.close();
-
 
         //PARA ORDENAR AS NOTICIAS POR ORDEM DECRESCENTE DA DATA
         Collections.sort(noticias_list, new Comparator<Noticia>() {
             @Override
             public int compare(Noticia n1, Noticia n2) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                Date data1 = new Date();
-                Date data2 = new Date();
-                try {
-                    data1 = df.parse(n1.data_criacao);
-                    data2 = df.parse(n2.data_criacao);
-                } catch (ParseException e) {
-                    Log.e("DateParse", e.getMessage());
-                }
-                if (data1.after(data2)) {
+                if (n1.data_edicao.after(n2.data_edicao)) {
                     return -1;
-                } else if (data1.before(data2)) {
+                } else if (n1.data_edicao.before(n2.data_edicao)) {
                     return 1;
                 } else {
                     return 0;

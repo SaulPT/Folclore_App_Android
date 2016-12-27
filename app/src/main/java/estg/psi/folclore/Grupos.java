@@ -36,8 +36,6 @@ public class Grupos extends Base {
                 SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(Grupos.this);
                 if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
                     definicoes.edit().putString("grupo_selecionado_nome", grupo_selecionado).apply();
-                } else {
-                    definicoes.edit().remove("grupo_selecionado_nome").apply();
                 }
 
                 //ACIONA O BOTAO HISTORIAL DO MENU

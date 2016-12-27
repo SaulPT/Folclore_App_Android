@@ -48,7 +48,9 @@ public class Definicoes extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!definicoes.getBoolean("guardar_grupo_selecionado", false)) {
+        if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
+            definicoes.edit().putString("grupo_selecionado_nome", getIntent().getStringExtra("grupo_selecionado")).apply();
+        } else {
             definicoes.edit().remove("grupo_selecionado_nome").apply();
         }
 

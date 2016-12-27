@@ -1,6 +1,7 @@
 package estg.psi.folclore.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,12 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
 import estg.psi.folclore.Base;
 import estg.psi.folclore.R;
+import estg.psi.folclore.database.CacheDB;
 import estg.psi.folclore.model.Noticia;
 
 
@@ -44,7 +47,7 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
         }
 
         ((TextView) convertView.findViewById(R.id.text_noticia_titulo)).setText(noticia.titulo);
-        ((TextView) convertView.findViewById(R.id.text_noticia_data)).setText(noticia.data_criacao);
+        ((TextView) convertView.findViewById(R.id.text_noticia_data)).setText(CacheDB.dateformat.format(noticia.data_criacao));
         TextView text_conteudo = (TextView) convertView.findViewById(R.id.text_noticia_conteudo);
 
         //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
@@ -54,11 +57,21 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
             text_conteudo.setText(Html.fromHtml(noticia.conteudo));
         }
 
+        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem_noticia);
         Ion.with(getContext())
                 .load(Base.IMG_URL + "noticias/" + noticia.imagem)
-                .noCache()
-                .withBitmap()
-                .intoImageView((ImageView) convertView.findViewById(R.id.imagem_noticia));
+                .setTimeout(1000)
+                .asBitmap()
+                .setCallback(new FutureCallback<Bitmap>() {
+                    @Override
+                    public void onCompleted(Exception e, Bitmap result) {
+                        if (e != null) {
+                            imageview.setImageResource(R.drawable.default_noticias);
+                        } else {
+                            imageview.setImageBitmap(result);
+                        }
+                    }
+                });
 
         return convertView;
     }
