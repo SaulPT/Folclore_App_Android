@@ -40,9 +40,9 @@ public class Login extends Base {
                 String password = ((EditText) findViewById(R.id.login_password)).getText().toString();
 
 
-                //ENVIAR GET PARA URL DA API
+                //ENVIAR POST PARA URL DA API
                 Ion.with(Login.this)
-                        .load("GET", API_URL + "/user/login")
+                        .load("POST", API_URL + "/user/login")
                         .setTimeout(10000)
                         .addHeader("username", txt_username)
                         .addHeader("password", password)
@@ -67,8 +67,7 @@ public class Login extends Base {
                                         //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
                                         guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
-                                        Intent intente = new Intent("estg.psi.folclore.AREAPESSOAL");
-                                        iniciar_intente_extras(intente);
+                                        iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
 
                                         //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
                                         finish();

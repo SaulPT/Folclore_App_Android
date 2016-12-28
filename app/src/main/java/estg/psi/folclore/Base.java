@@ -1,7 +1,9 @@
 package estg.psi.folclore;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -14,7 +16,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
+
+import java.util.List;
+
+import estg.psi.folclore.adapter.EventosAdapter;
+import estg.psi.folclore.adapter.NoticiasAdapter;
+import estg.psi.folclore.adapter.ParceriasAdapter;
+import estg.psi.folclore.database.CacheDB;
+import estg.psi.folclore.model.Evento;
+import estg.psi.folclore.model.Noticia;
+import estg.psi.folclore.model.Parceria;
 
 public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -244,6 +265,91 @@ public class Base extends AppCompatActivity
         intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
         startActivity(intente);
+    }
+
+
+    protected void obter_dados_API(final String dados, String metodo, String api_suburl) {
+        findViewById(R.id.loading_anim).setVisibility(View.VISIBLE);
+
+        final CacheDB bd = new CacheDB(this);
+
+        //VERIFICA SE O TELEMÓVEL ESTÁ LIGADO À INTERNET
+        ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting()) {
+            Toast.makeText(this, "Sem acesso à internet. A mostrar dados locais", Toast.LENGTH_SHORT).show();
+            mostrar_dados_locais(bd, dados);
+            bd.close();
+            findViewById(R.id.loading_anim).setVisibility(View.GONE);
+        } else {
+            //SE SIM, ACEDE À API
+            Ion.with(this)
+                    .load(metodo, API_URL + api_suburl)
+                    .setTimeout(10000)
+                    .asJsonArray()
+                    .withResponse()
+                    .setCallback(new FutureCallback<Response<JsonArray>>() {
+                        @Override
+                        public void onCompleted(Exception e, Response<JsonArray> result) {
+                            //EM CASO DE ERRO NA LIGAÇÃO
+                            if (e != null) {
+                                Toast.makeText(Base.this, "Erro na ligação ao servidor. A mostrar dados locais", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
+                                if (result.getHeaders().code() != 200) {
+                                    //SE A API DESOLVEU ERRO
+                                    Toast.makeText(Base.this, result.getHeaders().message() + ". A mostrar dados locais", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    //SE A API DEVOLVEU OS DADOS COM SUCESSO
+
+                                    //ACTUALIZA A BD COM OS DADOS RECEBIDOS
+                                    bd.apagar_noticias();
+
+                                    GsonBuilder gson = new GsonBuilder();
+                                    gson.setDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    switch (dados) {
+                                        case "noticias":
+                                            List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
+                                            }.getType());
+                                            bd.inserir_noticias(noticias);
+                                            break;
+                                        case "parcerias":
+                                            List<Parceria> parcerias = gson.create().fromJson(result.getResult(), new TypeToken<List<Parceria>>() {
+                                            }.getType());
+                                            bd.inserir_parcerias(parcerias);
+                                            break;
+                                        case "eventos":
+                                            List<Evento> eventos = gson.create().fromJson(result.getResult(), new TypeToken<List<Evento>>() {
+                                            }.getType());
+                                            bd.inserir_eventos(eventos);
+                                            break;
+                                    }
+                                }
+                            }
+
+                            mostrar_dados_locais(bd, dados);
+                            bd.close();
+                            findViewById(R.id.loading_anim).setVisibility(View.GONE);
+                        }
+                    });
+        }
+    }
+
+
+    protected void mostrar_dados_locais(CacheDB bd, String dados) {
+        switch (dados) {
+            case "noticias":
+                NoticiasAdapter noticias_adapter = new NoticiasAdapter(this, R.id.listview, bd.obter_noticias());
+                ((ListView) findViewById(R.id.listview)).setAdapter(noticias_adapter);
+                break;
+            case "parcerias":
+                ParceriasAdapter parcerias_adapter = new ParceriasAdapter(this, R.id.listview, bd.obter_parcerias());
+                ((ListView) findViewById(R.id.listview)).setAdapter(parcerias_adapter);
+                break;
+            case "eventos":
+                EventosAdapter eventosAdapter = new EventosAdapter(this, R.id.listview, bd.obter_eventos());
+                ((ListView) findViewById(R.id.listview)).setAdapter(eventosAdapter);
+                break;
+        }
     }
 
 }

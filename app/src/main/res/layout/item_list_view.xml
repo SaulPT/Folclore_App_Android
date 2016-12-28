@@ -11,7 +11,7 @@
 
 
     <TextView
-        android:id="@+id/text_noticia_titulo"
+        android:id="@+id/titulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Título"
@@ -19,14 +19,14 @@
         android:textStyle="normal|bold" />
 
     <TextView
-        android:id="@+id/text_noticia_data"
+        android:id="@+id/data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="data"
         android:textSize="20sp" />
 
     <ImageView
-        android:id="@+id/imagem_noticia"
+        android:id="@+id/imagem"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -35,7 +35,7 @@
         app:srcCompat="@drawable/default_noticias" />
 
     <TextView
-        android:id="@+id/text_noticia_conteudo"
+        android:id="@+id/conteudo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Conteúdo"

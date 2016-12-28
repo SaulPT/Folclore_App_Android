@@ -15,7 +15,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import estg.psi.folclore.model.Evento;
 import estg.psi.folclore.model.Noticia;
+import estg.psi.folclore.model.Parceria;
 
 public class CacheDB extends SQLiteOpenHelper {
 
@@ -28,7 +30,7 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        String comando = "CREATE TABLE IF NOT EXISTS noticia" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS noticia" +
                 " (id INT PRIMARY KEY," +
                 " titulo TEXT," +
                 " conteudo TEXT," +
@@ -37,8 +39,25 @@ public class CacheDB extends SQLiteOpenHelper {
                 " autor_id INT," +
                 " imagem TEXT," +
                 " ativo INT," +
-                " aprovado INT)";
-        db.execSQL(comando);
+                " aprovado INT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS parceria" +
+                " (id INT PRIMARY KEY," +
+                " parceiro TEXT," +
+                " site_parceiro TEXT," +
+                " descricao TEXT," +
+                " imagem TEXT," +
+                " ativo INT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS evento" +
+                " (id INT PRIMARY KEY," +
+                " nome TEXT," +
+                " descricao TEXT," +
+                " local TEXT," +
+                " data TEXT," +
+                " data_criacao TEXT," +
+                " concelho_id INT," +
+                " autor_id INT," +
+                " imagem TEXT," +
+                " estado INT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -114,6 +133,134 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public void apagar_noticias() {
         getWritableDatabase().delete("noticia", null, null);
+    }
+
+
+    public void inserir_parcerias(List<Parceria> parcerias) {
+        //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
+        getWritableDatabase().delete("parceria", null, null);
+
+        //E INSERE OS DADOS QUE RECEBEU DA API
+        for (Parceria parceria : parcerias) {
+            ContentValues valores = new ContentValues();
+            valores.put("id", parceria.id);
+            valores.put("parceiro", parceria.parceiro);
+            valores.put("site_parceiro", parceria.site_parceiro);
+            valores.put("descricao", parceria.descricao);
+            valores.put("imagem", parceria.imagem);
+            valores.put("ativo", parceria.ativo);
+
+            getWritableDatabase().insert("parceria", null, valores);
+        }
+    }
+
+    public List<Parceria> obter_parcerias() {
+        Cursor query_cursor = getReadableDatabase().query("parceria", null, "ativo = 1", null, null, null, null);
+
+        List<Parceria> parcerias_list = new ArrayList<>();
+        for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
+            Parceria parceria = new Parceria();
+            parceria.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
+            parceria.parceiro = query_cursor.getString(query_cursor.getColumnIndex("parceiro"));
+            parceria.site_parceiro = query_cursor.getString(query_cursor.getColumnIndex("site_parceiro"));
+            parceria.descricao = query_cursor.getString(query_cursor.getColumnIndex("descricao"));
+            parceria.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
+            parceria.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
+            parcerias_list.add(parceria);
+        }
+        query_cursor.close();
+
+        //PARA ORDENAR AS PARCERIAS POR ORDEM CRESCENTE
+        Collections.sort(parcerias_list, new Comparator<Parceria>() {
+            @Override
+            public int compare(Parceria p1, Parceria p2) {
+                if (p1.parceiro.compareToIgnoreCase(p2.parceiro) < 0) {
+                    return -1;
+                } else if (p1.parceiro.compareToIgnoreCase(p2.parceiro) > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        return parcerias_list;
+    }
+
+    public void apagar_parcerias() {
+        getWritableDatabase().delete("parceria", null, null);
+    }
+
+    public void inserir_eventos(List<Evento> eventos) {
+        //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
+        getWritableDatabase().delete("evento", null, null);
+
+        //E INSERE OS DADOS QUE RECEBEU DA API
+        for (Evento evento : eventos) {
+            ContentValues valores = new ContentValues();
+            valores.put("id", evento.id);
+            valores.put("nome", evento.nome);
+            valores.put("descricao", evento.descricao);
+            valores.put("local", evento.local);
+            valores.put("data", dateformat.format(evento.data));
+            valores.put("data_criacao", dateformat.format(evento.data_criacao));
+            valores.put("concelho_id", evento.concelho_id);
+            valores.put("autor_id", evento.autor_id);
+            valores.put("imagem", evento.imagem);
+            valores.put("estado", evento.estado);
+
+            getWritableDatabase().insert("evento", null, valores);
+        }
+    }
+
+    public List<Evento> obter_eventos() {
+        Cursor query_cursor = getReadableDatabase().query("evento", null, "estado = 1", null, null, null, null);
+
+        List<Evento> eventos_list = new ArrayList<>();
+        for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
+            Evento evento = new Evento();
+            evento.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
+            evento.nome = query_cursor.getString(query_cursor.getColumnIndex("nome"));
+            evento.descricao = query_cursor.getString(query_cursor.getColumnIndex("descricao"));
+            evento.local = query_cursor.getString(query_cursor.getColumnIndex("local"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data"));
+                evento.data = dateformat.parse(data);
+                data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                evento.data_criacao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+
+            evento.concelho_id = query_cursor.getInt(query_cursor.getColumnIndex("concelho_id"));
+            evento.autor_id = query_cursor.getInt(query_cursor.getColumnIndex("autor_id"));
+            evento.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
+            evento.estado = query_cursor.getInt(query_cursor.getColumnIndex("estado"));
+            eventos_list.add(evento);
+        }
+        query_cursor.close();
+
+        //PARA ORDENAR AS NOTICIAS POR ORDEM DECRESCENTE DA DATA
+        Collections.sort(eventos_list, new Comparator<Evento>() {
+            @Override
+            public int compare(Evento e1, Evento e2) {
+                if (e1.data.after(e2.data)) {
+                    return 1;
+                } else if (e1.data.before(e2.data)) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        return eventos_list;
+    }
+
+    public void apagar_eventos() {
+        getWritableDatabase().delete("evento", null, null);
     }
 
 }

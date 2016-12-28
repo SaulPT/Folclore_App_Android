@@ -35,31 +35,28 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
         this.context = context;
     }
 
-    @Override
-    public
-    @NonNull
-    View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Noticia noticia = noticias.get(position);
-
+    //FUNCAO 'getView' GENÉRICA PARA APLICAR A OUTROS ADAPTERS
+    public static View getview_generico(Context context, View convertView, ViewGroup parent, String titulo, String data, String conteudo, String imagem, String api_suburl) {
         if (convertView == null) {
-            LayoutInflater layoutinflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutinflater.inflate(R.layout.noticias_list_view, parent, false);
+            LayoutInflater layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutinflater.inflate(R.layout.item_list_view, parent, false);
         }
 
-        ((TextView) convertView.findViewById(R.id.text_noticia_titulo)).setText(noticia.titulo);
-        ((TextView) convertView.findViewById(R.id.text_noticia_data)).setText(CacheDB.dateformat.format(noticia.data_criacao));
-        TextView text_conteudo = (TextView) convertView.findViewById(R.id.text_noticia_conteudo);
+        ((TextView) convertView.findViewById(R.id.titulo)).setText(titulo);
+        ((TextView) convertView.findViewById(R.id.data)).setText(data);
+        TextView text_conteudo = (TextView) convertView.findViewById(R.id.conteudo);
 
         //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
         if (Build.VERSION.SDK_INT >= 24) {
-            text_conteudo.setText(Html.fromHtml(noticia.conteudo, Html.FROM_HTML_MODE_LEGACY));
+            text_conteudo.setText(Html.fromHtml(conteudo, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            text_conteudo.setText(Html.fromHtml(noticia.conteudo));
+            text_conteudo.setText(Html.fromHtml(conteudo));
         }
 
-        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem_noticia);
-        Ion.with(getContext())
-                .load(Base.IMG_URL + "noticias/" + noticia.imagem)
+        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem);
+        Ion.with(context)
+                .load(Base.IMG_URL + api_suburl + imagem)
+                //.noCache() RESOLVE BUG DAS IMAGENS COM ALTURA 1
                 .setTimeout(1000)
                 .asBitmap()
                 .setCallback(new FutureCallback<Bitmap>() {
@@ -74,6 +71,16 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
                 });
 
         return convertView;
+    }
+
+    @Override
+    public
+    @NonNull
+    View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Noticia noticia = noticias.get(position);
+
+        return getview_generico(context, convertView, parent,
+                noticia.titulo, CacheDB.dateformat.format(noticia.data_edicao), noticia.conteudo, noticia.imagem, "noticias/");
     }
 }
 

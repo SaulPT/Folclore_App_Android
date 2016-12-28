@@ -18,23 +18,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:label="@string/nav_noticias">
                 <action android:name="estg.psi.folclore.NOTICIAS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="estg.psi.folclore.Eventos"
-            android:label="@string/nav_eventos">
-            <intent-filter>
+            <intent-filter android:label="@string/nav_eventos">
                 <action android:name="estg.psi.folclore.EVENTOS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="estg.psi.folclore.Parcerias"
-            android:label="@string/nav_parcerias">
-            <intent-filter>
+            <intent-filter android:label="@string/nav_parcerias">
                 <action android:name="estg.psi.folclore.PARCERIAS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
