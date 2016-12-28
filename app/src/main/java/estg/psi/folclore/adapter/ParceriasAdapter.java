@@ -29,7 +29,7 @@ public class ParceriasAdapter extends ArrayAdapter<Parceria> {
     View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Parceria parceria = parcerias.get(position);
 
-        return NoticiasAdapter.getview_generico(context, convertView, parent,
+        return BaseAdapter.getview_generico(context, convertView, parent,
                 parceria.parceiro, parceria.site_parceiro, parceria.descricao, parceria.imagem, "parcerias/");
     }
 }

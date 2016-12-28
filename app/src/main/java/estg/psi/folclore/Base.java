@@ -30,10 +30,12 @@ import com.koushikdutta.ion.Response;
 import java.util.List;
 
 import estg.psi.folclore.adapter.EventosAdapter;
+import estg.psi.folclore.adapter.GruposAdapter;
 import estg.psi.folclore.adapter.NoticiasAdapter;
 import estg.psi.folclore.adapter.ParceriasAdapter;
 import estg.psi.folclore.database.CacheDB;
 import estg.psi.folclore.model.Evento;
+import estg.psi.folclore.model.Grupo;
 import estg.psi.folclore.model.Noticia;
 import estg.psi.folclore.model.Parceria;
 
@@ -41,7 +43,7 @@ public class Base extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
-    public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api";
+    public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
     //protected static final String API_URL = "http://www.folcloreonline.pt/api";
     //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     protected String grupo_selecionado, username, token;
@@ -274,7 +276,7 @@ public class Base extends AppCompatActivity
     }
 
 
-    protected void obter_dados_API(final String dados, String metodo, String api_suburl) {
+    protected void obter_dados_API(String metodo, final String dados_api_suburl) {
         findViewById(R.id.loading_anim).setVisibility(View.VISIBLE);
 
         final CacheDB bd = new CacheDB(this);
@@ -283,13 +285,13 @@ public class Base extends AppCompatActivity
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting()) {
             Toast.makeText(this, "Sem acesso à internet. A mostrar dados locais", Toast.LENGTH_SHORT).show();
-            mostrar_dados_locais(bd, dados);
+            mostrar_dados_locais(bd, dados_api_suburl);
             bd.close();
             findViewById(R.id.loading_anim).setVisibility(View.GONE);
         } else {
             //SE SIM, ACEDE À API
             Ion.with(this)
-                    .load(metodo, API_URL + api_suburl)
+                    .load(metodo, API_URL + dados_api_suburl)
                     .setTimeout(10000)
                     .asJsonArray()
                     .withResponse()
@@ -312,7 +314,7 @@ public class Base extends AppCompatActivity
 
                                     GsonBuilder gson = new GsonBuilder();
                                     gson.setDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    switch (dados) {
+                                    switch (dados_api_suburl) {
                                         case "noticias":
                                             List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
                                             }.getType());
@@ -328,11 +330,16 @@ public class Base extends AppCompatActivity
                                             }.getType());
                                             bd.inserir_eventos(eventos);
                                             break;
+                                        case "grupos":
+                                            List<Grupo> grupos = gson.create().fromJson(result.getResult(), new TypeToken<List<Grupo>>() {
+                                            }.getType());
+                                            bd.inserir_grupos(grupos);
+                                            break;
                                     }
                                 }
                             }
 
-                            mostrar_dados_locais(bd, dados);
+                            mostrar_dados_locais(bd, dados_api_suburl);
                             bd.close();
                             findViewById(R.id.loading_anim).setVisibility(View.GONE);
                         }
@@ -341,8 +348,8 @@ public class Base extends AppCompatActivity
     }
 
 
-    protected void mostrar_dados_locais(CacheDB bd, String dados) {
-        switch (dados) {
+    protected void mostrar_dados_locais(CacheDB bd, String dados_api_suburl) {
+        switch (dados_api_suburl) {
             case "noticias":
                 NoticiasAdapter noticias_adapter = new NoticiasAdapter(this, R.id.listview, bd.obter_noticias());
                 ((ListView) findViewById(R.id.listview)).setAdapter(noticias_adapter);
@@ -352,8 +359,12 @@ public class Base extends AppCompatActivity
                 ((ListView) findViewById(R.id.listview)).setAdapter(parcerias_adapter);
                 break;
             case "eventos":
-                EventosAdapter eventosAdapter = new EventosAdapter(this, R.id.listview, bd.obter_eventos());
-                ((ListView) findViewById(R.id.listview)).setAdapter(eventosAdapter);
+                EventosAdapter eventos_adapter = new EventosAdapter(this, R.id.listview, bd.obter_eventos());
+                ((ListView) findViewById(R.id.listview)).setAdapter(eventos_adapter);
+                break;
+            case "grupos":
+                GruposAdapter grupos_adapter = new GruposAdapter(this, R.id.listview, bd.obter_grupos());
+                ((ListView) findViewById(R.id.listview)).setAdapter(grupos_adapter);
                 break;
         }
     }

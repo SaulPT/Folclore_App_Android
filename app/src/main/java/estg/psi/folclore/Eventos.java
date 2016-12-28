@@ -18,7 +18,7 @@ public class Eventos extends Base {
     public void onResume() {
         super.onResume();
 
-        obter_dados_API("eventos", "GET", "/eventos");
+        obter_dados_API("GET", "eventos");
     }
 
 }

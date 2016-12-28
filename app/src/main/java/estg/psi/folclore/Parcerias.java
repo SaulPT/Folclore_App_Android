@@ -18,7 +18,7 @@ public class Parcerias extends Base {
     public void onResume() {
         super.onResume();
 
-        obter_dados_API("parcerias", "GET", "/parcerias");
+        obter_dados_API("GET", "parcerias");
     }
 
 }

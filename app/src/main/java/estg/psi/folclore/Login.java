@@ -42,7 +42,7 @@ public class Login extends Base {
 
                 //ENVIAR POST PARA URL DA API
                 Ion.with(Login.this)
-                        .load("POST", API_URL + "/user/login")
+                        .load("POST", API_URL + "user/login")
                         .setTimeout(10000)
                         .addHeader("username", txt_username)
                         .addHeader("password", password)

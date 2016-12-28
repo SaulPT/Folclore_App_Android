@@ -16,13 +16,14 @@ import java.util.List;
 import java.util.Locale;
 
 import estg.psi.folclore.model.Evento;
+import estg.psi.folclore.model.Grupo;
 import estg.psi.folclore.model.Noticia;
 import estg.psi.folclore.model.Parceria;
 
 public class CacheDB extends SQLiteOpenHelper {
 
     public static final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-    private static final int VERSAO = 1;
+    private static final int VERSAO = 11;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -58,12 +59,25 @@ public class CacheDB extends SQLiteOpenHelper {
                 " autor_id INT," +
                 " imagem TEXT," +
                 " estado INT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS grupo" +
+                " (id INT PRIMARY KEY," +
+                " nome TEXT," +
+                " abreviatura TEXT," +
+                " concelho_id INT," +
+                " logo TEXT," +
+                " data_criacao TEXT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //CODIGO EXECUTADO QUANDO SE ALTERA A VERSÃO
-        onCreate(db);
+        if (newVersion > oldVersion) {
+            db.execSQL("DROP TABLE IF EXISTS noticia");
+            db.execSQL("DROP TABLE IF EXISTS parceria");
+            db.execSQL("DROP TABLE IF EXISTS evento");
+            db.execSQL("DROP TABLE IF EXISTS grupo");
+            onCreate(db);
+        }
     }
+
 
     public void inserir_noticias(List<Noticia> noticias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
@@ -114,7 +128,7 @@ public class CacheDB extends SQLiteOpenHelper {
         }
         query_cursor.close();
 
-        //PARA ORDENAR AS NOTICIAS POR ORDEM DECRESCENTE DA DATA
+        //PARA ORDENAR POR ORDEM DECRESCENTE DA DATA
         Collections.sort(noticias_list, new Comparator<Noticia>() {
             @Override
             public int compare(Noticia n1, Noticia n2) {
@@ -170,7 +184,7 @@ public class CacheDB extends SQLiteOpenHelper {
         }
         query_cursor.close();
 
-        //PARA ORDENAR AS PARCERIAS POR ORDEM CRESCENTE
+        //PARA ORDENAR POR ORDEM ALFABÉTICA
         Collections.sort(parcerias_list, new Comparator<Parceria>() {
             @Override
             public int compare(Parceria p1, Parceria p2) {
@@ -190,6 +204,7 @@ public class CacheDB extends SQLiteOpenHelper {
     public void apagar_parcerias() {
         getWritableDatabase().delete("parceria", null, null);
     }
+
 
     public void inserir_eventos(List<Evento> eventos) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
@@ -242,7 +257,7 @@ public class CacheDB extends SQLiteOpenHelper {
         }
         query_cursor.close();
 
-        //PARA ORDENAR AS NOTICIAS POR ORDEM DECRESCENTE DA DATA
+        //PARA ORDENAR POR ORDEM CRESCENTE DA DATA
         Collections.sort(eventos_list, new Comparator<Evento>() {
             @Override
             public int compare(Evento e1, Evento e2) {
@@ -263,4 +278,94 @@ public class CacheDB extends SQLiteOpenHelper {
         getWritableDatabase().delete("evento", null, null);
     }
 
+
+    public void inserir_grupos(List<Grupo> grupos) {
+        //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
+        getWritableDatabase().delete("grupo", null, null);
+
+        //E INSERE OS DADOS QUE RECEBEU DA API
+        for (Grupo grupo : grupos) {
+            ContentValues valores = new ContentValues();
+            valores.put("id", grupo.id);
+            valores.put("nome", grupo.nome);
+            valores.put("abreviatura", grupo.abreviatura);
+            valores.put("concelho_id", grupo.concelho_id);
+            valores.put("logo", grupo.logo);
+            valores.put("data_criacao", dateformat.format(grupo.data_criacao));
+
+            getWritableDatabase().insert("grupo", null, valores);
+        }
+    }
+
+    public List<Grupo> obter_grupos() {
+        Cursor query_cursor = getReadableDatabase().query("grupo", null, null, null, null, null, null);
+
+        List<Grupo> grupos_list = new ArrayList<>();
+        for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
+            Grupo grupo = new Grupo();
+            grupo.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
+            grupo.nome = query_cursor.getString(query_cursor.getColumnIndex("nome"));
+            grupo.abreviatura = query_cursor.getString(query_cursor.getColumnIndex("abreviatura"));
+            grupo.concelho_id = query_cursor.getInt(query_cursor.getColumnIndex("concelho_id"));
+            grupo.logo = query_cursor.getString(query_cursor.getColumnIndex("logo"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                grupo.data_criacao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+
+            grupos_list.add(grupo);
+        }
+        query_cursor.close();
+
+        //PARA ORDENAR POR ORDEM ALFABÉTICA
+        Collections.sort(grupos_list, new Comparator<Grupo>() {
+            @Override
+            public int compare(Grupo g1, Grupo g2) {
+                if (g1.abreviatura.compareToIgnoreCase(g2.abreviatura) < 0) {
+                    return -1;
+                } else if (g1.abreviatura.compareToIgnoreCase(g2.abreviatura) > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        return grupos_list;
+    }
+
+    public Grupo obter_grupo(int id) {
+        Cursor query_cursor = getReadableDatabase().query("grupo", null, "id = " + id, null, null, null, null);
+        Grupo grupo = null;
+
+        if (query_cursor.getCount() > 0) {
+            query_cursor.moveToFirst();
+            grupo = new Grupo();
+            grupo.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
+            grupo.nome = query_cursor.getString(query_cursor.getColumnIndex("nome"));
+            grupo.abreviatura = query_cursor.getString(query_cursor.getColumnIndex("abreviatura"));
+            grupo.concelho_id = query_cursor.getInt(query_cursor.getColumnIndex("concelho_id"));
+            grupo.logo = query_cursor.getString(query_cursor.getColumnIndex("logo"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                grupo.data_criacao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+        }
+
+        query_cursor.close();
+
+        return grupo;
+    }
+
+    public void apagar_grupos() {
+        getWritableDatabase().delete("grupo", null, null);
+    }
 }

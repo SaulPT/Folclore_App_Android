@@ -35,7 +35,7 @@ public class HomeNoticias extends Base {
     public void onResume() {
         super.onResume();
 
-        obter_dados_API("noticias", "GET", "/noticias");
+        obter_dados_API("GET", "noticias");
     }
 
     //PARA TERMINAR A APP SEMPRE QUE 'RETROCEDEMOS' NO ECRA NOTICIAS

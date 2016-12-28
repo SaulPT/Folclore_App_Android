@@ -30,7 +30,7 @@ public class EventosAdapter extends ArrayAdapter<Evento> {
     View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Evento evento = eventos.get(position);
 
-        return NoticiasAdapter.getview_generico(context, convertView, parent,
+        return BaseAdapter.getview_generico(context, convertView, parent,
                 evento.nome, CacheDB.dateformat.format(evento.data), evento.descricao, evento.imagem, "eventos/");
     }
 }

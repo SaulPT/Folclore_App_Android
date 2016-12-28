@@ -1,10 +1,6 @@
 package estg.psi.folclore;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
-import android.view.View;
 import android.view.ViewStub;
 
 public class Grupos extends Base {
@@ -14,9 +10,10 @@ public class Grupos extends Base {
         super.onCreate(savedInstanceState);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
-        viewstub.setLayoutResource(R.layout.grupos);
+        viewstub.setLayoutResource(R.layout.noticias_parcerias_eventos);
         viewstub.inflate();
 
+        /*
         View.OnClickListener cliques = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,6 +44,14 @@ public class Grupos extends Base {
         findViewById(R.id.btn_grupo2).setOnClickListener(cliques);
         findViewById(R.id.btn_grupo3).setOnClickListener(cliques);
 
+        */
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        obter_dados_API("GET", "grupos");
     }
 
 }

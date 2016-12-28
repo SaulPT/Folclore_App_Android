@@ -9,18 +9,17 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import estg.psi.folclore.database.CacheDB;
-import estg.psi.folclore.model.Noticia;
+import estg.psi.folclore.model.Grupo;
 
 
-public class NoticiasAdapter extends ArrayAdapter<Noticia> {
+public class GruposAdapter extends ArrayAdapter<Grupo> {
 
     private final Context context;
-    private final List<Noticia> noticias;
+    private final List<Grupo> grupos;
 
-    public NoticiasAdapter(Context context, int layout, List<Noticia> noticias) {
-        super(context, layout, noticias);
-        this.noticias = noticias;
+    public GruposAdapter(Context context, int layout, List<Grupo> grupos) {
+        super(context, layout, grupos);
+        this.grupos = grupos;
         this.context = context;
     }
 
@@ -28,10 +27,10 @@ public class NoticiasAdapter extends ArrayAdapter<Noticia> {
     public
     @NonNull
     View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Noticia noticia = noticias.get(position);
+        Grupo grupo = grupos.get(position);
 
         return BaseAdapter.getview_generico(context, convertView, parent,
-                noticia.titulo, CacheDB.dateformat.format(noticia.data_edicao), noticia.conteudo, noticia.imagem, "noticias/");
+                grupo.abreviatura, "concelho: " + grupo.concelho_id, null, grupo.logo, "grupos/");
     }
 }
 
