@@ -82,11 +82,17 @@ public class Base extends AppCompatActivity
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        onNewIntent(data);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            setResult(1, getIntent());
             super.onBackPressed();
         }
     }
@@ -170,7 +176,7 @@ public class Base extends AppCompatActivity
             case R.id.nav_eventos:
                 intente = new Intent("estg.psi.folclore.EVENTOS");
                 break;
-            case R.id.parcerias:
+            case R.id.nav_parcerias:
                 intente = new Intent("estg.psi.folclore.PARCERIAS");
                 break;
             case R.id.nav_grupos:
@@ -196,7 +202,7 @@ public class Base extends AppCompatActivity
     //FUNÇÕES PERSONALIZADAS//
     //////////////////////////
 
-    private void checkar_estado_grupo_login() {
+    protected void checkar_estado_grupo_login() {
         //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
         if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
@@ -264,7 +270,7 @@ public class Base extends AppCompatActivity
 
         intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
-        startActivity(intente);
+        startActivityForResult(intente, 1);
     }
 
 

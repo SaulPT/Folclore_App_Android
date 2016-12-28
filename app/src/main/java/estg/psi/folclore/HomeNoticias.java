@@ -12,13 +12,11 @@ public class HomeNoticias extends Base {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.setTitle(R.string.nav_noticias);
-
+        this.setTitle(R.string.nav_noticias);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
         viewstub.setLayoutResource(R.layout.noticias_parcerias_eventos);
         viewstub.inflate();
-
 
         //OBTEM O LOGIN E O GRUPO SELECIONADO PELAS DEFINICOES GRAVADAS
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
@@ -26,7 +24,6 @@ public class HomeNoticias extends Base {
         username = definicoes.getString("username", null);
         token = definicoes.getString("token", null);
         grupo_selecionado = definicoes.getString("grupo_selecionado_nome", null);
-
 
         //APENAS PARA NA FUNÇÃO "checkar_estado_grupo_login" SABER SE DEVE CARREGAR O
         //GRUPO SELECIONADO PELAS PREFERENCES (1º ARRANQUE) OU PELA VARIÁVEL
@@ -38,33 +35,18 @@ public class HomeNoticias extends Base {
     public void onResume() {
         super.onResume();
 
-        switch (getIntent().getAction()) {
-            case "estg.psi.folclore.PARCERIAS":
-                obter_dados_API("parcerias", "GET", "/parcerias");
-                break;
-            case "estg.psi.folclore.EVENTOS":
-                obter_dados_API("eventos", "GET", "/eventos");
-                break;
-            default:
-                obter_dados_API("noticias", "GET", "/noticias");
-                break;
-        }
-
+        obter_dados_API("noticias", "GET", "/noticias");
     }
 
+    //PARA TERMINAR A APP SEMPRE QUE 'RETROCEDEMOS' NO ECRA NOTICIAS
     @Override
     public void onBackPressed() {
-        if (getClass().getSimpleName().equals("HomeNoticias")) {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                finishAffinity();
-            }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            finishAffinity();
         }
-
     }
 
 }

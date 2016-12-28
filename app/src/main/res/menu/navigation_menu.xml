@@ -6,11 +6,11 @@
             android:id="@+id/nav_noticias"
             android:title="@string/nav_noticias" />
         <item
+            android:id="@+id/nav_parcerias"
+            android:title="@string/nav_parcerias" />
+        <item
             android:id="@+id/nav_eventos"
             android:title="@string/nav_eventos" />
-        <item
-            android:id="@+id/parcerias"
-            android:title="@string/nav_parcerias" />
         <item
             android:id="@+id/nav_grupos"
             android:title="@string/nav_grupos" />

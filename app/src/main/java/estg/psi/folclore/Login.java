@@ -68,9 +68,6 @@ public class Login extends Base {
                                         guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
                                         iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
-
-                                        //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
-                                        finish();
                                     }
                                 }
 
@@ -83,5 +80,14 @@ public class Login extends Base {
         });
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        setResult(1, data);
+
+        //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
+        finish();
+    }
+
 
 }
