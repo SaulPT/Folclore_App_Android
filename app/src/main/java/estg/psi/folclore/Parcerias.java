@@ -10,15 +10,14 @@ public class Parcerias extends Base {
         super.onCreate(savedInstanceState);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
-        viewstub.setLayoutResource(R.layout.noticias_parcerias_eventos);
+        viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        obter_dados_API("GET", "parcerias");
+        obter_dados_API_listview("GET", "parcerias");
     }
 
 }

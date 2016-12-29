@@ -2,7 +2,6 @@ package estg.psi.folclore;
 
 import android.os.Bundle;
 import android.view.ViewStub;
-import android.widget.TextView;
 
 public class GrupoInfo extends Base {
 
@@ -11,8 +10,9 @@ public class GrupoInfo extends Base {
         super.onCreate(savedInstanceState);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
-        viewstub.setLayoutResource(R.layout.grupo_info);
+        viewstub.setLayoutResource(R.layout.item_listview);
         viewstub.inflate();
+
 
     }
 
@@ -20,8 +20,9 @@ public class GrupoInfo extends Base {
     public void onResume() {
         super.onResume();
 
-        //RECEBE A INFO DA ATIVIDADE ANTERIOR PELO INTENT
-        ((TextView) findViewById(R.id.txt_info)).setText(grupo_selecionado);
+        if (getIntent() != null) {
+            obter_dados_API_item("GET", "grupos/", getIntent().getIntExtra("grupo_selecionado", -1));
+        }
     }
 
 }

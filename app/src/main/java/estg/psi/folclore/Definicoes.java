@@ -1,10 +1,8 @@
 package estg.psi.folclore;
 
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,15 +16,12 @@ public class Definicoes extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        //CONFIGURA A VIEW NORMAL, MAS SEM O NAVIGATION DRAWER, PARA CONTER SÓ UMA SIMPLES TOOLBAR
         setContentView(R.layout.home);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_ab_back_material);
-
         setSupportActionBar(toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,17 +40,6 @@ public class Definicoes extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
-        if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
-            definicoes.edit().putString("grupo_selecionado_nome", getIntent().getStringExtra("grupo_selecionado")).apply();
-        } else {
-            definicoes.edit().remove("grupo_selecionado_nome").apply();
-        }
-
-        super.onBackPressed();
-    }
 
     //NECESSÀRIO USAR A CLASSE "fragment"
     //PORQUE O MÉTODO "addPreferencesFromResource" DEXOU SE SER

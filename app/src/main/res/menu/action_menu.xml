@@ -4,10 +4,10 @@
 
     <item
         android:id="@+id/action_definicoes"
-        android:title="@string/action_definicoes" />
+        android:title="@string/action_settings" />
     <item
         android:id="@+id/action_area_pessoal"
-        android:title="@string/action_area_pessoal" />
+        android:title="@string/action_profile" />
     <item
         android:id="@+id/action_logout"
         android:title="@string/action_logout"

@@ -6,33 +6,46 @@
     <!-- NAVIGATION DRAWER -->
     <string name="navigation_drawer_open">Abrir menu de navegação</string>
     <string name="navigation_drawer_close">Fechar menu de navegação</string>
-    <string name="nav_image_description">Logotipo do utilizador</string>
-    <string name="nav_no_username">Público</string>
-    <string name="nav_noticias">Notícias</string>
-    <string name="nav_eventos">Eventos</string>
-    <string name="nav_parcerias">Parcerias</string>
-    <string name="nav_grupos">Grupos</string>
-    <string name="nav_grupo_contactos">Contactos</string>
-    <string name="nav_grupo_corposgerentes">Corpos gerentes</string>
-    <string name="nav_grupo_dancas">Danças</string>
-    <string name="nav_grupo_agenda">Agenda</string>
-    <string name="nav_grupo_galeria">Galeria</string>
-    <string name="nav_grupo_gastronomia">Gastronomia</string>
-    <string name="nav_grupo_historial">Historial</string>
-    <string name="nav_grupo_instrumentos">Instrumentos</string>
-    <string name="nav_grupo_patrimonio">Património</string>
-    <string name="nav_grupo_trajes">Trajes</string>
-    <string name="nav_grupo_utensilios">Utensilios</string>
+    <string name="nav_user_avatar">Logotipo do utilizador</string>
+    <string name="nav_public_username">Público</string>
+    <string name="nav_news">Notícias</string>
+    <string name="nav_events">Eventos</string>
+    <string name="nav_partners">Parcerias</string>
+    <string name="nav_groups">Grupos</string>
+    <string name="nav_no_group_selected">NENHUM GRUPO SELECIONADO</string>
+    <string name="nav_group_contacts">Contactos</string>
+    <string name="nav_group_staff">Corpos gerentes</string>
+    <string name="nav_group_moves">Danças</string>
+    <string name="nav_group_schedule">Agenda</string>
+    <string name="nav_group_gallery">Galeria</string>
+    <string name="nav_group_food">Gastronomia</string>
+    <string name="nav_group_history">Historial</string>
+    <string name="nav_group_instruments">Instrumentos</string>
+    <string name="nav_group_patrimony">Património</string>
+    <string name="nav_group_clothes">Trajes</string>
+    <string name="nav_group_tools">Utensilios</string>
 
 
     <!-- ACTION MENU -->
-    <string name="action_definicoes">Definições</string>
-    <string name="action_area_pessoal">Área Pessoal</string>
+    <string name="action_settings">Definições</string>
+    <string name="action_profile">Área Pessoal</string>
     <string name="action_login">Iniciar Sessão</string>
     <string name="action_logout">Terminar sessão</string>
 
 
     <!-- ACTIVIDADE NOTÍCIAS -->
     <string name="activity_noticias_image_description">Imagem da notícia</string>
+
+
+    <!-- ACTIVIDADE PARCERIAS -->
+    <string name="activity_parcerias_image_description">Logotipo da parceria</string>
+
+
+    <!-- ACTIVIDADE EVENTOS -->
+    <string name="activity_eventos_image_description">Imagem do evento</string>
+
+
+    <!-- ACTIVIDADE GRUPOS -->
+    <string name="activity_grupos_image_description">Logotipo do grupo</string>
 
 </resources>

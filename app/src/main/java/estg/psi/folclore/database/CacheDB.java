@@ -22,8 +22,9 @@ import estg.psi.folclore.model.Parceria;
 
 public class CacheDB extends SQLiteOpenHelper {
 
-    public static final SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-    private static final int VERSAO = 11;
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final SimpleDateFormat dateformat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
+    private static final int VERSAO = 12;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -65,7 +66,8 @@ public class CacheDB extends SQLiteOpenHelper {
                 " abreviatura TEXT," +
                 " concelho_id INT," +
                 " logo TEXT," +
-                " data_criacao TEXT)");
+                " data_criacao TEXT," +
+                " ativo INT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -292,6 +294,7 @@ public class CacheDB extends SQLiteOpenHelper {
             valores.put("concelho_id", grupo.concelho_id);
             valores.put("logo", grupo.logo);
             valores.put("data_criacao", dateformat.format(grupo.data_criacao));
+            valores.put("ativo", grupo.ativo);
 
             getWritableDatabase().insert("grupo", null, valores);
         }
@@ -308,6 +311,7 @@ public class CacheDB extends SQLiteOpenHelper {
             grupo.abreviatura = query_cursor.getString(query_cursor.getColumnIndex("abreviatura"));
             grupo.concelho_id = query_cursor.getInt(query_cursor.getColumnIndex("concelho_id"));
             grupo.logo = query_cursor.getString(query_cursor.getColumnIndex("logo"));
+            grupo.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
 
             //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
             try {
@@ -350,6 +354,7 @@ public class CacheDB extends SQLiteOpenHelper {
             grupo.abreviatura = query_cursor.getString(query_cursor.getColumnIndex("abreviatura"));
             grupo.concelho_id = query_cursor.getInt(query_cursor.getColumnIndex("concelho_id"));
             grupo.logo = query_cursor.getString(query_cursor.getColumnIndex("logo"));
+            grupo.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
 
             //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
             try {
@@ -363,6 +368,19 @@ public class CacheDB extends SQLiteOpenHelper {
         query_cursor.close();
 
         return grupo;
+    }
+
+    public void alterar_grupo(Grupo grupo) {
+        ContentValues valores = new ContentValues();
+        valores.put("id", grupo.id);
+        valores.put("nome", grupo.nome);
+        valores.put("abreviatura", grupo.abreviatura);
+        valores.put("concelho_id", grupo.concelho_id);
+        valores.put("logo", grupo.logo);
+        valores.put("data_criacao", dateformat.format(grupo.data_criacao));
+        valores.put("ativo", grupo.ativo);
+
+        getWritableDatabase().update("grupo", valores, "id = " + grupo.id, null);
     }
 
     public void apagar_grupos() {

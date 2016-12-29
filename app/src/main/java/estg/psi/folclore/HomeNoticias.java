@@ -12,10 +12,10 @@ public class HomeNoticias extends Base {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTitle(R.string.nav_noticias);
+        this.setTitle(R.string.nav_news);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
-        viewstub.setLayoutResource(R.layout.noticias_parcerias_eventos);
+        viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
 
         //OBTEM O LOGIN E O GRUPO SELECIONADO PELAS DEFINICOES GRAVADAS
@@ -23,7 +23,7 @@ public class HomeNoticias extends Base {
         logado = definicoes.getBoolean("logado", false);
         username = definicoes.getString("username", null);
         token = definicoes.getString("token", null);
-        grupo_selecionado = definicoes.getString("grupo_selecionado_nome", null);
+        grupo_selecionado = definicoes.getInt("grupo_selecionado", -1);
 
         //APENAS PARA NA FUNÇÃO "checkar_estado_grupo_login" SABER SE DEVE CARREGAR O
         //GRUPO SELECIONADO PELAS PREFERENCES (1º ARRANQUE) OU PELA VARIÁVEL
@@ -34,8 +34,7 @@ public class HomeNoticias extends Base {
     @Override
     public void onResume() {
         super.onResume();
-
-        obter_dados_API("GET", "noticias");
+        obter_dados_API_listview("GET", "noticias");
     }
 
     //PARA TERMINAR A APP SEMPRE QUE 'RETROCEDEMOS' NO ECRA NOTICIAS

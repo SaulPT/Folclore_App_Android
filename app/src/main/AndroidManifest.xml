@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name="estg.psi.folclore.Parcerias"
-            android:label="@string/nav_parcerias">
+            android:label="@string/nav_partners">
             <intent-filter>
                 <action android:name="estg.psi.folclore.PARCERIAS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -33,7 +33,7 @@
         </activity>
         <activity
             android:name="estg.psi.folclore.Eventos"
-            android:label="@string/nav_eventos">
+            android:label="@string/nav_events">
             <intent-filter>
                 <action android:name="estg.psi.folclore.EVENTOS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name="estg.psi.folclore.Grupos"
-            android:label="@string/nav_grupos">
+            android:label="@string/nav_groups">
             <intent-filter>
                 <action android:name="estg.psi.folclore.GRUPOS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -57,7 +57,7 @@
         </activity>
         <activity
             android:name="estg.psi.folclore.AreaPessoal"
-            android:label="@string/action_area_pessoal">
+            android:label="@string/action_profile">
             <intent-filter>
                 <action android:name="estg.psi.folclore.AREAPESSOAL" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -73,7 +73,7 @@
         </activity>
         <activity
             android:name="estg.psi.folclore.Definicoes"
-            android:label="@string/action_definicoes">
+            android:label="@string/action_settings">
             <intent-filter>
                 <action android:name="estg.psi.folclore.DEFINICOES" />
                 <category android:name="android.intent.category.DEFAULT" />

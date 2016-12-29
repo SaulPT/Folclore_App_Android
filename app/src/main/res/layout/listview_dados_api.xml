@@ -6,14 +6,14 @@
 
 
     <ProgressBar
-        android:id="@+id/loading_anim"
+        android:id="@+id/loading_anim_listview"
         style="@android:style/Widget.Material.ProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/activity_vertical_margin" />
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/listview_dados_api"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

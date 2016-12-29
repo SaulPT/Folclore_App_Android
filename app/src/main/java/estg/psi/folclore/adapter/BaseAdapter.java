@@ -24,17 +24,18 @@ public class BaseAdapter {
                                         String titulo, String data, String conteudo, String imagem, String api_suburl) {
         if (convertView == null) {
             LayoutInflater layoutinflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutinflater.inflate(R.layout.item_list_view, parent, false);
+            convertView = layoutinflater.inflate(R.layout.item_listview, parent, false);
         }
 
         ((TextView) convertView.findViewById(R.id.titulo)).setText(titulo);
         ((TextView) convertView.findViewById(R.id.data)).setText(data);
         TextView text_conteudo = (TextView) convertView.findViewById(R.id.conteudo);
-
+        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem);
 
         if (api_suburl.equals("grupos/")) {
-            //NO CASO DE O ADAPTER FOR PARA GRUPOS, REMOVE O TEXTVIEW DE COMTEUDO/DESCRICAO
+            //NO CASO DE O ADAPTER FOR PARA GRUPOS, REMOVE O TEXTVIEW DE COMTEUDO/DESCRICAO E A IMAGEVIEW
             text_conteudo.setVisibility(View.GONE);
+            imageview.setVisibility(View.GONE);
         } else {
             //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
             if (Build.VERSION.SDK_INT >= 24) {
@@ -42,24 +43,19 @@ public class BaseAdapter {
             } else {
                 text_conteudo.setText(Html.fromHtml(conteudo));
             }
-        }
 
-        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem);
-        Ion.with(context)
-                .load(Base.IMG_URL + api_suburl + imagem)
-                //.noCache() RESOLVE BUG DAS IMAGENS COM ALTURA 1
-                .setTimeout(1000)
-                .asBitmap()
-                .setCallback(new FutureCallback<Bitmap>() {
-                    @Override
-                    public void onCompleted(Exception e, Bitmap result) {
-                        if (e != null) {
-                            imageview.setImageResource(R.drawable.default_noticias);
-                        } else {
-                            imageview.setImageBitmap(result);
-                        }
+            //CARREGA A IMAGEM
+            Ion.with(context).load(Base.IMG_URL + api_suburl + imagem).setTimeout(1000).asBitmap().setCallback(new FutureCallback<Bitmap>() {
+                @Override
+                public void onCompleted(Exception e, Bitmap result) {
+                    if (e != null) {
+                        imageview.setImageResource(R.drawable.default_noticias);
+                    } else {
+                        imageview.setImageBitmap(result);
                     }
-                });
+                }
+            });
+        }
 
         return convertView;
     }

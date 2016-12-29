@@ -4,55 +4,62 @@
     <group>
         <item
             android:id="@+id/nav_noticias"
-            android:title="@string/nav_noticias" />
+            android:title="@string/nav_news" />
         <item
             android:id="@+id/nav_parcerias"
-            android:title="@string/nav_parcerias" />
+            android:title="@string/nav_partners" />
         <item
             android:id="@+id/nav_eventos"
-            android:title="@string/nav_eventos" />
+            android:title="@string/nav_events" />
         <item
             android:id="@+id/nav_grupos"
-            android:title="@string/nav_grupos" />
+            android:title="@string/nav_groups" />
     </group>
 
     <group
-        android:id="@+id/menu_grupo"
+        android:enabled="false">
+        <item
+            android:id="@+id/nav_grupo_selecionado"
+            android:title="@string/nav_no_group_selected" />
+    </group>
+
+    <group
+        android:id="@+id/nav_menu_grupo"
         android:enabled="false">
 
         <item
             android:id="@+id/nav_grupo_historial"
-            android:title="@string/nav_grupo_historial" />
+            android:title="@string/nav_group_history" />
         <item
             android:id="@+id/nav_grupo_corposgerentes"
-            android:title="@string/nav_grupo_corposgerentes" />
+            android:title="@string/nav_group_staff" />
         <item
             android:id="@+id/nav_grupo_galeria"
-            android:title="@string/nav_grupo_galeria" />
+            android:title="@string/nav_group_gallery" />
         <item
             android:id="@+id/nav_grupo_eventos"
-            android:title="@string/nav_grupo_agenda" />
+            android:title="@string/nav_group_schedule" />
         <item
             android:id="@+id/nav_grupo_instrumentos"
-            android:title="@string/nav_grupo_instrumentos" />
+            android:title="@string/nav_group_instruments" />
         <item
             android:id="@+id/nav_grupo_dancas"
-            android:title="@string/nav_grupo_dancas" />
+            android:title="@string/nav_group_moves" />
         <item
             android:id="@+id/nav_grupo_trajes"
-            android:title="@string/nav_grupo_trajes" />
+            android:title="@string/nav_group_clothes" />
         <item
             android:id="@+id/nav_grupo_utensilios"
-            android:title="@string/nav_grupo_utensilios" />
+            android:title="@string/nav_group_tools" />
         <item
             android:id="@+id/nav_grupo_gastronomia"
-            android:title="@string/nav_grupo_gastronomia" />
+            android:title="@string/nav_group_food" />
         <item
             android:id="@+id/nav_grupo_patrimonio"
-            android:title="@string/nav_grupo_patrimonio" />
+            android:title="@string/nav_group_patrimony" />
         <item
             android:id="@+id/nav_grupo_contactos"
-            android:title="@string/nav_grupo_contactos" />
+            android:title="@string/nav_group_contacts" />
     </group>
 
 
