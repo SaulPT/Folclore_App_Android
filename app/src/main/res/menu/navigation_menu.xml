@@ -28,6 +28,9 @@
         android:enabled="false">
 
         <item
+            android:id="@+id/nav_grupo_detalhes"
+            android:title="@string/nav_group_details" />
+        <item
             android:id="@+id/nav_grupo_historial"
             android:title="@string/nav_group_history" />
         <item

@@ -5,6 +5,16 @@
     android:orientation="vertical">
 
 
+    <TextView
+        android:id="@+id/textView_grupos_administrados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:text="@string/managed_groups"
+        android:textAlignment="center"
+        android:textSize="@dimen/navigation_header_username_font"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/button_remover_grupo_selecionado"
         android:layout_width="match_parent"

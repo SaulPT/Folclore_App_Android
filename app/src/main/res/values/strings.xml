@@ -13,6 +13,7 @@
     <string name="nav_partners">Parcerias</string>
     <string name="nav_groups">Grupos</string>
     <string name="nav_no_group_selected">NENHUM GRUPO SELECIONADO</string>
+    <string name="nav_group_details">Detalhes</string>
     <string name="nav_group_contacts">Contactos</string>
     <string name="nav_group_staff">Corpos gerentes</string>
     <string name="nav_group_moves">Danças</string>
@@ -37,6 +38,11 @@
     <string name="settings_save_selected_group">Guardar grupo selecionado</string>
     <string name="settings_show_list_group_images">Mostrar imagens na lista de grupos</string>
     <string name="settings_exit_on_home_screen">Sair da aplicação no ecrã Notícias</string>
+
+
+    <!-- ÁREA PESSOAL -->
+    <string name="managed_groups">GRUPOS ADMINISTRADOS</string>
+
 
     <!-- ACTIVIDADE NOTÍCIAS -->
     <string name="activity_noticias_image_description">Imagem da notícia</string>

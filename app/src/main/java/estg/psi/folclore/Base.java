@@ -40,8 +40,7 @@ import estg.psi.folclore.model.Grupo;
 import estg.psi.folclore.model.Noticia;
 import estg.psi.folclore.model.Parceria;
 
-public class Base extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
     public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
@@ -315,7 +314,6 @@ public class Base extends AppCompatActivity
 
 
     protected void obter_dados_API_array(final String suburl) {
-        findViewById(R.id.loading_anim_listview).setVisibility(View.VISIBLE);
 
         //VERIFICA SE O TELEMÓVEL TEM LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
@@ -345,28 +343,37 @@ public class Base extends AppCompatActivity
                                     List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
                                     }.getType());
                                     bd.guardar_noticias(noticias);
-                                    NoticiasAdapter noticias_adapter = new NoticiasAdapter(Base.this, R.id.listview_dados_api, bd.obter_noticias());
+
+                                    //MOSTRA OS DADOS NA LISTVIEW
+                                    NoticiasAdapter noticias_adapter = new NoticiasAdapter(Base.this, R.id.listview_dados_api, Noticia.ordenar_noticias_data_desc(noticias));
                                     ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(noticias_adapter);
                                     break;
                                 case "parcerias":
                                     List<Parceria> parcerias = gson.create().fromJson(result.getResult(), new TypeToken<List<Parceria>>() {
                                     }.getType());
                                     bd.guardar_parcerias(parcerias);
-                                    ParceriasAdapter parcerias_adapter = new ParceriasAdapter(Base.this, R.id.listview_dados_api, bd.obter_parcerias());
+
+                                    //MOSTRA OS DADOS NA LISTVIEW
+                                    ParceriasAdapter parcerias_adapter = new ParceriasAdapter(Base.this, R.id.listview_dados_api, Parceria.ordenar_parcerias_nome(parcerias));
                                     ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(parcerias_adapter);
                                     break;
                                 case "eventos":
                                     List<Evento> eventos = gson.create().fromJson(result.getResult(), new TypeToken<List<Evento>>() {
                                     }.getType());
                                     bd.guardar_eventos(eventos);
-                                    EventosAdapter eventos_adapter = new EventosAdapter(Base.this, R.id.listview_dados_api, bd.obter_eventos());
+
+                                    //MOSTRA OS DADOS NA LISTVIEW
+                                    EventosAdapter eventos_adapter = new EventosAdapter(Base.this, R.id.listview_dados_api, Evento.ordenar_data_desc(eventos));
                                     ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(eventos_adapter);
                                     break;
                                 case "grupos":
                                     List<Grupo> grupos = gson.create().fromJson(result.getResult(), new TypeToken<List<Grupo>>() {
                                     }.getType());
+                                    bd.apagar_grupos();
                                     bd.guardar_grupos(grupos);
-                                    GruposAdapter grupos_adapter = new GruposAdapter(Base.this, R.id.listview_dados_api, bd.obter_grupos());
+
+                                    //MOSTRA OS DADOS NA LISTVIEW
+                                    GruposAdapter grupos_adapter = new GruposAdapter(Base.this, R.id.listview_dados_api, Grupo.ordenar_nome(grupos));
                                     ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(grupos_adapter);
                                     break;
                             }
@@ -410,6 +417,8 @@ public class Base extends AppCompatActivity
                                 case "grupos/":
                                     Grupo grupo = gson.create().fromJson(result.getResult(), Grupo.class);
                                     bd.guardar_grupo(grupo);
+
+                                    //USA O ADAPTER DOS GRUPOS PARA MOSTRAR OS DADOS PORQUE SAO IGUAIS AOS DA LISTVIEW
                                     GruposAdapter.mostrar_grupo(Base.this, Base.this.findViewById(android.R.id.content), grupo, true);
                                     break;
                             }

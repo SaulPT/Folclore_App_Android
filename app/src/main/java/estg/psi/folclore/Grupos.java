@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import estg.psi.folclore.database.CacheDB;
+import estg.psi.folclore.model.Grupo;
 
 public class Grupos extends Base {
 
@@ -26,7 +27,7 @@ public class Grupos extends Base {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CacheDB bd = new CacheDB(Grupos.this);
-                grupo_selecionado = bd.obter_grupos().get((int) id).id;
+                grupo_selecionado = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).id;
                 bd.close();
 
                 Intent intente = new Intent("estg.psi.folclore.GRUPOINFO");

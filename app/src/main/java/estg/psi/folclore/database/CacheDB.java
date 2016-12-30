@@ -10,8 +10,6 @@ import android.util.Log;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,7 +108,7 @@ public class CacheDB extends SQLiteOpenHelper {
     public List<Noticia> obter_noticias() {
         Cursor query_cursor = getReadableDatabase().query("noticia", null, null, null, null, null, null);
 
-        List<Noticia> noticias_list = new ArrayList<>();
+        List<Noticia> noticias = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
             Noticia noticia = new Noticia();
             noticia.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
@@ -131,25 +129,11 @@ public class CacheDB extends SQLiteOpenHelper {
             noticia.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
             noticia.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
             noticia.aprovado = query_cursor.getInt(query_cursor.getColumnIndex("aprovado"));
-            noticias_list.add(noticia);
+            noticias.add(noticia);
         }
         query_cursor.close();
 
-        //PARA ORDENAR POR ORDEM DECRESCENTE DA DATA
-        Collections.sort(noticias_list, new Comparator<Noticia>() {
-            @Override
-            public int compare(Noticia n1, Noticia n2) {
-                if (n1.data_edicao.after(n2.data_edicao)) {
-                    return -1;
-                } else if (n1.data_edicao.before(n2.data_edicao)) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        return noticias_list;
+        return noticias;
     }
 
 
@@ -174,7 +158,7 @@ public class CacheDB extends SQLiteOpenHelper {
     public List<Parceria> obter_parcerias() {
         Cursor query_cursor = getReadableDatabase().query("parceria", null, null, null, null, null, null);
 
-        List<Parceria> parcerias_list = new ArrayList<>();
+        List<Parceria> parcerias = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
             Parceria parceria = new Parceria();
             parceria.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
@@ -183,25 +167,11 @@ public class CacheDB extends SQLiteOpenHelper {
             parceria.descricao = query_cursor.getString(query_cursor.getColumnIndex("descricao"));
             parceria.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
             parceria.ativo = query_cursor.getInt(query_cursor.getColumnIndex("ativo"));
-            parcerias_list.add(parceria);
+            parcerias.add(parceria);
         }
         query_cursor.close();
 
-        //PARA ORDENAR POR ORDEM ALFABÉTICA
-        Collections.sort(parcerias_list, new Comparator<Parceria>() {
-            @Override
-            public int compare(Parceria p1, Parceria p2) {
-                if (p1.parceiro.compareToIgnoreCase(p2.parceiro) < 0) {
-                    return -1;
-                } else if (p1.parceiro.compareToIgnoreCase(p2.parceiro) > 0) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        return parcerias_list;
+        return parcerias;
     }
 
 
@@ -230,7 +200,7 @@ public class CacheDB extends SQLiteOpenHelper {
     public List<Evento> obter_eventos() {
         Cursor query_cursor = getReadableDatabase().query("evento", null, null, null, null, null, null);
 
-        List<Evento> eventos_list = new ArrayList<>();
+        List<Evento> eventos = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
             Evento evento = new Evento();
             evento.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
@@ -252,33 +222,15 @@ public class CacheDB extends SQLiteOpenHelper {
             evento.autor_id = query_cursor.getInt(query_cursor.getColumnIndex("autor_id"));
             evento.imagem = query_cursor.getString(query_cursor.getColumnIndex("imagem"));
             evento.estado = query_cursor.getInt(query_cursor.getColumnIndex("estado"));
-            eventos_list.add(evento);
+            eventos.add(evento);
         }
         query_cursor.close();
 
-        //PARA ORDENAR POR ORDEM CRESCENTE DA DATA
-        Collections.sort(eventos_list, new Comparator<Evento>() {
-            @Override
-            public int compare(Evento e1, Evento e2) {
-                if (e1.data.after(e2.data)) {
-                    return 1;
-                } else if (e1.data.before(e2.data)) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        return eventos_list;
+        return eventos;
     }
 
 
     public void guardar_grupos(List<Grupo> grupos) {
-        //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
-        getWritableDatabase().delete("grupo", null, null);
-
-        //E INSERE OS DADOS QUE RECEBEU DA API
         for (Grupo grupo : grupos) {
             guardar_grupo(grupo);
         }
@@ -301,7 +253,7 @@ public class CacheDB extends SQLiteOpenHelper {
     public List<Grupo> obter_grupos() {
         Cursor query_cursor = getReadableDatabase().query("grupo", null, null, null, null, null, null);
 
-        List<Grupo> grupos_list = new ArrayList<>();
+        List<Grupo> grupos = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
             Grupo grupo = new Grupo();
             grupo.id = query_cursor.getInt(query_cursor.getColumnIndex("id"));
@@ -319,25 +271,11 @@ public class CacheDB extends SQLiteOpenHelper {
                 Log.e("DateParse", e.getMessage());
             }
 
-            grupos_list.add(grupo);
+            grupos.add(grupo);
         }
         query_cursor.close();
 
-        //PARA ORDENAR POR ORDEM ALFABÉTICA
-        Collections.sort(grupos_list, new Comparator<Grupo>() {
-            @Override
-            public int compare(Grupo g1, Grupo g2) {
-                if (g1.abreviatura.compareToIgnoreCase(g2.abreviatura) < 0) {
-                    return -1;
-                } else if (g1.abreviatura.compareToIgnoreCase(g2.abreviatura) > 0) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        return grupos_list;
+        return grupos;
     }
 
     public Grupo obter_grupo(int id) {
@@ -366,5 +304,9 @@ public class CacheDB extends SQLiteOpenHelper {
         query_cursor.close();
 
         return grupo;
+    }
+
+    public void apagar_grupos() {
+        getWritableDatabase().delete("grupo", null, null);
     }
 }

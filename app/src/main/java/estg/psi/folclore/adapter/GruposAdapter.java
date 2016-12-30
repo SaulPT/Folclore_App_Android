@@ -55,7 +55,7 @@ public class GruposAdapter extends ArrayAdapter<Grupo> {
         });
 
         final ImageView imageview = (ImageView) view.findViewById(R.id.imagem);
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("mostrar_imagens_lista_grupos", false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("mostrar_imagens_lista_grupos", false) || vista_detalhe) {
             //MOSTRA A IMAGEM
             Ion.with(context).load(Base.IMG_URL + "grupos/" + grupo.logo).setTimeout(Base.TIMEOUT).asBitmap().setCallback(new FutureCallback<Bitmap>() {
                 @Override
