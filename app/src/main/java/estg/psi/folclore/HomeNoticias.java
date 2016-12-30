@@ -27,14 +27,17 @@ public class HomeNoticias extends Base {
 
         //APENAS PARA NA FUNÇÃO "checkar_estado_grupo_login" SABER SE DEVE CARREGAR O
         //GRUPO SELECIONADO PELAS PREFERENCES (1º ARRANQUE) OU PELA VARIÁVEL
-        definicoes.edit().putBoolean("grupo_auto", true).apply();
+        if (getIntent().getAction().equals("android.intent.action.MAIN")) {
+            definicoes.edit().putBoolean("grupo_auto", true).apply();
+        }
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        obter_dados_API_listview("GET", "noticias");
+
+        obter_dados_API_array("noticias");
     }
 
     //PARA TERMINAR A APP SEMPRE QUE 'RETROCEDEMOS' NO ECRA NOTICIAS
@@ -44,7 +47,11 @@ public class HomeNoticias extends Base {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            finishAffinity();
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("sair_app_ecra_noticias", true)) {
+                finishAffinity();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

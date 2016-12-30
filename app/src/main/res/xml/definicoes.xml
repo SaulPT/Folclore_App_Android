@@ -2,8 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="sair_app_ecra_noticias"
+        android:title="@string/settings_exit_on_home_screen" />
+
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="guardar_grupo_selecionado"
-        android:title="Guardar grupo selecionado" />
+        android:title="@string/settings_save_selected_group" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="mostrar_imagens_lista_grupos"
+        android:title="@string/settings_show_list_group_images" />
 
 </PreferenceScreen>

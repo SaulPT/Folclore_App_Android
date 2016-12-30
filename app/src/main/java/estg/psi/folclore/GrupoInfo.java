@@ -21,7 +21,7 @@ public class GrupoInfo extends Base {
         super.onResume();
 
         if (getIntent() != null) {
-            obter_dados_API_item("GET", "grupos/", getIntent().getIntExtra("grupo_selecionado", -1));
+            obter_dados_API_objeto("grupos/", getIntent().getIntExtra("grupo_selecionado", -1));
         }
     }
 

@@ -43,7 +43,7 @@ public class Login extends Base {
                 //ENVIAR POST PARA URL DA API
                 Ion.with(Login.this)
                         .load("POST", API_URL + "user/login")
-                        .setTimeout(10000)
+                        .setTimeout(TIMEOUT)
                         .addHeader("username", txt_username)
                         .addHeader("password", password)
                         .addHeader("dispositivo", "Android")
@@ -68,6 +68,7 @@ public class Login extends Base {
                                         guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
                                         iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
+
                                     }
                                 }
 
@@ -83,11 +84,13 @@ public class Login extends Base {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        setResult(1, data);
+        if (logado) {
+            setResult(1, data);
 
-        //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
-        finish();
+            //TERMINA A ATIVIDADE PARA NAO SER ACEDIDA COM O BOTAO "VOLTAR"
+            finish();
+        }
+
     }
-
 
 }

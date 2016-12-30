@@ -17,7 +17,8 @@ public class Parcerias extends Base {
     @Override
     public void onResume() {
         super.onResume();
-        obter_dados_API_listview("GET", "parcerias");
+
+        obter_dados_API_array("parcerias");
     }
 
 }

@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import estg.psi.folclore.database.CacheDB;
 
 public class Grupos extends Base {
+
+    private Button button_remover_grupo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,30 @@ public class Grupos extends Base {
                 iniciar_intente_extras(intente);
             }
         });
+
+
+        button_remover_grupo = (Button) findViewById(R.id.button_remover_grupo_selecionado);
+        button_remover_grupo.setVisibility(View.VISIBLE);
+        button_remover_grupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                grupo_selecionado = -1;
+                atualizar_nav_header_action_menu();
+                v.setEnabled(false);
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        obter_dados_API_listview("GET", "grupos");
+
+        if (getIntent().getIntExtra("grupo_selecionado", -1) == -1) {
+            button_remover_grupo.setEnabled(false);
+        } else {
+            button_remover_grupo.setEnabled(true);
+        }
+        obter_dados_API_array("grupos");
     }
 
 }

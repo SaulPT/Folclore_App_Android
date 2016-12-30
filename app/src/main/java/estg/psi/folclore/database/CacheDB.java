@@ -24,7 +24,7 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final SimpleDateFormat dateformat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
-    private static final int VERSAO = 12;
+    private static final int VERSAO = 14;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -68,6 +68,10 @@ public class CacheDB extends SQLiteOpenHelper {
                 " logo TEXT," +
                 " data_criacao TEXT," +
                 " ativo INT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS concelho" +
+                " (id INT PRIMARY KEY," +
+                " nome TEXT," +
+                " distrito_id INT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -76,12 +80,13 @@ public class CacheDB extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS parceria");
             db.execSQL("DROP TABLE IF EXISTS evento");
             db.execSQL("DROP TABLE IF EXISTS grupo");
+            db.execSQL("DROP TABLE IF EXISTS concelho");
             onCreate(db);
         }
     }
 
 
-    public void inserir_noticias(List<Noticia> noticias) {
+    public void guardar_noticias(List<Noticia> noticias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
         getWritableDatabase().delete("noticia", null, null);
 
@@ -103,7 +108,7 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
     public List<Noticia> obter_noticias() {
-        Cursor query_cursor = getReadableDatabase().query("noticia", null, "ativo = 1", null, null, null, null);
+        Cursor query_cursor = getReadableDatabase().query("noticia", null, null, null, null, null, null);
 
         List<Noticia> noticias_list = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
@@ -147,12 +152,8 @@ public class CacheDB extends SQLiteOpenHelper {
         return noticias_list;
     }
 
-    public void apagar_noticias() {
-        getWritableDatabase().delete("noticia", null, null);
-    }
 
-
-    public void inserir_parcerias(List<Parceria> parcerias) {
+    public void guardar_parcerias(List<Parceria> parcerias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
         getWritableDatabase().delete("parceria", null, null);
 
@@ -171,7 +172,7 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
     public List<Parceria> obter_parcerias() {
-        Cursor query_cursor = getReadableDatabase().query("parceria", null, "ativo = 1", null, null, null, null);
+        Cursor query_cursor = getReadableDatabase().query("parceria", null, null, null, null, null, null);
 
         List<Parceria> parcerias_list = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
@@ -203,12 +204,8 @@ public class CacheDB extends SQLiteOpenHelper {
         return parcerias_list;
     }
 
-    public void apagar_parcerias() {
-        getWritableDatabase().delete("parceria", null, null);
-    }
 
-
-    public void inserir_eventos(List<Evento> eventos) {
+    public void guardar_eventos(List<Evento> eventos) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
         getWritableDatabase().delete("evento", null, null);
 
@@ -231,7 +228,7 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
     public List<Evento> obter_eventos() {
-        Cursor query_cursor = getReadableDatabase().query("evento", null, "estado = 1", null, null, null, null);
+        Cursor query_cursor = getReadableDatabase().query("evento", null, null, null, null, null, null);
 
         List<Evento> eventos_list = new ArrayList<>();
         for (query_cursor.moveToFirst(); !query_cursor.isAfterLast(); query_cursor.moveToNext()) {
@@ -276,28 +273,29 @@ public class CacheDB extends SQLiteOpenHelper {
         return eventos_list;
     }
 
-    public void apagar_eventos() {
-        getWritableDatabase().delete("evento", null, null);
-    }
 
-
-    public void inserir_grupos(List<Grupo> grupos) {
+    public void guardar_grupos(List<Grupo> grupos) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
         getWritableDatabase().delete("grupo", null, null);
 
         //E INSERE OS DADOS QUE RECEBEU DA API
         for (Grupo grupo : grupos) {
-            ContentValues valores = new ContentValues();
-            valores.put("id", grupo.id);
-            valores.put("nome", grupo.nome);
-            valores.put("abreviatura", grupo.abreviatura);
-            valores.put("concelho_id", grupo.concelho_id);
-            valores.put("logo", grupo.logo);
-            valores.put("data_criacao", dateformat.format(grupo.data_criacao));
-            valores.put("ativo", grupo.ativo);
-
-            getWritableDatabase().insert("grupo", null, valores);
+            guardar_grupo(grupo);
         }
+    }
+
+    public void guardar_grupo(Grupo grupo) {
+        getWritableDatabase().delete("grupo", "id = " + grupo.id, null);
+        ContentValues valores = new ContentValues();
+        valores.put("id", grupo.id);
+        valores.put("nome", grupo.nome);
+        valores.put("abreviatura", grupo.abreviatura);
+        valores.put("concelho_id", grupo.concelho_id);
+        valores.put("logo", grupo.logo);
+        valores.put("data_criacao", dateformat.format(grupo.data_criacao));
+        valores.put("ativo", grupo.ativo);
+
+        getWritableDatabase().insert("grupo", null, valores);
     }
 
     public List<Grupo> obter_grupos() {
@@ -368,22 +366,5 @@ public class CacheDB extends SQLiteOpenHelper {
         query_cursor.close();
 
         return grupo;
-    }
-
-    public void alterar_grupo(Grupo grupo) {
-        ContentValues valores = new ContentValues();
-        valores.put("id", grupo.id);
-        valores.put("nome", grupo.nome);
-        valores.put("abreviatura", grupo.abreviatura);
-        valores.put("concelho_id", grupo.concelho_id);
-        valores.put("logo", grupo.logo);
-        valores.put("data_criacao", dateformat.format(grupo.data_criacao));
-        valores.put("ativo", grupo.ativo);
-
-        getWritableDatabase().update("grupo", valores, "id = " + grupo.id, null);
-    }
-
-    public void apagar_grupos() {
-        getWritableDatabase().delete("grupo", null, null);
     }
 }

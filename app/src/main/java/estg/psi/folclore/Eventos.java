@@ -17,7 +17,8 @@ public class Eventos extends Base {
     @Override
     public void onResume() {
         super.onResume();
-        obter_dados_API_listview("GET", "eventos");
+
+        obter_dados_API_array("eventos");
     }
 
 }
