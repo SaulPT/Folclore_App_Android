@@ -40,43 +40,40 @@ public class Login extends Base {
                 String password = ((EditText) findViewById(R.id.login_password)).getText().toString();
 
 
-                //ENVIAR POST PARA URL DA API
-                Ion.with(Login.this)
-                        .load("POST", API_URL + "user/login")
-                        .setTimeout(TIMEOUT)
-                        .addHeader("username", txt_username)
-                        .addHeader("password", password)
-                        .addHeader("dispositivo", "Android")
-                        .asJsonObject()
-                        .withResponse()
-                        .setCallback(new FutureCallback<Response<JsonObject>>() {
-                            @Override
-                            public void onCompleted(Exception e, Response<JsonObject> result) {
-                                //EM CASO DE ERRO NA LIGAÇÃO
-                                if (e != null) {
-                                    Toast.makeText(Login.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                if (verificar_ligacao_internet()) {
+                    //ENVIAR POST PARA URL DA API
+                    Ion.with(Login.this).load("POST", API_URL + "user/login").setTimeout(TIMEOUT)
+                            .addHeader("username", txt_username)
+                            .addHeader("password", password)
+                            .addHeader("dispositivo", "Android")
+                            .asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
+                        @Override
+                        public void onCompleted(Exception e, Response<JsonObject> result) {
+                            //EM CASO DE ERRO NA LIGAÇÃO
+                            if (e != null) {
+                                Toast.makeText(Login.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
+                                if (result.getHeaders().code() != 200) {
+                                    Toast.makeText(Login.this, "Erro de autenticação", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
-                                    if (result.getHeaders().code() != 200) {
-                                        Toast.makeText(Login.this, "Erro de autenticação", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        logado = true;
-                                        username = txt_username;
-                                        token = result.getResult().get("token").getAsString();
+                                    logado = true;
+                                    username = txt_username;
+                                    token = result.getResult().get("token").getAsString();
 
-                                        //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
-                                        guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
+                                    //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
+                                    guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
-                                        iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
+                                    iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
 
-                                    }
                                 }
-
-                                botao_login.setEnabled(true);
-                                loading.setVisibility(View.GONE);
                             }
-                        });
 
+                            botao_login.setEnabled(true);
+                            loading.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
         });
 

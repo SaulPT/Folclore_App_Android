@@ -166,39 +166,55 @@ public class Base extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        Intent intente = null;
 
         switch (item.getItemId()) {
             case R.id.action_definicoes:
-                intente = new Intent("estg.psi.folclore.DEFINICOES");
+                iniciar_intente_extras(new Intent("estg.psi.folclore.DEFINICOES"));
                 break;
             case R.id.action_area_pessoal:
                 if (logado) {
-                    intente = new Intent("estg.psi.folclore.AREAPESSOAL");
+                    iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
                 } else {
-                    intente = new Intent("estg.psi.folclore.LOGIN");
+                    iniciar_intente_extras(new Intent("estg.psi.folclore.LOGIN"));
                 }
                 break;
             case R.id.action_logout:
-                logado = false;
+                final String nome_classe_actual = getClass().getSimpleName();
+                if (verificar_ligacao_internet()) {
+                    Ion.with(this).load("POST", API_URL + "user/logout").setTimeout(TIMEOUT)
+                            .addHeader("token", token)
+                            .asJsonObject().withResponse()
+                            .setCallback(new FutureCallback<Response<JsonObject>>() {
+                                @Override
+                                public void onCompleted(Exception e, Response<JsonObject> result) {
+                                    //EM CASO DE ERRO NA LIGAÇÃO
+                                    if (e != null) {
+                                        Toast.makeText(Base.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
+                                        if (result.getHeaders().code() != 200) {
+                                            Toast.makeText(Base.this, "Erro de autenticação", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            logado = false;
+                                            username = null;
+                                            token = null;
 
-                //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
-                guardar_definicoes_logado(logado);
+                                            //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
+                                            guardar_definicoes_logado(logado);
 
-                //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
-                if (getClass().getSimpleName().equals("AreaPessoal")) {
-                    intente = new Intent("estg.psi.folclore.LOGIN");
+                                            //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
+                                            if (nome_classe_actual.equals("AreaPessoal")) {
+                                                iniciar_intente_extras(new Intent("estg.psi.folclore.LOGIN"));
+                                            } else {
+                                                atualizar_nav_header_action_menu();
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                 }
                 break;
         }
-
-
-        if (intente != null) {
-            iniciar_intente_extras(intente);
-        } else {
-            atualizar_nav_header_action_menu();
-        }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -407,7 +423,7 @@ public class Base extends AppCompatActivity
     }
 
 
-    private boolean verificar_ligacao_internet() {
+    protected boolean verificar_ligacao_internet() {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting()) {
             Toast.makeText(this, "Sem acesso à internet. A mostrar dados locais", Toast.LENGTH_SHORT).show();
