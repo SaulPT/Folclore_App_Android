@@ -46,7 +46,7 @@ public class GruposAdapter extends ArrayAdapter<Grupo> {
             @Override
             public void onCompleted(Exception e, Response<JsonObject> result) {
                 if (e != null) {
-                    textview_concelho.setText("Concelho");
+                    textview_concelho.setText(R.string.towncity);
                 } else {
                     Concelho concelho = new Gson().fromJson(result.getResult(), Concelho.class);
                     textview_concelho.setText(concelho.nome);

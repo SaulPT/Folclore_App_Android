@@ -16,29 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
-import java.util.List;
-
-import estg.psi.folclore.adapter.EventosAdapter;
-import estg.psi.folclore.adapter.GruposAdapter;
-import estg.psi.folclore.adapter.NoticiasAdapter;
-import estg.psi.folclore.adapter.ParceriasAdapter;
 import estg.psi.folclore.database.CacheDB;
-import estg.psi.folclore.model.Evento;
-import estg.psi.folclore.model.Grupo;
-import estg.psi.folclore.model.Noticia;
-import estg.psi.folclore.model.Parceria;
 
 public class Base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -65,7 +51,6 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.setDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -120,7 +105,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             onNewIntent(data);
         }
@@ -149,13 +134,6 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
 
-        //MOSTRA A PESQUISA EM CERTAS ATIVIDADES
-        if (getClass().getSimpleName().equals("Login") ||
-                getClass().getSimpleName().equals("AreaPessoal")) {
-            menu.findItem(R.id.action_search).setVisible(false);
-        }
-
-
         return true;
     }
 
@@ -171,10 +149,12 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                 iniciar_intente_extras(new Intent("estg.psi.folclore.DEFINICOES"));
                 break;
             case R.id.action_area_pessoal:
-                if (logado) {
-                    iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
-                } else {
-                    iniciar_intente_extras(new Intent("estg.psi.folclore.LOGIN"));
+                if (verificar_ligacao_internet()) {
+                    if (logado) {
+                        iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
+                    } else {
+                        iniciar_intente_extras(new Intent("estg.psi.folclore.LOGIN"));
+                    }
                 }
                 break;
             case R.id.action_logout:
@@ -239,7 +219,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                 intente = new Intent("estg.psi.folclore.GRUPOS");
                 break;
             default:
-                intente = new Intent("estg.psi.folclore.GRUPOINFO");
+                intente = new Intent("estg.psi.folclore.GRUPODETALHES");
                 break;
         }
 
@@ -313,132 +293,24 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected void obter_dados_API_array(final String suburl) {
-
-        //VERIFICA SE O TELEMÓVEL TEM LIGAÇÃO À INTERNET
-        if (!verificar_ligacao_internet()) {
-            findViewById(R.id.loading_anim_listview).setVisibility(View.GONE);
-        } else {
-            //SE SIM, ACEDE À API
-            Ion.with(this).load(API_URL + suburl).setTimeout(TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
-                @Override
-                public void onCompleted(Exception e, Response<JsonArray> result) {
-                    //EM CASO DE ERRO NA LIGAÇÃO
-                    if (e != null) {
-                        Toast.makeText(Base.this, "Erro na ligação ao servidor. A mostrar dados locais", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
-                        if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(Base.this, result.getHeaders().message() + ". A mostrar dados locais", Toast.LENGTH_SHORT).show();
-                        } else {
-                            CacheDB bd = new CacheDB(Base.this);
-
-                            //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
-                            GsonBuilder gson = new GsonBuilder();
-                            gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
-                            switch (suburl) {
-                                case "noticias":
-                                    List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
-                                    }.getType());
-                                    bd.guardar_noticias(noticias);
-
-                                    //MOSTRA OS DADOS NA LISTVIEW
-                                    NoticiasAdapter noticias_adapter = new NoticiasAdapter(Base.this, R.id.listview_dados_api, Noticia.ordenar_noticias_data_desc(noticias));
-                                    ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(noticias_adapter);
-                                    break;
-                                case "parcerias":
-                                    List<Parceria> parcerias = gson.create().fromJson(result.getResult(), new TypeToken<List<Parceria>>() {
-                                    }.getType());
-                                    bd.guardar_parcerias(parcerias);
-
-                                    //MOSTRA OS DADOS NA LISTVIEW
-                                    ParceriasAdapter parcerias_adapter = new ParceriasAdapter(Base.this, R.id.listview_dados_api, Parceria.ordenar_parcerias_nome(parcerias));
-                                    ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(parcerias_adapter);
-                                    break;
-                                case "eventos":
-                                    List<Evento> eventos = gson.create().fromJson(result.getResult(), new TypeToken<List<Evento>>() {
-                                    }.getType());
-                                    bd.guardar_eventos(eventos);
-
-                                    //MOSTRA OS DADOS NA LISTVIEW
-                                    EventosAdapter eventos_adapter = new EventosAdapter(Base.this, R.id.listview_dados_api, Evento.ordenar_data_desc(eventos));
-                                    ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(eventos_adapter);
-                                    break;
-                                case "grupos":
-                                    List<Grupo> grupos = gson.create().fromJson(result.getResult(), new TypeToken<List<Grupo>>() {
-                                    }.getType());
-                                    bd.apagar_grupos();
-                                    bd.guardar_grupos(grupos);
-
-                                    //MOSTRA OS DADOS NA LISTVIEW
-                                    GruposAdapter grupos_adapter = new GruposAdapter(Base.this, R.id.listview_dados_api, Grupo.ordenar_nome(grupos));
-                                    ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(grupos_adapter);
-                                    break;
-                            }
-                            bd.close();
-                        }
-                    }
-                    findViewById(R.id.loading_anim_listview).setVisibility(View.GONE);
-                }
-            });
-        }
-    }
-
-
-    protected void obter_dados_API_objeto(final String dados_api_suburl, final int id) {
-        findViewById(R.id.loading_anim_item).setVisibility(View.VISIBLE);
-
-        //VERIFICA SE O TELEMÓVEL TEM LIGAÇÃO À INTERNET
-        if (!verificar_ligacao_internet()) {
-            findViewById(R.id.loading_anim_item).setVisibility(View.GONE);
-        } else {
-            //SE SIM, ACEDE À API
-            Ion.with(this).load(API_URL + dados_api_suburl + id).setTimeout(TIMEOUT).asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
-                @Override
-                public void onCompleted(Exception e, Response<JsonObject> result) {
-                    //EM CASO DE ERRO NA LIGAÇÃO
-                    if (e != null) {
-                        Toast.makeText(Base.this, "Erro na ligação ao servidor. A mostrar dados locais", Toast.LENGTH_SHORT).show();
-                    } else {
-
-                        //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
-                        if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(Base.this, result.getHeaders().message() + ". A mostrar dados locais", Toast.LENGTH_SHORT).show();
-                        } else {
-                            CacheDB bd = new CacheDB(Base.this);
-
-                            //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
-                            GsonBuilder gson = new GsonBuilder();
-                            gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
-                            switch (dados_api_suburl) {
-                                case "grupos/":
-                                    Grupo grupo = gson.create().fromJson(result.getResult(), Grupo.class);
-                                    bd.guardar_grupo(grupo);
-
-                                    //USA O ADAPTER DOS GRUPOS PARA MOSTRAR OS DADOS PORQUE SAO IGUAIS AOS DA LISTVIEW
-                                    GruposAdapter.mostrar_grupo(Base.this, Base.this.findViewById(android.R.id.content), grupo, true);
-                                    break;
-                            }
-                            bd.close();
-                        }
-                    }
-                    findViewById(R.id.loading_anim_item).setVisibility(View.GONE);
-                }
-            });
-        }
-    }
-
-
     protected boolean verificar_ligacao_internet() {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting()) {
-            Toast.makeText(this, "Sem acesso à internet. A mostrar dados locais", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
+        }
+    }
+
+
+    protected void loading(boolean loading) {
+        if (loading) {
+            findViewById(R.id.loading_anim_listview).setVisibility(View.VISIBLE);
+            findViewById(R.id.listview_dados_api).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.loading_anim_listview).setVisibility(View.GONE);
+            findViewById(R.id.listview_dados_api).setVisibility(View.VISIBLE);
         }
     }
 

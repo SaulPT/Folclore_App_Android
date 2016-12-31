@@ -48,10 +48,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="estg.psi.folclore.GrupoInfo"
+            android:name="estg.psi.folclore.GrupoDetalhes"
             android:label="Grupo Info">
             <intent-filter>
-                <action android:name="estg.psi.folclore.GRUPOINFO" />
+                <action android:name="estg.psi.folclore.GRUPODETALHES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="estg.psi.folclore.Login"
+            android:label="@string/action_login">
+            <intent-filter>
+                <action android:name="estg.psi.folclore.LOGIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -64,10 +72,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="estg.psi.folclore.Login"
-            android:label="@string/action_login">
+            android:name="estg.psi.folclore.EditarGrupoDetalhes"
+            android:label="@string/edit_group_details">
             <intent-filter>
-                <action android:name="estg.psi.folclore.LOGIN" />
+                <action android:name="estg.psi.folclore.EDITARGRUPODETALHES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

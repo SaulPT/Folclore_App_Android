@@ -1,8 +1,12 @@
 package estg.psi.folclore;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,7 +26,7 @@ import estg.psi.folclore.model.Grupo;
 public class AreaPessoal extends Base {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
@@ -30,13 +34,45 @@ public class AreaPessoal extends Base {
         viewstub.inflate();
 
         findViewById(R.id.textView_grupos_administrados).setVisibility(View.VISIBLE);
+
+        ((ListView) findViewById(R.id.listview_dados_api)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
+                //OBTEM O ID E O NOME DO GRUPO
+                CacheDB bd = new CacheDB(AreaPessoal.this);
+                final int grupo_id = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).id;
+                String grupo_abreviatura = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).abreviatura;
+                bd.close();
+
+                new AlertDialog.Builder(AreaPessoal.this)
+                        .setTitle(grupo_abreviatura)
+                        .setNegativeButton(R.string.cancel, null)
+                        .setItems(R.array.popup_group_actions, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        Intent intente = new Intent("estg.psi.folclore.EDITARGRUPODETALHES");
+                                        intente.putExtra("grupo_id", grupo_id);
+                                        startActivity(intente);
+                                        break;
+                                    case 1:
+                                        Toast.makeText(AreaPessoal.this, "1", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        //VERIFICA SE O TELEMÓVEL TEM LIGAÇÃO À INTERNET
+
+        //VERIFICA SE HÁ LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
             findViewById(R.id.loading_anim_listview).setVisibility(View.GONE);
         } else {
@@ -47,13 +83,13 @@ public class AreaPessoal extends Base {
                 public void onCompleted(Exception e, Response<JsonArray> result) {
                     //EM CASO DE ERRO NA LIGAÇÃO
                     if (e != null) {
-                        Toast.makeText(AreaPessoal.this, "Erro na ligação ao servidor. A mostrar dados locais", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AreaPessoal.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                     } else {
 
                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                         if (result.getHeaders().code() != 200) {
                             //SE A API DESOLVEU ERRO
-                            Toast.makeText(AreaPessoal.this, result.getHeaders().message() + ". A mostrar dados locais", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AreaPessoal.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                         } else {
                             CacheDB bd = new CacheDB(AreaPessoal.this);
 
@@ -75,5 +111,6 @@ public class AreaPessoal extends Base {
                 }
             });
         }
+
     }
 }

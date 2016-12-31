@@ -13,7 +13,7 @@ public class Definicoes extends AppCompatActivity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //CONFIGURA A VIEW NORMAL, MAS SEM O NAVIGATION DRAWER, PARA CONTER SÓ UMA SIMPLES TOOLBAR
@@ -41,9 +41,8 @@ public class Definicoes extends AppCompatActivity {
     }
 
 
-    //NECESSÀRIO USAR A CLASSE "fragment"
-    //PORQUE O MÉTODO "addPreferencesFromResource" DEXOU SE SER
-    //SUPORTADO NA CLASS "PreferenceActivity"
+    //NECESSÀRIO USAR A CLASSE "PreferenceFragment"
+    //PORQUE O MÉTODO "addPreferencesFromResource" DEXOU SE SER SUPORTADO NA CLASS "PreferenceActivity"
     public static class Definicoes_Fragment extends PreferenceFragment {
         @Override
         public void onCreate(final Bundle savedInstanceState) {

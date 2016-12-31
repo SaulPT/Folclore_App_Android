@@ -6,11 +6,26 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.ViewStub;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
+
+import java.util.List;
+
+import estg.psi.folclore.adapter.NoticiasAdapter;
+import estg.psi.folclore.database.CacheDB;
+import estg.psi.folclore.model.Noticia;
 
 public class HomeNoticias extends Base {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTitle(R.string.nav_news);
 
@@ -37,8 +52,51 @@ public class HomeNoticias extends Base {
     public void onResume() {
         super.onResume();
 
-        obter_dados_API_array("noticias");
+        loading(true);
+        final CacheDB bd = new CacheDB(this);
+
+        //VERIFICA SE HÁ LIGAÇÃO À INTERNET
+        if (!verificar_ligacao_internet()) {
+            mostrar_dados(bd.obter_noticias());
+            bd.close();
+            loading(false);
+        } else {
+            //SE SIM, ACEDE À API
+            Ion.with(this).load(API_URL + "noticias").setTimeout(TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
+                @Override
+                public void onCompleted(Exception e, Response<JsonArray> result) {
+                    //EM CASO DE ERRO NA LIGAÇÃO
+                    if (e != null) {
+                        Toast.makeText(HomeNoticias.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                        mostrar_dados(bd.obter_noticias());
+                    } else {
+                        //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
+                        if (result.getHeaders().code() != 200) {
+                            //SE A API DESOLVEU ERRO
+                            Toast.makeText(HomeNoticias.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            mostrar_dados(bd.obter_noticias());
+                        } else {
+                            //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
+                            GsonBuilder gson = new GsonBuilder();
+                            gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
+                            List<Noticia> noticias = gson.create().fromJson(result.getResult(), new TypeToken<List<Noticia>>() {
+                            }.getType());
+                            bd.guardar_noticias(noticias);
+                            mostrar_dados(noticias);
+                        }
+                    }
+                    bd.close();
+                    loading(false);
+                }
+            });
+        }
     }
+
+    private void mostrar_dados(List<Noticia> noticias) {
+        NoticiasAdapter noticias_adapter = new NoticiasAdapter(this, R.id.listview_dados_api, Noticia.ordenar_noticias_data_desc(noticias));
+        ((ListView) findViewById(R.id.listview_dados_api)).setAdapter(noticias_adapter);
+    }
+
 
     //PARA TERMINAR A APP SEMPRE QUE 'RETROCEDEMOS' NO ECRA NOTICIAS
     @Override

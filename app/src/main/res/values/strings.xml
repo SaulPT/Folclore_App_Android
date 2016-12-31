@@ -1,6 +1,9 @@
 <resources>
 
     <string name="app_name">Folclore Online</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="delete">Eliminar</string>
 
 
     <!-- NAVIGATION DRAWER -->
@@ -42,6 +45,24 @@
 
     <!-- ÁREA PESSOAL -->
     <string name="managed_groups">GRUPOS ADMINISTRADOS</string>
+    <string-array name="popup_group_actions">
+        <item>Detalhes</item>
+        <item>Historial</item>
+    </string-array>
+
+
+    <!-- ACTIVIDADE EDITARGRUPODETALHES -->
+    <string name="towncity">Concelho:</string>
+    <string name="district">Distrito:</string>
+    <string name="shortname">Abreviatura:</string>
+    <string name="complete_name">Nome completo:</string>
+    <string name="edit_group_details">Editar detalhes</string>
+
+
+    <!-- LISVIEW -->
+    <string name="tittle">Título</string>
+    <string name="date">Data</string>
+    <string name="content">Conteúdo</string>
 
 
     <!-- ACTIVIDADE NOTÍCIAS -->

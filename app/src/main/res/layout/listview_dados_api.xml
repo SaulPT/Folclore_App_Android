@@ -12,7 +12,9 @@
         android:layout_margin="@dimen/activity_vertical_margin"
         android:text="@string/managed_groups"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/navigation_header_username_font"
+        android:textStyle="normal|bold"
         android:visibility="gone" />
 
     <Button

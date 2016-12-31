@@ -19,7 +19,7 @@ import com.koushikdutta.ion.Response;
 public class Login extends Base {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
@@ -80,7 +80,7 @@ public class Login extends Base {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (logado) {
             setResult(1, data);
 
