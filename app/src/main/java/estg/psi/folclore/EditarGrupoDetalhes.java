@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +25,9 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import estg.psi.folclore.database.CacheDB;
 import estg.psi.folclore.model.Concelho;
 import estg.psi.folclore.model.Grupo;
@@ -33,6 +37,7 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
     String[] distritos;
     Concelho[] concelhos;
     Grupo grupo;
+    int grupo_distrito_id;
     EditText grupo_nome, grupo_abreviatura;
     Spinner grupo_concelho, grupo_distrito;
 
@@ -66,19 +71,110 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
         grupo_concelho = (Spinner) findViewById(R.id.spinner_grupo_concelho);
 
 
+        grupo_distrito.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //MOSTRA OS CONCELHOS DO DISTRITO SELECIONADO
+                List<Concelho> concelhos_distrito = new ArrayList<>();
+                for (Concelho concelho : concelhos) {
+                    if (concelho.distrito_id == (int) id + 1) {
+                        concelhos_distrito.add(concelho);
+                    }
+                }
+                Concelho.ordenar_nome(concelhos_distrito);
+                grupo_concelho.setAdapter(new ArrayAdapter<>(EditarGrupoDetalhes.this, R.layout.item_spinner, concelhos_distrito));
+
+                //SELECIONA O CONCELHO DO GRUPO AO MOSTRAR O DISTRITO DESSE GRUPO
+                if (grupo_distrito_id == id + 1) {
+                    int posicao_concelho_grupo = 0;
+                    for (int x = 0; x < concelhos_distrito.size(); x++) {
+                        if (concelhos_distrito.get(x).id == grupo.concelho_id) {
+                            posicao_concelho_grupo = x;
+                        }
+                    }
+                    grupo_concelho.setSelection(posicao_concelho_grupo);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_menu, menu);
+        menu.findItem(R.id.edit_eliminar).setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_confirmar:
+                Grupo grupo_atualizado = grupo;
+                grupo_atualizado.abreviatura = grupo_abreviatura.getText().toString();
+                grupo_atualizado.nome = grupo_nome.getText().toString();
+                if (concelhos != null) {
+                    grupo_atualizado.concelho_id = ((Concelho) grupo_concelho.getItemAtPosition(grupo_concelho.getSelectedItemPosition())).id;
+                }
+
+                //ENVIA O NOVO GRUPO PARA A API
+                loading(true);
+                if (!verificar_ligacao_internet()) {
+                    Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
+                    loading(false);
+                } else {
+                    Ion.with(this).load("PUT", Base.API_URL + "grupos/" + grupo_atualizado.id).setTimeout(Base.TIMEOUT)
+                            .addHeader("token", getIntent().getStringExtra("token"))
+                            .setStringBody(new GsonBuilder().setDateFormat(CacheDB.DATE_TIME_FORMAT).create().toJson(grupo_atualizado))
+                            .asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
+                        @Override
+                        public void onCompleted(Exception e, Response<JsonObject> result) {
+                            if (e != null) {
+                                Toast.makeText(EditarGrupoDetalhes.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                                loading(false);
+                            } else {
+                                if (result.getHeaders().code() != 200) {
+                                    Toast.makeText(EditarGrupoDetalhes.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                                    loading(false);
+                                } else {
+                                    onBackPressed();
+                                }
+                            }
+
+                        }
+                    });
+                }
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //CARREGA OS DADOS DO GRUPO, COMEÇANDO PELOS DISTRITOS
         loading(true);
         if (!verificar_ligacao_internet()) {
             Toast.makeText(this, "Não foi possível carregar distritos e concelhos", Toast.LENGTH_SHORT).show();
+            loading(false);
         } else {
-            //CARREGA OS DISTRITOS
             Ion.with(this).load(Base.API_URL + "distritos").setTimeout(Base.TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
                 @Override
                 public void onCompleted(Exception e, Response<JsonArray> result) {
                     if (e != null) {
                         Toast.makeText(EditarGrupoDetalhes.this, "Não foi possível carregar distritos e concelhos", Toast.LENGTH_SHORT).show();
+                        loading(false);
                     } else {
                         if (result.getHeaders().code() != 200) {
                             Toast.makeText(EditarGrupoDetalhes.this, "Não foi possível carregar distritos e concelhos", Toast.LENGTH_SHORT).show();
+                            loading(false);
                         } else {
                             distritos = new Gson().fromJson(result.getResult(), String[].class);
                             carregar_concelhos();
@@ -87,7 +183,6 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void carregar_concelhos() {
@@ -96,9 +191,11 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
             public void onCompleted(Exception e, Response<JsonArray> result) {
                 if (e != null) {
                     Toast.makeText(EditarGrupoDetalhes.this, "Não foi possível carregar distritos e concelhos", Toast.LENGTH_SHORT).show();
+                    loading(false);
                 } else {
                     if (result.getHeaders().code() != 200) {
                         Toast.makeText(EditarGrupoDetalhes.this, "Não foi possível carregar distritos e concelhos", Toast.LENGTH_SHORT).show();
+                        loading(false);
                     } else {
                         concelhos = new Gson().fromJson(result.getResult(), Concelho[].class);
                         carregar_grupo();
@@ -129,7 +226,6 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
                         grupo = gson.create().fromJson(result.getResult(), Grupo.class);
                         bd.guardar_grupo(grupo);
 
-                        //USA O ADAPTER DOS GRUPOS PARA MOSTRAR OS DADOS DO GRUPO OBTIDO
                         mostrar_grupo(grupo);
                     }
                 }
@@ -152,21 +248,22 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_menu, menu);
-        menu.findItem(R.id.edit_eliminar).setVisible(false);
-        return true;
-    }
+    private void mostrar_grupo(Grupo grupo) {
+        grupo_abreviatura.setText(grupo.abreviatura);
+        grupo_nome.setText(grupo.nome);
+        grupo_distrito.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner, distritos));
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_confirmar:
-                break;
-        }
+        //PARA SABER O DISTRITO DO GRUPO
+        int x = 0;
+        grupo_distrito_id = -1;
+        do {
+            if (concelhos[x].id == grupo.concelho_id) {
+                grupo_distrito_id = concelhos[x].distrito_id;
+            }
+            x++;
+        } while (grupo_distrito_id == -1);
 
-        return super.onOptionsItemSelected(item);
+        grupo_distrito.setSelection(grupo_distrito_id - 1);
     }
 
     private void loading(boolean loading) {
@@ -197,25 +294,7 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
 
     private boolean verificar_ligacao_internet() {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (net.getActiveNetworkInfo() != null || net.getActiveNetworkInfo().isConnectedOrConnecting());
-    }
-
-    private void mostrar_grupo(Grupo grupo) {
-        grupo_abreviatura.setText(grupo.abreviatura);
-        grupo_nome.setText(grupo.nome);
-        grupo_distrito.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, distritos));
-
-        //PARA SABER O DISTRITO DO GRUPO
-        int x = 0;
-        int grupo_distrito_id = -1;
-        do {
-            if (concelhos[x].id == grupo.concelho_id) {
-                grupo_distrito_id = concelhos[x].distrito_id;
-            }
-            x++;
-        } while (grupo_distrito_id == -1);
-
-        grupo_distrito.setSelection(grupo_distrito_id);
+        return !(net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting());
     }
 
 }

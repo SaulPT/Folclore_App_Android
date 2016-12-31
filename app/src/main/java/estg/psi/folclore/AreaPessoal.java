@@ -54,6 +54,7 @@ public class AreaPessoal extends Base {
                                     case 0:
                                         Intent intente = new Intent("estg.psi.folclore.EDITARGRUPODETALHES");
                                         intente.putExtra("grupo_id", grupo_id);
+                                        intente.putExtra("token", token);
                                         startActivity(intente);
                                         break;
                                     case 1:
