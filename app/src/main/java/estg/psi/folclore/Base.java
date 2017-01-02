@@ -30,9 +30,9 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
 
     public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
     public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
-    public static final int TIMEOUT = 10000;
-    //protected static final String API_URL = "http://www.folcloreonline.pt/api";
+    //public static final String API_URL = "http://www.folcloreonline.pt/api/";
     //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
+    public static final int TIMEOUT = 10000;
     protected int grupo_selecionado;
     protected String username, token;
     protected boolean logado;
@@ -71,20 +71,6 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (getIntent() != null) {
-            //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO COM BASE NA VARIAVEL GLOBAL
-            if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
-                definicoes.edit().remove("grupo_auto").apply();
-            } else {
-                grupo_selecionado = getIntent().getIntExtra("grupo_selecionado", -1);
-            }
-
-            Menu m = ((NavigationView) findViewById(R.id.nav_view)).getMenu();
-            if (grupo_selecionado == -1) {
-                m.setGroupEnabled(R.id.nav_menu_grupo, false);
-            } else {
-                m.setGroupEnabled(R.id.nav_menu_grupo, true);
-            }
-
             //VERIFICA O ESTADO DO LOGIN
             if (!logado) {
                 logado = getIntent().getBooleanExtra("logado", false);
@@ -92,6 +78,12 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                 token = getIntent().getStringExtra("token");
             }
 
+            //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO TENDO EM CONTA A PRIMEIRA VERIFICAÇÃO
+            if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
+                definicoes.edit().remove("grupo_auto").apply();
+            } else {
+                grupo_selecionado = getIntent().getIntExtra("grupo_selecionado", -1);
+            }
 
             atualizar_nav_header_action_menu();
         }
@@ -117,7 +109,15 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            setResult(1, getIntent());
+            //ENVIA OS DADOS ATUAIS PARA AS ANTIVIDADES ANTERIORES SEREM ATUALIZADAS
+            Intent intente = getIntent();
+            intente.putExtra("grupo_selecionado", grupo_selecionado);
+            intente.putExtra("logado", logado);
+            if (logado) {
+                intente.putExtra("username", username);
+                intente.putExtra("token", token);
+            }
+            setResult(1, intente);
             super.onBackPressed();
         }
     }
@@ -127,12 +127,10 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
 
-
         //VERIFICA SE EXISTE ALGUM USER LOGADO PARA MOSTRAR OU NAO A OPÇAO "LOGOUT"
         if (logado) {
             menu.findItem(R.id.action_logout).setVisible(true);
         }
-
 
         return true;
     }
@@ -218,15 +216,16 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_grupos:
                 intente = new Intent("estg.psi.folclore.GRUPOS");
                 break;
-            default:
+            case R.id.nav_grupo_detalhes:
                 intente = new Intent("estg.psi.folclore.GRUPODETALHES");
+                break;
+            default:
+                intente = new Intent("estg.psi.folclore.GRUPOHISTORIAL");
                 break;
         }
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
 
         iniciar_intente_extras(intente);
 
@@ -253,8 +252,10 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         CacheDB bd = new CacheDB(this);
         if (grupo_selecionado != -1 && bd.obter_grupo(grupo_selecionado) != null) {
             nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setTitle(bd.obter_grupo(grupo_selecionado).abreviatura.toUpperCase());
+            nav_view.getMenu().setGroupEnabled(R.id.nav_menu_grupo, true);
         } else {
             nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setTitle("NENHUM GRUPO SELECIONADO");
+            nav_view.getMenu().setGroupEnabled(R.id.nav_menu_grupo, false);
         }
         bd.close();
 
@@ -304,7 +305,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected void loading(boolean loading) {
+    protected void loading_listview(boolean loading) {
         if (loading) {
             findViewById(R.id.loading_anim_listview).setVisibility(View.VISIBLE);
             findViewById(R.id.listview_dados_api).setVisibility(View.GONE);

@@ -40,7 +40,7 @@ public class HomeNoticias extends Base {
         token = definicoes.getString("token", null);
         grupo_selecionado = definicoes.getInt("grupo_selecionado", -1);
 
-        //APENAS PARA NA FUNÇÃO "checkar_estado_grupo_login" SABER SE DEVE CARREGAR O
+        //APENAS PARA NO "onResume" SABER SE DEVE CARREGAR O
         //GRUPO SELECIONADO PELAS PREFERENCES (1º ARRANQUE) OU PELA VARIÁVEL
         if (getIntent().getAction().equals("android.intent.action.MAIN")) {
             definicoes.edit().putBoolean("grupo_auto", true).apply();
@@ -52,14 +52,14 @@ public class HomeNoticias extends Base {
     public void onResume() {
         super.onResume();
 
-        loading(true);
+        loading_listview(true);
         final CacheDB bd = new CacheDB(this);
 
         //VERIFICA SE HÁ LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
             mostrar_dados(bd.obter_noticias());
             bd.close();
-            loading(false);
+            loading_listview(false);
         } else {
             //SE SIM, ACEDE À API
             Ion.with(this).load(API_URL + "noticias").setTimeout(TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
@@ -72,8 +72,8 @@ public class HomeNoticias extends Base {
                     } else {
                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                         if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(HomeNoticias.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            //SE A API DEVOLVEU ERRO
+                            Toast.makeText(HomeNoticias.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                             mostrar_dados(bd.obter_noticias());
                         } else {
                             //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
@@ -86,7 +86,7 @@ public class HomeNoticias extends Base {
                         }
                     }
                     bd.close();
-                    loading(false);
+                    loading_listview(false);
                 }
             });
         }

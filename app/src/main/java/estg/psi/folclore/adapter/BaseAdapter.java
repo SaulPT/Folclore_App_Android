@@ -30,8 +30,6 @@ class BaseAdapter {
         ((TextView) convertView.findViewById(R.id.titulo_nome)).setText(titulo);
         ((TextView) convertView.findViewById(R.id.data_local_concelho)).setText(data);
         TextView text_conteudo = (TextView) convertView.findViewById(R.id.conteudo_descricao);
-        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem);
-
         //PARA MOSTRAR OS DADOS DO CONTEÚDO QUE VÊM EM HTML
         //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
         if (Build.VERSION.SDK_INT >= 24) {
@@ -41,6 +39,7 @@ class BaseAdapter {
         }
 
         //MOSTRA A IMAGEM
+        final ImageView imageview = (ImageView) convertView.findViewById(R.id.imagem);
         Ion.with(context).load(Base.IMG_URL + api_suburl + imagem).setTimeout(Base.TIMEOUT).asBitmap().setCallback(new FutureCallback<Bitmap>() {
             @Override
             public void onCompleted(Exception e, Bitmap result) {

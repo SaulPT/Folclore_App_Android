@@ -63,20 +63,21 @@ public class Grupos extends Base {
     public void onResume() {
         super.onResume();
 
-        if (getIntent().getIntExtra("grupo_selecionado", -1) == -1) {
+        //if (getIntent().getIntExtra("grupo_selecionado", -1) == -1) {
+        if (grupo_selecionado == -1) {
             button_remover_grupo.setEnabled(false);
         } else {
             button_remover_grupo.setEnabled(true);
         }
 
-        loading(true);
+        loading_listview(true);
         final CacheDB bd = new CacheDB(this);
 
         //VERIFICA SE HÁ LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
             mostrar_dados(bd.obter_grupos());
             bd.close();
-            loading(false);
+            loading_listview(false);
         } else {
             //SE SIM, ACEDE À API
             Ion.with(this).load(API_URL + "grupos").setTimeout(TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
@@ -89,8 +90,8 @@ public class Grupos extends Base {
                     } else {
                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                         if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(Grupos.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            //SE A API DEVOLVEU ERRO
+                            Toast.makeText(Grupos.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                             mostrar_dados(bd.obter_grupos());
                         } else {
                             //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
@@ -104,7 +105,7 @@ public class Grupos extends Base {
                         }
                     }
                     bd.close();
-                    loading(false);
+                    loading_listview(false);
                 }
             });
         }

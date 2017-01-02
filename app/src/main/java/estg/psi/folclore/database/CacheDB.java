@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import estg.psi.folclore.model.Evento;
 import estg.psi.folclore.model.Grupo;
+import estg.psi.folclore.model.Historial;
 import estg.psi.folclore.model.Noticia;
 import estg.psi.folclore.model.Parceria;
 
@@ -22,7 +23,7 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final SimpleDateFormat dateformat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
-    private static final int VERSAO = 14;
+    private static final int VERSAO = 21;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -66,10 +67,11 @@ public class CacheDB extends SQLiteOpenHelper {
                 " logo TEXT," +
                 " data_criacao TEXT," +
                 " ativo INT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS concelho" +
-                " (id INT PRIMARY KEY," +
-                " nome TEXT," +
-                " distrito_id INT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS historial" +
+                " (grupo_id INT PRIMARY KEY," +
+                " historial TEXT," +
+                " data_criacao TEXT," +
+                " data_edicao TEXT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -78,11 +80,13 @@ public class CacheDB extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS parceria");
             db.execSQL("DROP TABLE IF EXISTS evento");
             db.execSQL("DROP TABLE IF EXISTS grupo");
-            db.execSQL("DROP TABLE IF EXISTS concelho");
+            db.execSQL("DROP TABLE IF EXISTS historial");
             onCreate(db);
         }
     }
 
+
+    //NOTICIA   ///////////////////////////////////////////////////////////////////////////////////
 
     public void guardar_noticias(List<Noticia> noticias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
@@ -137,6 +141,8 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
 
+    //PARCERIA   ///////////////////////////////////////////////////////////////////////////////////
+
     public void guardar_parcerias(List<Parceria> parcerias) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
         getWritableDatabase().delete("parceria", null, null);
@@ -174,6 +180,8 @@ public class CacheDB extends SQLiteOpenHelper {
         return parcerias;
     }
 
+
+    //EVENTO   ///////////////////////////////////////////////////////////////////////////////////
 
     public void guardar_eventos(List<Evento> eventos) {
         //AO FUNCIONAR COMO CACHE, A BD APAGA TUDO
@@ -229,6 +237,8 @@ public class CacheDB extends SQLiteOpenHelper {
         return eventos;
     }
 
+
+    //GRUPO   ///////////////////////////////////////////////////////////////////////////////////
 
     public void guardar_grupos(List<Grupo> grupos) {
         for (Grupo grupo : grupos) {
@@ -306,7 +316,58 @@ public class CacheDB extends SQLiteOpenHelper {
         return grupo;
     }
 
+    public void apagar_grupo(int id) {
+        getWritableDatabase().delete("grupo", "id = " + id, null);
+        getWritableDatabase().delete("historial", "grupo_id = " + id, null);
+    }
+
     public void apagar_grupos() {
         getWritableDatabase().delete("grupo", null, null);
+        getWritableDatabase().delete("historial", null, null);
+    }
+
+
+    //HISTORIAl   ///////////////////////////////////////////////////////////////////////////////////
+
+    public void guardar_historial(Historial historial) {
+        apagar_historial(historial.grupo_id);
+
+        ContentValues valores = new ContentValues();
+        valores.put("grupo_id", historial.grupo_id);
+        valores.put("historial", historial.historial);
+        valores.put("data_criacao", dateformat.format(historial.data_criacao));
+        valores.put("data_edicao", dateformat.format(historial.data_edicao));
+
+        getWritableDatabase().insert("historial", null, valores);
+    }
+
+    public Historial obter_historial(int grupo_id) {
+        Cursor query_cursor = getReadableDatabase().query("historial", null, "grupo_id = " + grupo_id, null, null, null, null);
+        Historial historial = null;
+
+        if (query_cursor.getCount() > 0) {
+            query_cursor.moveToFirst();
+            historial = new Historial();
+            historial.grupo_id = query_cursor.getInt(query_cursor.getColumnIndex("grupo_id"));
+            historial.historial = query_cursor.getString(query_cursor.getColumnIndex("historial"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                historial.data_criacao = dateformat.parse(data);
+                data = query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
+                historial.data_edicao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+        }
+
+        query_cursor.close();
+
+        return historial;
+    }
+
+    public void apagar_historial(int grupo_id) {
+        getWritableDatabase().delete("historial", "grupo_id = " + grupo_id, null);
     }
 }

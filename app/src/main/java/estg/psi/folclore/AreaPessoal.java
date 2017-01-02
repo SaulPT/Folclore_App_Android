@@ -41,7 +41,7 @@ public class AreaPessoal extends Base {
                 //OBTEM O ID E O NOME DO GRUPO
                 CacheDB bd = new CacheDB(AreaPessoal.this);
                 final int grupo_id = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).id;
-                String grupo_abreviatura = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).abreviatura;
+                final String grupo_abreviatura = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).abreviatura;
                 bd.close();
 
                 new AlertDialog.Builder(AreaPessoal.this)
@@ -50,17 +50,19 @@ public class AreaPessoal extends Base {
                         .setItems(R.array.popup_group_actions, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Intent intente = new Intent();
                                 switch (which) {
                                     case 0:
-                                        Intent intente = new Intent("estg.psi.folclore.EDITARGRUPODETALHES");
-                                        intente.putExtra("grupo_id", grupo_id);
-                                        intente.putExtra("token", token);
-                                        startActivity(intente);
+                                        intente.setAction("estg.psi.folclore.EDITARGRUPODETALHES");
                                         break;
                                     case 1:
-                                        Toast.makeText(AreaPessoal.this, "1", Toast.LENGTH_SHORT).show();
+                                        intente.setAction("estg.psi.folclore.EDITARGRUPOHISTORIAL");
+                                        intente.putExtra("grupo_nome", grupo_abreviatura);
                                         break;
                                 }
+                                intente.putExtra("grupo_id", grupo_id);
+                                intente.putExtra("token", token);
+                                startActivity(intente);
                                 dialog.dismiss();
                             }
                         }).show();
@@ -89,8 +91,8 @@ public class AreaPessoal extends Base {
 
                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                         if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(AreaPessoal.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            //SE A API DEVOLVEU ERRO
+                            Toast.makeText(AreaPessoal.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                         } else {
                             CacheDB bd = new CacheDB(AreaPessoal.this);
 

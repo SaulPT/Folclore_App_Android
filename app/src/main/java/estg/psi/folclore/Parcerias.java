@@ -33,14 +33,14 @@ public class Parcerias extends Base {
     public void onResume() {
         super.onResume();
 
-        loading(true);
+        loading_listview(true);
         final CacheDB bd = new CacheDB(this);
 
         //VERIFICA SE HÁ LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
             mostrar_dados(bd.obter_parcerias());
             bd.close();
-            loading(false);
+            loading_listview(false);
         } else {
             //SE SIM, ACEDE À API
             Ion.with(this).load(API_URL + "parcerias").setTimeout(TIMEOUT).asJsonArray().withResponse().setCallback(new FutureCallback<Response<JsonArray>>() {
@@ -53,8 +53,8 @@ public class Parcerias extends Base {
                     } else {
                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
                         if (result.getHeaders().code() != 200) {
-                            //SE A API DESOLVEU ERRO
-                            Toast.makeText(Parcerias.this, "Erro do servidor (" + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            //SE A API DEVOLVEU ERRO
+                            Toast.makeText(Parcerias.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                             mostrar_dados(bd.obter_parcerias());
                         } else {
                             //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
@@ -67,7 +67,7 @@ public class Parcerias extends Base {
                         }
                     }
                     bd.close();
-                    loading(false);
+                    loading_listview(false);
                 }
             });
         }
