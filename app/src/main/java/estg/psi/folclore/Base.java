@@ -28,10 +28,10 @@ import estg.psi.folclore.database.CacheDB;
 
 public class Base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
-    public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
-    //public static final String API_URL = "http://www.folcloreonline.pt/api/";
-    //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
+    //public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
+    //public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
+    public static final String API_URL = "http://www.folcloreonline.pt/api/";
+    public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     public static final int TIMEOUT = 10000;
     int grupo_selecionado;
     String username, token;
