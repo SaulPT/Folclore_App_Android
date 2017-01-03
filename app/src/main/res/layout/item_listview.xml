@@ -46,7 +46,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:contentDescription="@string/activity_noticias_image_description"
-            app:srcCompat="@drawable/default_noticias" />
+            app:srcCompat="@drawable/default_img" />
 
         <TextView
             android:id="@+id/conteudo_descricao"

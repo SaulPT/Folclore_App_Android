@@ -16,7 +16,4 @@
     <dimen name="listview_data_conteudo_font">20sp</dimen>
     <dimen name="navigation_header_username_font">25sp</dimen>
 
-    <!-- SPINNER -->
-    <dimen name="spinner_margin">10dp</dimen>
-
 </resources>

@@ -19,7 +19,7 @@ import estg.psi.folclore.model.Historial;
 
 public class GrupoHistorial extends Base {
 
-    TextView textview_historial;
+    private TextView textview_historial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

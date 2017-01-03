@@ -13,7 +13,7 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
+        android:text="@string/login"
         android:textAlignment="center"
         android:textSize="30sp" />
 
@@ -28,7 +28,7 @@
         android:id="@+id/login_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="username"
+        android:hint="@string/username"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -36,7 +36,7 @@
         android:id="@+id/login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textSize="20sp" />
@@ -46,13 +46,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Memorizar" />
+        android:text="@string/remember_me" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Entrar"
+        android:text="@string/login_ok"
         android:textSize="25sp" />
 
     <ProgressBar

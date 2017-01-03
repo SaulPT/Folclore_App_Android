@@ -28,10 +28,10 @@ import estg.psi.folclore.model.Historial;
 
 public class EditarGrupoHistorial extends AppCompatActivity {
 
-    Historial historial;
-    int grupo_id;
-    EditText grupo_historial;
-    boolean criar_novo;
+    private Historial historial;
+    private int grupo_id;
+    private EditText grupo_historial;
+    private boolean criar_novo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

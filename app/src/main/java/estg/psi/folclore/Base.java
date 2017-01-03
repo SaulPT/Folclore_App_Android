@@ -33,9 +33,9 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     //public static final String API_URL = "http://www.folcloreonline.pt/api/";
     //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     public static final int TIMEOUT = 10000;
-    protected int grupo_selecionado;
-    protected String username, token;
-    protected boolean logado;
+    int grupo_selecionado;
+    String username, token;
+    boolean logado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +237,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     //FUNÇÕES PERSONALIZADAS//
     //////////////////////////
 
-    protected void atualizar_nav_header_action_menu() {
+    void atualizar_nav_header_action_menu() {
         //MOSTRA O NOME DO UTILIZADOR
         View navview = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         TextView txtusername = (TextView) navview.findViewById(R.id.txt_username);
@@ -264,7 +264,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected void guardar_definicoes_logado(boolean lembrar_login) {
+    void guardar_definicoes_logado(boolean lembrar_login) {
         SharedPreferences.Editor definicoes = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (lembrar_login) {
             definicoes.putBoolean("logado", lembrar_login);
@@ -279,7 +279,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected void iniciar_intente_extras(Intent intente) {
+    void iniciar_intente_extras(Intent intente) {
         intente.putExtra("grupo_selecionado", grupo_selecionado);
         intente.putExtra("logado", logado);
 
@@ -294,7 +294,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected boolean verificar_ligacao_internet() {
+    boolean verificar_ligacao_internet() {
         ConnectivityManager net = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (net.getActiveNetworkInfo() == null || !net.getActiveNetworkInfo().isConnectedOrConnecting()) {
             Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
@@ -305,7 +305,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    protected void loading_listview(boolean loading) {
+    void loading_listview(boolean loading) {
         if (loading) {
             findViewById(R.id.loading_anim_listview).setVisibility(View.VISIBLE);
             findViewById(R.id.listview_dados_api).setVisibility(View.GONE);

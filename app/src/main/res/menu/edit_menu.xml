@@ -6,18 +6,18 @@
         android:id="@+id/action_edit_eliminar"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_edit_guardar"
         android:icon="@android:drawable/ic_menu_save"
         android:title="@string/save"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_edit_adicionar"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>

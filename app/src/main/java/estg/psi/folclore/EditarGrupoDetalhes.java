@@ -34,12 +34,12 @@ import estg.psi.folclore.model.Grupo;
 
 public class EditarGrupoDetalhes extends AppCompatActivity {
 
-    String[] distritos;
-    Concelho[] concelhos;
-    Grupo grupo;
-    int grupo_id, grupo_distrito_id;
-    EditText grupo_nome, grupo_abreviatura;
-    Spinner grupo_concelho, grupo_distrito;
+    private String[] distritos;
+    private Concelho[] concelhos;
+    private Grupo grupo;
+    private int grupo_id, grupo_distrito_id;
+    private EditText grupo_nome, grupo_abreviatura;
+    private Spinner grupo_concelho, grupo_distrito;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +81,7 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
                         concelhos_distrito.add(concelho);
                     }
                 }
-                Concelho.ordenar_nome(concelhos_distrito);
-                grupo_concelho.setAdapter(new ArrayAdapter<>(EditarGrupoDetalhes.this, R.layout.item_spinner, concelhos_distrito));
+                grupo_concelho.setAdapter(new ArrayAdapter<>(EditarGrupoDetalhes.this, R.layout.item_spinner, Concelho.ordenar_nome(concelhos_distrito)));
 
                 //SELECIONA O CONCELHO DO GRUPO AO MOSTRAR O DISTRITO DESSE GRUPO
                 if (grupo_distrito_id == id + 1) {
@@ -257,7 +256,7 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
             @Override
             public void onCompleted(Exception e, Bitmap result) {
                 if (e != null) {
-                    imageview.setImageResource(R.drawable.default_noticias);
+                    imageview.setImageResource(R.drawable.default_img);
                 } else {
                     imageview.setImageBitmap(result);
                 }

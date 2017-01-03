@@ -61,7 +61,7 @@ public class GruposAdapter extends ArrayAdapter<Grupo> {
                 @Override
                 public void onCompleted(Exception e, Bitmap result) {
                     if (e != null) {
-                        imageview.setImageResource(R.drawable.default_noticias);
+                        imageview.setImageResource(R.drawable.default_img);
                     } else {
                         imageview.setImageBitmap(result);
                     }

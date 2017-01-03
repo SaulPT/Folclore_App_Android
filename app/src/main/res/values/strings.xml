@@ -18,17 +18,7 @@
     <string name="nav_groups">Grupos</string>
     <string name="nav_no_group_selected">NENHUM GRUPO SELECIONADO</string>
     <string name="nav_group_details">Detalhes</string>
-    <string name="nav_group_contacts">Contactos</string>
-    <string name="nav_group_staff">Corpos gerentes</string>
-    <string name="nav_group_moves">Danças</string>
-    <string name="nav_group_schedule">Agenda</string>
-    <string name="nav_group_gallery">Galeria</string>
-    <string name="nav_group_food">Gastronomia</string>
     <string name="nav_group_history">Historial</string>
-    <string name="nav_group_instruments">Instrumentos</string>
-    <string name="nav_group_patrimony">Património</string>
-    <string name="nav_group_clothes">Trajes</string>
-    <string name="nav_group_tools">Utensilios</string>
 
 
     <!-- ACTION MENU -->
@@ -42,6 +32,14 @@
     <string name="settings_save_selected_group">Guardar grupo selecionado</string>
     <string name="settings_show_list_group_images">Mostrar imagens na lista de grupos</string>
     <string name="settings_exit_on_home_screen">Sair da aplicação no ecrã Notícias</string>
+
+
+    <!-- OUTRAS ACTIVIDADES -->
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Lembrar</string>
+    <string name="login_ok">Entrar</string>
 
 
     <!-- ÁREA PESSOAL -->
@@ -70,10 +68,7 @@
 
 
     <!-- OUTRAS ACTIVIDADES -->
-    <string name="activity_noticias_image_description">Imagem da notícia</string>
-    <string name="activity_parcerias_image_description">Logotipo da parceria</string>
-    <string name="activity_eventos_image_description">Imagem do evento</string>
-    <string name="activity_grupos_image_description">Logotipo do grupo</string>
+    <string name="activity_noticias_image_description">Imagem</string>
     <string name="remove_selected_group">Remover Grupo Selecionado</string>
 
 </resources>
