@@ -40,8 +40,9 @@ public class AreaPessoal extends Base {
             public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
                 //OBTEM O ID E O NOME DO GRUPO
                 CacheDB bd = new CacheDB(AreaPessoal.this);
-                final int grupo_id = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).id;
-                final String grupo_abreviatura = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).abreviatura;
+                Grupo grupo_selecionado = (Grupo) ((ListView) findViewById(R.id.listview_dados_api)).getAdapter().getItem(position);
+                final int grupo_id = grupo_selecionado.id;
+                final String grupo_abreviatura = grupo_selecionado.abreviatura;
                 bd.close();
 
                 new AlertDialog.Builder(AreaPessoal.this)

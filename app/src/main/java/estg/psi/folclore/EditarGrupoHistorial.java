@@ -121,7 +121,10 @@ public class EditarGrupoHistorial extends AppCompatActivity {
                                 Toast.makeText(EditarGrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                                 loading(false);
                             } else {
-                                if (result.getHeaders().code() != 200) {
+                                if (result.getHeaders().code() == 500) {
+                                    Toast.makeText(EditarGrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                    loading(false);
+                                } else if (result.getHeaders().code() != 200) {
                                     Toast.makeText(EditarGrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else {
@@ -151,7 +154,10 @@ public class EditarGrupoHistorial extends AppCompatActivity {
                                 Toast.makeText(EditarGrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                                 loading(false);
                             } else {
-                                if (result.getHeaders().code() != 200) {
+                                if (result.getHeaders().code() == 500) {
+                                    Toast.makeText(EditarGrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                    loading(false);
+                                } else if (result.getHeaders().code() != 200) {
                                     Toast.makeText(EditarGrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else {

@@ -169,8 +169,12 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                                         Toast.makeText(Base.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                                     } else {
                                         //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
-                                        if (result.getHeaders().code() != 200) {
-                                            Toast.makeText(Base.this, "Erro de autenticação", Toast.LENGTH_SHORT).show();
+                                        if (result.getHeaders().code() == 500) {
+                                            //SE A API DEVOLVEU UM ERRO CONHECIDO
+                                            Toast.makeText(Base.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                        } else if (result.getHeaders().code() != 200) {
+                                            //SE A API DEVOLVEU UM ERRO DESCONHECIDO
+                                            Toast.makeText(Base.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                         } else {
                                             logado = false;
                                             username = null;

@@ -114,7 +114,7 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_edit_guardar) {
             //CRIA O NOVO GRUPO PASA SER ATUALIZADO
-            Grupo grupo_atualizado = grupo;
+            final Grupo grupo_atualizado = grupo;
             grupo_atualizado.abreviatura = grupo_abreviatura.getText().toString();
             grupo_atualizado.nome = grupo_nome.getText().toString();
             if (concelhos != null) {
@@ -137,10 +137,17 @@ public class EditarGrupoDetalhes extends AppCompatActivity {
                             Toast.makeText(EditarGrupoDetalhes.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                             loading(false);
                         } else {
-                            if (result.getHeaders().code() != 200) {
+                            if (result.getHeaders().code() == 500) {
+                                Toast.makeText(EditarGrupoDetalhes.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                loading(false);
+                            } else if (result.getHeaders().code() != 200) {
                                 Toast.makeText(EditarGrupoDetalhes.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                 loading(false);
                             } else {
+                                //EM CASO DE SUCESSO, ATUALIZA A BD E SAI DA ATIVIDADE
+                                CacheDB bd = new CacheDB(EditarGrupoDetalhes.this);
+                                bd.guardar_grupo(grupo_atualizado);
+                                bd.close();
                                 onBackPressed();
                             }
                         }
