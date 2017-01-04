@@ -33,17 +33,18 @@ public class AreaPessoal extends Base {
         viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
 
+        final ListView listview_grupos = (ListView) findViewById(R.id.listview_dados_api);
         findViewById(R.id.textView_grupos_administrados).setVisibility(View.VISIBLE);
 
-        ((ListView) findViewById(R.id.listview_dados_api)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listview_grupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, final long id) {
                 //OBTEM O ID E O NOME DO GRUPO
                 CacheDB bd = new CacheDB(AreaPessoal.this);
-                Grupo grupo_selecionado = (Grupo) ((ListView) findViewById(R.id.listview_dados_api)).getAdapter().getItem(position);
+                Grupo grupo_selecionado = (Grupo) listview_grupos.getAdapter().getItem(position);
+                bd.close();
                 final int grupo_id = grupo_selecionado.id;
                 final String grupo_abreviatura = grupo_selecionado.abreviatura;
-                bd.close();
 
                 new AlertDialog.Builder(AreaPessoal.this)
                         .setTitle(grupo_abreviatura)

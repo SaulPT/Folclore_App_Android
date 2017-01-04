@@ -34,11 +34,13 @@ public class Grupos extends Base {
         viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
 
-        ((ListView) findViewById(R.id.listview_dados_api)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListView listview_grupos = (ListView) findViewById(R.id.listview_dados_api);
+
+        listview_grupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CacheDB bd = new CacheDB(Grupos.this);
-                grupo_selecionado = Grupo.ordenar_nome(bd.obter_grupos()).get((int) id).id;
+                grupo_selecionado = ((Grupo) listview_grupos.getAdapter().getItem(position)).id;
                 bd.close();
 
                 Intent intente = new Intent("estg.psi.folclore.GRUPODETALHES");
