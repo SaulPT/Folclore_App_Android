@@ -25,13 +25,13 @@ import com.koushikdutta.ion.builder.Builders;
 import java.util.Calendar;
 
 import estg.psi.folclore.database.CacheDB;
-import estg.psi.folclore.model.Historial;
+import estg.psi.folclore.model.Corpogerente;
 
-public class EditarGrupoHistorial extends AppCompatActivity {
+public class EditarGrupoCorpogerente extends AppCompatActivity {
 
-    private Historial historial;
+    private Corpogerente corpogerente;
     private int grupo_id;
-    private EditText grupo_historial;
+    private EditText grupo_corpogerente;
     private boolean criar_novo;
 
     @Override
@@ -59,14 +59,14 @@ public class EditarGrupoHistorial extends AppCompatActivity {
         viewstub.inflate();
 
 
-        grupo_historial = (EditText) findViewById(R.id.editText_grupo_info);
-        ((TextView) findViewById(R.id.textview_grupo_info)).setText(R.string.history);
+        grupo_corpogerente = (EditText) findViewById(R.id.editText_grupo_info);
+        ((TextView) findViewById(R.id.textview_grupo_info)).setText(R.string.staff);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_menu, menu);
-        if (historial == null) {
+        if (corpogerente == null) {
             menu.findItem(R.id.action_edit_adicionar).setVisible(true);
             menu.findItem(R.id.action_edit_eliminar).setVisible(false);
             menu.findItem(R.id.action_edit_guardar).setVisible(false);
@@ -89,50 +89,50 @@ public class EditarGrupoHistorial extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_adicionar:
                 criar_novo = true;
-                historial = new Historial();
-                mostrar_historial();
+                corpogerente = new Corpogerente();
+                mostrar_corpogerente();
                 break;
             case R.id.action_edit_guardar:
-                //CRIA O NOVO HISTORIAL
-                final Historial novo_historial = historial;
-                novo_historial.grupo_id = grupo_id;
-                novo_historial.historial = grupo_historial.getText().toString();
-                novo_historial.data_edicao = Calendar.getInstance().getTime();
+                //CRIA O NOVO CORPO GERENTE
+                final Corpogerente novo_corpogerente = corpogerente;
+                novo_corpogerente.grupo_id = grupo_id;
+                novo_corpogerente.corposgerentes = grupo_corpogerente.getText().toString();
+                novo_corpogerente.data_edicao = Calendar.getInstance().getTime();
 
                 //SELECIONA O PEDIDO CONFORME SEJA ALTERAÇÃO OU CRIAÇÃO
                 Builders.Any.B ion_load;
                 if (criar_novo) {
-                    novo_historial.data_criacao = Calendar.getInstance().getTime();
-                    ion_load = Ion.with(this).load("POST", Base.API_URL + "grupohistorials");
+                    novo_corpogerente.data_criacao = Calendar.getInstance().getTime();
+                    ion_load = Ion.with(this).load("POST", Base.API_URL + "grupocorpogerentes");
                 } else {
-                    ion_load = Ion.with(this).load("PUT", Base.API_URL + "grupohistorials/" + grupo_id);
+                    ion_load = Ion.with(this).load("PUT", Base.API_URL + "grupocorpogerentes/" + grupo_id);
                 }
 
-                //ENVIA O NOVO HISTORIAL PARA A API
+                //ENVIA O NOVO CORPO GERENTE PARA A API
                 loading(true);
                 if (!verificar_ligacao_internet()) {
                     Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
                     loading(false);
                 } else {
                     ion_load.setTimeout(Base.TIMEOUT).addHeader("token", getIntent().getStringExtra("token"))
-                            .setStringBody(new GsonBuilder().setDateFormat(CacheDB.DATE_TIME_FORMAT).create().toJson(novo_historial))
+                            .setStringBody(new GsonBuilder().setDateFormat(CacheDB.DATE_TIME_FORMAT).create().toJson(novo_corpogerente))
                             .asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
                         @Override
                         public void onCompleted(Exception e, Response<JsonObject> result) {
                             if (e != null) {
-                                Toast.makeText(EditarGrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditarGrupoCorpogerente.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                                 loading(false);
                             } else {
                                 if (result.getHeaders().code() == 500) {
-                                    Toast.makeText(EditarGrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditarGrupoCorpogerente.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else if (result.getHeaders().code() != 200) {
-                                    Toast.makeText(EditarGrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditarGrupoCorpogerente.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else {
                                     //EM CASO DE SUCESSO, ATUALIZA A BD E SAI DA ATIVIDADE
-                                    CacheDB bd = new CacheDB(EditarGrupoHistorial.this);
-                                    bd.guardar_historial(novo_historial);
+                                    CacheDB bd = new CacheDB(EditarGrupoCorpogerente.this);
+                                    bd.guardar_corpogerente(novo_corpogerente);
                                     bd.close();
                                     onBackPressed();
                                 }
@@ -147,25 +147,25 @@ public class EditarGrupoHistorial extends AppCompatActivity {
                     Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
                     loading(false);
                 } else {
-                    Ion.with(this).load("DELETE", Base.API_URL + "grupohistorials/" + grupo_id).setTimeout(Base.TIMEOUT)
+                    Ion.with(this).load("DELETE", Base.API_URL + "grupocorpogerentes/" + grupo_id).setTimeout(Base.TIMEOUT)
                             .addHeader("token", getIntent().getStringExtra("token"))
                             .asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
                         @Override
                         public void onCompleted(Exception e, Response<JsonObject> result) {
                             if (e != null) {
-                                Toast.makeText(EditarGrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditarGrupoCorpogerente.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
                                 loading(false);
                             } else {
                                 if (result.getHeaders().code() == 500) {
-                                    Toast.makeText(EditarGrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditarGrupoCorpogerente.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else if (result.getHeaders().code() != 200) {
-                                    Toast.makeText(EditarGrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EditarGrupoCorpogerente.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                                     loading(false);
                                 } else {
                                     //EM CASO DE SUCESSO, ATUALIZA A BD E SAI DA ATIVIDADE
-                                    CacheDB bd = new CacheDB(EditarGrupoHistorial.this);
-                                    bd.apagar_historial(grupo_id);
+                                    CacheDB bd = new CacheDB(EditarGrupoCorpogerente.this);
+                                    bd.apagar_corpogerente(grupo_id);
                                     bd.close();
                                     onBackPressed();
                                 }
@@ -191,52 +191,52 @@ public class EditarGrupoHistorial extends AppCompatActivity {
         if (!verificar_ligacao_internet()) {
             Toast.makeText(this, "Sem ligação à internet", Toast.LENGTH_SHORT).show();
             CacheDB bd = new CacheDB(this);
-            historial = bd.obter_historial(grupo_id);
+            corpogerente = bd.obter_corpogerente(grupo_id);
             bd.close();
-            mostrar_historial();
+            mostrar_corpogerente();
         } else {
-            Ion.with(this).load(Base.API_URL + "grupohistorials/" + grupo_id).setTimeout(Base.TIMEOUT)
+            Ion.with(this).load(Base.API_URL + "grupocorpogerentes/" + grupo_id).setTimeout(Base.TIMEOUT)
                     .asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
                 @Override
                 public void onCompleted(Exception e, Response<JsonObject> result) {
-                    CacheDB bd = new CacheDB(EditarGrupoHistorial.this);
+                    CacheDB bd = new CacheDB(EditarGrupoCorpogerente.this);
                     if (e != null) {
-                        Toast.makeText(EditarGrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
-                        historial = bd.obter_historial(grupo_id);
+                        Toast.makeText(EditarGrupoCorpogerente.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                        corpogerente = bd.obter_corpogerente(grupo_id);
                     } else {
                         if (result.getHeaders().code() == 500) {
-                            Toast.makeText(EditarGrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
-                            bd.apagar_historial(grupo_id);
+                            Toast.makeText(EditarGrupoCorpogerente.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                            bd.apagar_corpogerente(grupo_id);
                             if (result.getResult().get("code").getAsInt() == 404) {
                                 onBackPressed();
                             }
                         } else if (result.getHeaders().code() != 200) {
-                            Toast.makeText(EditarGrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
-                            historial = bd.obter_historial(grupo_id);
+                            Toast.makeText(EditarGrupoCorpogerente.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
+                            corpogerente = bd.obter_corpogerente(grupo_id);
                         } else {
                             GsonBuilder gson = new GsonBuilder();
                             gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
-                            historial = gson.create().fromJson(result.getResult(), Historial.class);
-                            bd.guardar_historial(historial);
+                            corpogerente = gson.create().fromJson(result.getResult(), Corpogerente.class);
+                            bd.guardar_corpogerente(corpogerente);
                         }
                     }
                     bd.close();
-                    mostrar_historial();
+                    mostrar_corpogerente();
                 }
             });
         }
     }
 
-    private void mostrar_historial() {
-        if (historial == null) {
+    private void mostrar_corpogerente() {
+        if (corpogerente == null) {
             findViewById(R.id.loading_anim_editar_grupo_info).setVisibility(View.GONE);
-        } else if (historial.historial != null) {
+        } else if (corpogerente.corposgerentes != null) {
             //PARA MOSTRAR OS DADOS DO CONTEÚDO QUE VÊM EM HTML
             //VERIFICA SE O ANDROID É ANTES DO NOUGAT(7) PORQUE OS MÉTODOS DE PARSING DO HTML VARIAM
             if (Build.VERSION.SDK_INT >= 24) {
-                grupo_historial.setText(Html.fromHtml(historial.historial, Html.FROM_HTML_MODE_LEGACY));
+                grupo_corpogerente.setText(Html.fromHtml(corpogerente.corposgerentes, Html.FROM_HTML_MODE_LEGACY));
             } else {
-                grupo_historial.setText(Html.fromHtml(historial.historial));
+                grupo_corpogerente.setText(Html.fromHtml(corpogerente.corposgerentes));
             }
             criar_novo = false;
             loading(false);
@@ -245,7 +245,7 @@ public class EditarGrupoHistorial extends AppCompatActivity {
             loading(false);
         }
 
-        //CRIA OS BOTOES NA ACTION MENU CONFORME EXISTE OU NÃO HISTORIAL
+        //CRIA OS BOTOES NA ACTION MENU CONFORME EXISTE OU NÃO GRUPOS GERENTES
         invalidateOptionsMenu();
     }
 

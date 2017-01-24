@@ -28,10 +28,10 @@ import estg.psi.folclore.database.CacheDB;
 
 public class Base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
-    //public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
-    public static final String API_URL = "http://www.folcloreonline.pt/api/";
-    public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
+    public static final String IMG_URL = "http://10.0.2.2/FolcloreOnline/backend/web/upload/";
+    public static final String API_URL = "http://10.0.2.2/FolcloreOnline/api/";
+    //public static final String API_URL = "http://www.folcloreonline.pt/api/";
+    //public static final String IMG_URL = "http://www.folcloreonline.pt/admin/upload/";
     public static final int TIMEOUT = 10000;
     int grupo_selecionado;
     String username, token;
@@ -223,8 +223,11 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_grupo_detalhes:
                 intente = new Intent("estg.psi.folclore.GRUPODETALHES");
                 break;
-            default:
+            case R.id.nav_grupo_historial:
                 intente = new Intent("estg.psi.folclore.GRUPOHISTORIAL");
+                break;
+            default:
+                intente = new Intent("estg.psi.folclore.GRUPOCORPOGERENTE");
                 break;
         }
 

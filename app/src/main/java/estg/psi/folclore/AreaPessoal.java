@@ -61,6 +61,10 @@ public class AreaPessoal extends Base {
                                         intente.setAction("estg.psi.folclore.EDITARGRUPOHISTORIAL");
                                         intente.putExtra("grupo_nome", grupo_abreviatura);
                                         break;
+                                    case 2:
+                                        intente.setAction("estg.psi.folclore.EDITARGRUPOCORPOGERENTE");
+                                        intente.putExtra("grupo_nome", grupo_abreviatura);
+                                        break;
                                 }
                                 intente.putExtra("grupo_id", grupo_id);
                                 intente.putExtra("token", token);

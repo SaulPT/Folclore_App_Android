@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import estg.psi.folclore.model.Corpogerente;
 import estg.psi.folclore.model.Evento;
 import estg.psi.folclore.model.Grupo;
 import estg.psi.folclore.model.Historial;
@@ -23,7 +24,7 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final SimpleDateFormat dateformat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
-    private static final int VERSAO = 21;
+    private static final int VERSAO = 22;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -72,6 +73,11 @@ public class CacheDB extends SQLiteOpenHelper {
                 " historial TEXT," +
                 " data_criacao TEXT," +
                 " data_edicao TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS corpogerente" +
+                " (grupo_id INT PRIMARY KEY," +
+                " corposgerentes TEXT," +
+                " data_criacao TEXT," +
+                " data_edicao TEXT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -81,6 +87,7 @@ public class CacheDB extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS evento");
             db.execSQL("DROP TABLE IF EXISTS grupo");
             db.execSQL("DROP TABLE IF EXISTS historial");
+            db.execSQL("DROP TABLE IF EXISTS corpogerente");
             onCreate(db);
         }
     }
@@ -317,17 +324,19 @@ public class CacheDB extends SQLiteOpenHelper {
     }
 
     public void apagar_grupo(int id) {
+        apagar_historial(id);
+        apagar_corpogerente(id);
         getWritableDatabase().delete("grupo", "id = " + id, null);
-        getWritableDatabase().delete("historial", "grupo_id = " + id, null);
     }
 
     public void apagar_grupos() {
-        getWritableDatabase().delete("grupo", null, null);
         getWritableDatabase().delete("historial", null, null);
+        getWritableDatabase().delete("corpogerente", null, null);
+        getWritableDatabase().delete("grupo", null, null);
     }
 
 
-    //HISTORIAl   ///////////////////////////////////////////////////////////////////////////////////
+    //HISTORIAL   ///////////////////////////////////////////////////////////////////////////////////
 
     public void guardar_historial(Historial historial) {
         apagar_historial(historial.grupo_id);
@@ -369,5 +378,50 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public void apagar_historial(int grupo_id) {
         getWritableDatabase().delete("historial", "grupo_id = " + grupo_id, null);
+    }
+
+
+    //CORPO GERENTE   ////////////////////////////////////////////////////////////////////////////////
+
+    public void guardar_corpogerente(Corpogerente corpogerente) {
+        apagar_corpogerente(corpogerente.grupo_id);
+
+        ContentValues valores = new ContentValues();
+        valores.put("grupo_id", corpogerente.grupo_id);
+        valores.put("corposgerentes", corpogerente.corposgerentes);
+        valores.put("data_criacao", dateformat.format(corpogerente.data_criacao));
+        valores.put("data_edicao", dateformat.format(corpogerente.data_edicao));
+
+        getWritableDatabase().insert("corpogerente", null, valores);
+    }
+
+    public Corpogerente obter_corpogerente(int grupo_id) {
+        Cursor query_cursor = getReadableDatabase().query("corpogerente", null, "grupo_id = " + grupo_id, null, null, null, null);
+        Corpogerente corpogerente = null;
+
+        if (query_cursor.getCount() > 0) {
+            query_cursor.moveToFirst();
+            corpogerente = new Corpogerente();
+            corpogerente.grupo_id = query_cursor.getInt(query_cursor.getColumnIndex("grupo_id"));
+            corpogerente.corposgerentes = query_cursor.getString(query_cursor.getColumnIndex("corposgerentes"));
+
+            //O ANDROID OBRIGA TRATAR A EXCEPÇÃO QUE RESULTA DA CONVERSÃO DO TEXTO EM DATA
+            try {
+                String data = query_cursor.getString(query_cursor.getColumnIndex("data_criacao"));
+                corpogerente.data_criacao = dateformat.parse(data);
+                data = query_cursor.getString(query_cursor.getColumnIndex("data_edicao"));
+                corpogerente.data_edicao = dateformat.parse(data);
+            } catch (ParseException e) {
+                Log.e("DateParse", e.getMessage());
+            }
+        }
+
+        query_cursor.close();
+
+        return corpogerente;
+    }
+
+    public void apagar_corpogerente(int grupo_id) {
+        getWritableDatabase().delete("corpogerente", "grupo_id = " + grupo_id, null);
     }
 }

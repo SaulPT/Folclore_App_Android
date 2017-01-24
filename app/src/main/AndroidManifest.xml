@@ -59,6 +59,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="estg.psi.folclore.GrupoCorpogerente">
+            <intent-filter>
+                <action android:name="estg.psi.folclore.GRUPOCORPOGERENTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="estg.psi.folclore.Login"
             android:label="@string/action_login">
@@ -84,6 +90,12 @@
         <activity android:name="estg.psi.folclore.EditarGrupoHistorial">
             <intent-filter>
                 <action android:name="estg.psi.folclore.EDITARGRUPOHISTORIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name="estg.psi.folclore.EditarGrupoCorpogerente">
+            <intent-filter>
+                <action android:name="estg.psi.folclore.EDITARGRUPOCORPOGERENTE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

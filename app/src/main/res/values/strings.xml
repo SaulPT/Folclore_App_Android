@@ -19,6 +19,7 @@
     <string name="nav_no_group_selected">NENHUM GRUPO SELECIONADO</string>
     <string name="nav_group_details">Detalhes</string>
     <string name="nav_group_history">Historial</string>
+    <string name="nav_group_staff">Corpos gerentes</string>
 
 
     <!-- ACTION MENU -->
@@ -47,6 +48,7 @@
     <string-array name="popup_group_actions">
         <item>Detalhes</item>
         <item>Historial</item>
+        <item>Corpos gerentes</item>
     </string-array>
 
 
@@ -59,6 +61,7 @@
 
     <!-- ACTIVIDADE EDITARGRUPOINFO -->
     <string name="history">Historial:</string>
+    <string name="staff">Corpos gerentes:</string>
 
 
     <!-- LISVIEW -->
