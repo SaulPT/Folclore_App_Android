@@ -4,15 +4,19 @@
     <group>
         <item
             android:id="@+id/nav_noticias"
+            android:icon="@drawable/noticias_icon"
             android:title="@string/nav_news" />
         <item
             android:id="@+id/nav_parcerias"
+            android:icon="@drawable/parcerias_icon"
             android:title="@string/nav_partners" />
         <item
             android:id="@+id/nav_eventos"
+            android:icon="@drawable/eventos_icon"
             android:title="@string/nav_events" />
         <item
             android:id="@+id/nav_grupos"
+            android:icon="@drawable/grupos_icon"
             android:title="@string/nav_groups" />
     </group>
 
@@ -29,13 +33,20 @@
 
         <item
             android:id="@+id/nav_grupo_detalhes"
+            android:icon="@drawable/grupo_detalhes_icon"
             android:title="@string/nav_group_details" />
         <item
             android:id="@+id/nav_grupo_historial"
+            android:icon="@drawable/grupo_historial_icon"
             android:title="@string/nav_group_history" />
         <item
             android:id="@+id/nav_grupo_corpogerente"
+            android:icon="@drawable/grupo_corpogerente_icon"
             android:title="@string/nav_group_staff" />
+        <item
+            android:id="@+id/nav_grupo_contacto"
+            android:icon="@drawable/grupo_contactos_icon"
+            android:title="@string/nav_group_contacts" />
     </group>
 
 

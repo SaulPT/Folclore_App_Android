@@ -37,13 +37,12 @@ public class GrupoCorpogerente extends Base {
     public void onResume() {
         super.onResume();
 
-        final CacheDB bd = new CacheDB(this);
-
         if (grupo_selecionado == -1) {
             onBackPressed();
         } else {
-            //VERIFICA SE HÁ LIGAÇÃO À INTERNET
+            final CacheDB bd = new CacheDB(this);
             loading(true);
+            //VERIFICA SE HÁ LIGAÇÃO À INTERNET
             if (!verificar_ligacao_internet()) {
                 this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);
                 mostrar_corpogerente(bd.obter_corpogerente(grupo_selecionado));

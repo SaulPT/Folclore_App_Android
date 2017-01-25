@@ -31,13 +31,12 @@ public class GrupoDetalhes extends Base {
     public void onResume() {
         super.onResume();
 
-        final CacheDB bd = new CacheDB(this);
-
         if (grupo_selecionado == -1) {
             onBackPressed();
         } else {
-            //VERIFICA SE HÁ LIGAÇÃO À INTERNET
+            final CacheDB bd = new CacheDB(this);
             loading(true);
+            //VERIFICA SE HÁ LIGAÇÃO À INTERNET
             if (!verificar_ligacao_internet()) {
                 //USA O ADAPTER DOS GRUPOS PARA MOSTRAR OS DADOS DO GRUPO OBTIDO
                 this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);

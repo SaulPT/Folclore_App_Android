@@ -1,10 +1,6 @@
 <resources>
 
     <string name="app_name">Folclore Online</string>
-    <string name="cancel">Cancelar</string>
-    <string name="save">Guardar</string>
-    <string name="delete">Eliminar</string>
-    <string name="add">Adicionar</string>
 
 
     <!-- NAVIGATION DRAWER -->
@@ -20,6 +16,7 @@
     <string name="nav_group_details">Detalhes</string>
     <string name="nav_group_history">Historial</string>
     <string name="nav_group_staff">Corpos gerentes</string>
+    <string name="nav_group_contacts">Contactos</string>
 
 
     <!-- ACTION MENU -->
@@ -27,6 +24,10 @@
     <string name="action_profile">Área Pessoal</string>
     <string name="action_login">Iniciar Sessão</string>
     <string name="action_logout">Terminar sessão</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
+    <string name="delete">Eliminar</string>
+    <string name="add">Adicionar</string>
 
 
     <!-- DEFINIÇÕES -->
