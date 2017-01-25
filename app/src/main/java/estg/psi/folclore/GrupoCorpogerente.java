@@ -30,7 +30,7 @@ public class GrupoCorpogerente extends Base {
         viewstub.inflate();
 
         textview_corpogerente = (TextView) findViewById(R.id.textview_conteudo_info);
-        ((TextView) findViewById(R.id.textview_titulo_info)).setText(R.string.staff);
+        ((TextView) findViewById(R.id.textview_titulo_info)).setText(R.string.nav_group_staff);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import estg.psi.folclore.model.Contacto;
 import estg.psi.folclore.model.Corpogerente;
 import estg.psi.folclore.model.Evento;
 import estg.psi.folclore.model.Grupo;
@@ -24,7 +25,7 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final SimpleDateFormat dateformat = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
-    private static final int VERSAO = 22;
+    private static final int VERSAO = 23;
     private static final String NOME = "folclore.db";
 
     public CacheDB(Context context) {
@@ -78,6 +79,15 @@ public class CacheDB extends SQLiteOpenHelper {
                 " corposgerentes TEXT," +
                 " data_criacao TEXT," +
                 " data_edicao TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS contacto" +
+                " (grupo_id INT PRIMARY KEY," +
+                " email TEXT," +
+                " facebook TEXT," +
+                " telefone TEXT," +
+                " morada TEXT," +
+                " site TEXT," +
+                " codigo_postal TEXT," +
+                " telemovel TEXT)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -88,6 +98,7 @@ public class CacheDB extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS grupo");
             db.execSQL("DROP TABLE IF EXISTS historial");
             db.execSQL("DROP TABLE IF EXISTS corpogerente");
+            db.execSQL("DROP TABLE IF EXISTS contacto");
             onCreate(db);
         }
     }
@@ -326,12 +337,14 @@ public class CacheDB extends SQLiteOpenHelper {
     public void apagar_grupo(int id) {
         apagar_historial(id);
         apagar_corpogerente(id);
+        apagar_contacto(id);
         getWritableDatabase().delete("grupo", "id = " + id, null);
     }
 
     public void apagar_grupos() {
         getWritableDatabase().delete("historial", null, null);
         getWritableDatabase().delete("corpogerente", null, null);
+        getWritableDatabase().delete("contacto", null, null);
         getWritableDatabase().delete("grupo", null, null);
     }
 
@@ -423,5 +436,50 @@ public class CacheDB extends SQLiteOpenHelper {
 
     public void apagar_corpogerente(int grupo_id) {
         getWritableDatabase().delete("corpogerente", "grupo_id = " + grupo_id, null);
+    }
+
+
+    //CONTACTO   ///////////////////////////////////////////////////////////////////////////////////
+
+    public void guardar_contacto(Contacto contacto) {
+        apagar_contacto(contacto.grupo_id);
+
+        ContentValues valores = new ContentValues();
+        valores.put("grupo_id", contacto.grupo_id);
+        valores.put("email", contacto.email);
+        valores.put("facebook", contacto.facebook);
+        valores.put("telefone", contacto.telefone);
+        valores.put("morada", contacto.morada);
+        valores.put("site", contacto.site);
+        valores.put("codigo_postal", contacto.codigo_postal);
+        valores.put("telemovel", contacto.telemovel);
+
+        getWritableDatabase().insert("contacto", null, valores);
+    }
+
+    public Contacto obter_contacto(int grupo_id) {
+        Cursor query_cursor = getReadableDatabase().query("contacto", null, "grupo_id = " + grupo_id, null, null, null, null);
+        Contacto contacto = null;
+
+        if (query_cursor.getCount() > 0) {
+            query_cursor.moveToFirst();
+            contacto = new Contacto();
+            contacto.grupo_id = query_cursor.getInt(query_cursor.getColumnIndex("grupo_id"));
+            contacto.email = query_cursor.getString(query_cursor.getColumnIndex("email"));
+            contacto.facebook = query_cursor.getString(query_cursor.getColumnIndex("facebook"));
+            contacto.telefone = query_cursor.getString(query_cursor.getColumnIndex("telefone"));
+            contacto.morada = query_cursor.getString(query_cursor.getColumnIndex("morada"));
+            contacto.site = query_cursor.getString(query_cursor.getColumnIndex("site"));
+            contacto.codigo_postal = query_cursor.getString(query_cursor.getColumnIndex("codigo_postal"));
+            contacto.telemovel = query_cursor.getString(query_cursor.getColumnIndex("telemovel"));
+        }
+
+        query_cursor.close();
+
+        return contacto;
+    }
+
+    public void apagar_contacto(int grupo_id) {
+        getWritableDatabase().delete("contacto", "grupo_id = " + grupo_id, null);
     }
 }

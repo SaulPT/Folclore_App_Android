@@ -43,7 +43,6 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
 
         //CARREGA O LAYOUT PRINCIPAL
         setContentView(R.layout.home);
-        //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -226,8 +225,11 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_grupo_historial:
                 intente = new Intent("estg.psi.folclore.GRUPOHISTORIAL");
                 break;
-            default:
+            case R.id.nav_grupo_corpogerente:
                 intente = new Intent("estg.psi.folclore.GRUPOCORPOGERENTE");
+                break;
+            default:
+                intente = new Intent("estg.psi.folclore.GRUPOCONTACTO");
                 break;
         }
 

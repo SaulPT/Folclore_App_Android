@@ -30,7 +30,7 @@ public class GrupoHistorial extends Base {
         viewstub.inflate();
 
         textview_historial = (TextView) findViewById(R.id.textview_conteudo_info);
-        ((TextView) findViewById(R.id.textview_titulo_info)).setText(R.string.history);
+        ((TextView) findViewById(R.id.textview_titulo_info)).setText(R.string.nav_group_history);
     }
 
     @Override

@@ -65,6 +65,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="estg.psi.folclore.GrupoContacto">
+            <intent-filter>
+                <action android:name="estg.psi.folclore.GRUPOCONTACTO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="estg.psi.folclore.Login"
             android:label="@string/action_login">

@@ -42,6 +42,8 @@
     <string name="password">Password</string>
     <string name="remember_me">Lembrar</string>
     <string name="login_ok">Entrar</string>
+    <string name="activity_noticias_image_description">Imagem</string>
+    <string name="remove_selected_group">Remover Grupo Selecionado</string>
 
 
     <!-- ÁREA PESSOAL -->
@@ -65,14 +67,20 @@
     <string name="staff">Corpos gerentes:</string>
 
 
-    <!-- LISVIEW -->
+    <!-- LISVIEW ITEM -->
     <string name="tittle">Título</string>
     <string name="date">Data</string>
     <string name="content">Conteúdo</string>
 
 
-    <!-- OUTRAS ACTIVIDADES -->
-    <string name="activity_noticias_image_description">Imagem</string>
-    <string name="remove_selected_group">Remover Grupo Selecionado</string>
+    <!-- ATIVIDADE GRUPO CONTACTO -->
+    <string name="address">Morada</string>
+    <string name="postcode">Código postal</string>
+    <string name="website">Website</string>
+    <string name="email">E-mail</string>
+    <string name="phone">Telefone</string>
+    <string name="mobilephone">Telemóvel</string>
+    <string name="facebook">Facebook</string>
+
 
 </resources>

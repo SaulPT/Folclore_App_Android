@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/tittle"
-        android:textSize="@dimen/listview_titulo_font"
+        android:textSize="@dimen/navigation_header_username_font"
         android:textStyle="normal|bold" />
 
     <TextView

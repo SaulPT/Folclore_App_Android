@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group>
+    <group
+        android:id="@+id/nav_menu_geral"
+        android:enabled="true">
         <item
             android:id="@+id/nav_noticias"
             android:icon="@drawable/noticias_icon"
@@ -20,10 +22,10 @@
             android:title="@string/nav_groups" />
     </group>
 
-    <group
-        android:enabled="false">
+    <group>
         <item
             android:id="@+id/nav_grupo_selecionado"
+            android:enabled="false"
             android:title="@string/nav_no_group_selected" />
     </group>
 
