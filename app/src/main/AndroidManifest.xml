@@ -105,6 +105,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="estg.psi.folclore.EditarGrupoContacto">
+            <intent-filter>
+                <action android:name="estg.psi.folclore.EDITARGRUPOCONTACTO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="estg.psi.folclore.Definicoes"
             android:label="@string/action_settings">
