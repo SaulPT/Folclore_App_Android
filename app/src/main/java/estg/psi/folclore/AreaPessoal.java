@@ -81,9 +81,18 @@ public class AreaPessoal extends Base {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
+        //TERMINA A ATIVIDADE SE NÃO EXISTIR UM UTILIZADOR AUTENTICADO
+        if (!logado) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         //VERIFICA SE HÁ LIGAÇÃO À INTERNET
         if (!verificar_ligacao_internet()) {
@@ -124,6 +133,5 @@ public class AreaPessoal extends Base {
                 }
             });
         }
-
     }
 }

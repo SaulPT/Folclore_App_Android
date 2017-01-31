@@ -17,111 +17,116 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/layout_grupo_contactos"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/layout_grupo_contactos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/address"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textview_morada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/postcode"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_morada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_codigopostal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/postcode"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/website"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_codigopostal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_website"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/website"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/email"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/email"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/phone"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_telefone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/phone"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/mobilephone"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_telefone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_telemovel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/mobilephone"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/facebook"
-            android:textSize="@dimen/navigation_header_username_font"
-            android:textStyle="normal|bold" />
+            <TextView
+                android:id="@+id/textview_telemovel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/facebook"
+                android:textSize="@dimen/navigation_header_username_font"
+                android:textStyle="normal|bold" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textview_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/listview_data_conteudo_font" />
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

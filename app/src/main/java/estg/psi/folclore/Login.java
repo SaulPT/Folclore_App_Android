@@ -84,13 +84,12 @@ public class Login extends Base {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onStart() {
+        super.onStart();
 
         //TERMINA A ATIVIDADE SE EXISTIR UM UTILIZADOR AUTENTICADO
-        if (getIntent().getBooleanExtra("logado", false)) {
-            onBackPressed();
+        if (logado) {
+            finish();
         }
     }
-
 }

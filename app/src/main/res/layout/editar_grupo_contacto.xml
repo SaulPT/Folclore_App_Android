@@ -17,110 +17,115 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/layout_editar_grupo_contactos"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/layout_editar_grupo_contactos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_morada"
-            android:text="@string/edit_address"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText_morada"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_morada"
+                android:text="@string/edit_address"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_codigopostal"
-            android:text="@string/edit_postcode"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_morada"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_codigopostal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_codigopostal"
+                android:text="@string/edit_postcode"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_website"
-            android:text="@string/edit_website"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_codigopostal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_website"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_website"
+                android:text="@string/edit_website"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_email"
-            android:text="@string/edit_email"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_email"
+                android:text="@string/edit_email"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_telefone"
-            android:text="@string/edit_phone"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_telefone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_telefone"
+                android:text="@string/edit_phone"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_telemovel"
-            android:text="@string/edit_mobilephone"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_telefone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_telemovel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_telemovel"
+                android:text="@string/edit_mobilephone"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_facebook"
-            android:text="@string/edit_facebook"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <EditText
+                android:id="@+id/editText_telemovel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/listview_data_conteudo_font" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_facebook"
+                android:text="@string/edit_facebook"
+                android:textSize="@dimen/listview_data_conteudo_font" />
+
+            <EditText
+                android:id="@+id/editText_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/listview_data_conteudo_font" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

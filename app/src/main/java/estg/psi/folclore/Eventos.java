@@ -30,7 +30,7 @@ public class Eventos extends Base {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
 
         loading_listview(true);

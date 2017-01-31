@@ -34,59 +34,64 @@ public class GrupoHistorial extends Base {
     }
 
     @Override
-    public void onResume() {
+    protected void onStart() {
+        super.onStart();
+
+        //TERMINA A ATIVIDADE SE NÃO EXISTIR UM GRUPO SELECIONADO
+        if (grupo_selecionado == -1) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
 
-        if (grupo_selecionado == -1) {
-            onBackPressed();
+        final CacheDB bd = new CacheDB(this);
+        loading(true);
+        //VERIFICA SE HÁ LIGAÇÃO À INTERNET
+        if (!verificar_ligacao_internet()) {
+            this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);
+            mostrar_historial(bd.obter_historial(grupo_selecionado));
+            bd.close();
         } else {
-            final CacheDB bd = new CacheDB(this);
-            loading(true);
-            //VERIFICA SE HÁ LIGAÇÃO À INTERNET
-            if (!verificar_ligacao_internet()) {
-                this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);
-                mostrar_historial(bd.obter_historial(grupo_selecionado));
-                bd.close();
-            } else {
-                //SE SIM, ACEDE À API
-                Ion.with(this).load(API_URL + "grupohistorials/" + grupo_selecionado).setTimeout(TIMEOUT).asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
-                    @Override
-                    public void onCompleted(Exception e, Response<JsonObject> result) {
-                        //EM CASO DE ERRO NA LIGAÇÃO
-                        if (e != null) {
-                            Toast.makeText(GrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
-                            if (result.getHeaders().code() == 500) {
-                                //SE A API DEVOLVEU UM ERRO CONHECIDO
-                                Toast.makeText(GrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
-                                bd.apagar_historial(grupo_selecionado);
-                                if (result.getResult().get("code").getAsInt() == 404) {
-                                    grupo_selecionado = -1;
-                                    onBackPressed();
-                                }
-                            } else if (result.getHeaders().code() != 200) {
-                                //SE A API DEVOLVEU UM ERRO DESCONHECIDO
-                                Toast.makeText(GrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
-                            } else {
-                                //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
-                                GsonBuilder gson = new GsonBuilder();
-                                gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
-                                Historial historial = gson.create().fromJson(result.getResult(), Historial.class);
-                                bd.guardar_historial(historial);
+            //SE SIM, ACEDE À API
+            Ion.with(this).load(API_URL + "grupohistorials/" + grupo_selecionado).setTimeout(TIMEOUT).asJsonObject().withResponse().setCallback(new FutureCallback<Response<JsonObject>>() {
+                @Override
+                public void onCompleted(Exception e, Response<JsonObject> result) {
+                    //EM CASO DE ERRO NA LIGAÇÃO
+                    if (e != null) {
+                        Toast.makeText(GrupoHistorial.this, "Erro na ligação ao servidor", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //EM CASO DE SUCESSO NA LIGAÇÃO VERIFICA O TIPO DE RESULTADO OBTIDO
+                        if (result.getHeaders().code() == 500) {
+                            //SE A API DEVOLVEU UM ERRO CONHECIDO
+                            Toast.makeText(GrupoHistorial.this, result.getResult().get("message").toString(), Toast.LENGTH_SHORT).show();
+                            bd.apagar_historial(grupo_selecionado);
+                            if (result.getResult().get("code").getAsInt() == 404) {
+                                grupo_selecionado = -1;
                             }
-                        }
-
-                        if (grupo_selecionado != -1) {
-                            GrupoHistorial.this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);
-                            mostrar_historial(bd.obter_historial(grupo_selecionado));
+                        } else if (result.getHeaders().code() != 200) {
+                            //SE A API DEVOLVEU UM ERRO DESCONHECIDO
+                            Toast.makeText(GrupoHistorial.this, "Erro do servidor (" + result.getHeaders().code() + " - " + result.getHeaders().message() + ")", Toast.LENGTH_SHORT).show();
                         } else {
-                            onBackPressed();
+                            //SE A API DEVOLVEU OS DADOS COM SUCESSO, DESERIALIZA E ATUALIZA A BD
+                            GsonBuilder gson = new GsonBuilder();
+                            gson.setDateFormat(CacheDB.DATE_TIME_FORMAT);
+                            Historial historial = gson.create().fromJson(result.getResult(), Historial.class);
+                            bd.guardar_historial(historial);
                         }
-                        bd.close();
                     }
-                });
-            }
+
+                    if (grupo_selecionado != -1) {
+                        GrupoHistorial.this.setTitle(bd.obter_grupo(grupo_selecionado).abreviatura);
+                        mostrar_historial(bd.obter_historial(grupo_selecionado));
+                    } else {
+                        finish();
+                    }
+                    bd.close();
+                }
+            });
         }
 
     }

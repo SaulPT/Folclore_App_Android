@@ -1,7 +1,9 @@
 package estg.psi.folclore;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.AdapterView;
@@ -34,20 +36,20 @@ public class Grupos extends Base {
         viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
 
-        final ListView listview_grupos = (ListView) findViewById(R.id.listview_dados_api);
+        final SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
 
+        final ListView listview_grupos = (ListView) findViewById(R.id.listview_dados_api);
         listview_grupos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CacheDB bd = new CacheDB(Grupos.this);
                 grupo_selecionado = ((Grupo) listview_grupos.getAdapter().getItem(position)).id;
                 bd.close();
-
+                definicoes.edit().putInt("grupo_selecionado", grupo_selecionado).apply();
                 Intent intente = new Intent("estg.psi.folclore.GRUPODETALHES");
                 iniciar_intente_extras(intente);
             }
         });
-
 
         button_remover_grupo = (Button) findViewById(R.id.button_remover_grupo_selecionado);
         button_remover_grupo.setVisibility(View.VISIBLE);
@@ -55,6 +57,7 @@ public class Grupos extends Base {
             @Override
             public void onClick(View v) {
                 grupo_selecionado = -1;
+                definicoes.edit().putInt("grupo_selecionado", grupo_selecionado).apply();
                 atualizar_nav_header_action_menu();
                 v.setEnabled(false);
             }
@@ -62,10 +65,9 @@ public class Grupos extends Base {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
 
-        //if (getIntent().getIntExtra("grupo_selecionado", -1) == -1) {
         if (grupo_selecionado == -1) {
             button_remover_grupo.setEnabled(false);
         } else {

@@ -18,75 +18,80 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/layout_editar_detalhes_info"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/grupo_imagem"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/imageview_height"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:contentDescription="@string/activity_noticias_image_description"
-            app:srcCompat="@drawable/default_img" />
-
-        <TextView
-            android:id="@+id/textview_grupo_abreviatura"
+        <LinearLayout
+            android:id="@+id/layout_editar_detalhes_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_grupo_abreviatura"
-            android:text="@string/shortname"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText_grupo_abreviatura"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <ImageView
+                android:id="@+id/grupo_imagem"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/imageview_height"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/activity_noticias_image_description"
+                app:srcCompat="@drawable/default_img" />
 
-        <TextView
-            android:id="@+id/textview_distrito"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/district"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:id="@+id/textview_grupo_abreviatura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_grupo_abreviatura"
+                android:text="@string/shortname"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <Spinner
-            android:id="@+id/spinner_grupo_distrito"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/editText_grupo_abreviatura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <TextView
-            android:id="@+id/textview_concelho"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/towncity"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:id="@+id/textview_distrito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/district"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <Spinner
-            android:id="@+id/spinner_grupo_concelho"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/spinner_grupo_distrito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textview_grupo_nome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/editText_grupo_nome"
-            android:text="@string/complete_name"
-            android:textSize="@dimen/listview_data_conteudo_font" />
+            <TextView
+                android:id="@+id/textview_concelho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/towncity"
+                android:textSize="@dimen/listview_data_conteudo_font" />
 
-        <EditText
-            android:id="@+id/editText_grupo_nome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/listview_data_conteudo_font" />
-    </LinearLayout>
+            <Spinner
+                android:id="@+id/spinner_grupo_concelho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textview_grupo_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/editText_grupo_nome"
+                android:text="@string/complete_name"
+                android:textSize="@dimen/listview_data_conteudo_font" />
+
+            <EditText
+                android:id="@+id/editText_grupo_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/listview_data_conteudo_font" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

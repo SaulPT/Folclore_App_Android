@@ -3,6 +3,8 @@ package estg.psi.folclore;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,6 +57,9 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //ICONES DO MENU A CORES
+        navigationView.setItemIconTintList(null);
     }
 
     @Override
@@ -64,42 +69,23 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
 
         SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
 
-        if (getIntent() != null) {
-            //VERIFICA O ESTADO DO LOGIN
-            if (!logado) {
-                logado = getIntent().getBooleanExtra("logado", false);
-                username = getIntent().getStringExtra("username");
-                token = getIntent().getStringExtra("token");
-            }
-
-            //DEFINE O ESTADO DOS ITEMS DO MENU DO GRUPO TENDO EM CONTA A PRIMEIRA VERIFICAÇÃO
-            if (getClass().getSimpleName().equals("HomeNoticias") && definicoes.getBoolean("grupo_auto", false)) {
-                definicoes.edit().remove("grupo_auto").apply();
-            } else {
-                grupo_selecionado = getIntent().getIntExtra("grupo_selecionado", -1);
-            }
-
-            atualizar_nav_header_action_menu();
+        //ATUALIZA O ESTADO DA APLICAÇÃO PELAS PREFERENCES
+        if (logado = definicoes.getBoolean("logado", false)) {
+            username = definicoes.getString("username", null);
+            token = definicoes.getString("token", null);
         }
-
-        //GUARDA O GRUPO SELECIONADO NAS SHAREDPREFERENCES SE A OPÇÃO ESTIVER ATIVA
         if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
-            definicoes.edit().putInt("grupo_selecionado", grupo_selecionado).apply();
+            grupo_selecionado = definicoes.getInt("grupo_selecionado", -1);
         } else {
-            definicoes.edit().remove("grupo_selecionado").apply();
+            grupo_selecionado = -1;
         }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            onNewIntent(data);
-        }
+        atualizar_nav_header_action_menu();
     }
 
     @Override
@@ -108,15 +94,6 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //ENVIA OS DADOS ATUAIS PARA AS ANTIVIDADES ANTERIORES SEREM ATUALIZADAS
-            Intent intente = getIntent();
-            intente.putExtra("grupo_selecionado", grupo_selecionado);
-            intente.putExtra("logado", logado);
-            if (logado) {
-                intente.putExtra("username", username);
-                intente.putExtra("token", token);
-            }
-            setResult(1, intente);
             super.onBackPressed();
         }
     }
@@ -143,7 +120,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
 
         switch (item.getItemId()) {
             case R.id.action_definicoes:
-                iniciar_intente_extras(new Intent("estg.psi.folclore.DEFINICOES"));
+                startActivity(new Intent("estg.psi.folclore.DEFINICOES"));
                 break;
             case R.id.action_area_pessoal:
                 if (verificar_ligacao_internet()) {
@@ -180,7 +157,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                                             token = null;
 
                                             //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
-                                            guardar_definicoes_logado(logado);
+                                            guardar_definicoes_logado(false);
 
                                             //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
                                             if (nome_classe_actual.equals("AreaPessoal")) {
@@ -256,14 +233,26 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
             txtusername.setText(R.string.nav_public_username);
         }
 
-        //MOSTRA O NOME DO GRUPO SELECIONADO
-        NavigationView nav_view = ((NavigationView) findViewById(R.id.nav_view));
+        //MOSTRA O NOME E AIMAGEM DO GRUPO SELECIONADO
+        final NavigationView nav_view = ((NavigationView) findViewById(R.id.nav_view));
         CacheDB bd = new CacheDB(this);
         if (grupo_selecionado != -1 && bd.obter_grupo(grupo_selecionado) != null) {
             nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setTitle(bd.obter_grupo(grupo_selecionado).abreviatura.toUpperCase());
+            Ion.with(this).load(Base.IMG_URL + "grupos/" + bd.obter_grupo(grupo_selecionado).logo)
+                    .asBitmap().setCallback(new FutureCallback<Bitmap>() {
+                @Override
+                public void onCompleted(Exception e, Bitmap result) {
+                    if (e != null) {
+                        nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setIcon(R.mipmap.ic_launcher);
+                    } else {
+                        nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setIcon(new BitmapDrawable(getResources(), result));
+                    }
+                }
+            });
             nav_view.getMenu().setGroupEnabled(R.id.nav_menu_grupo, true);
         } else {
             nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setTitle("NENHUM GRUPO SELECIONADO");
+            nav_view.getMenu().findItem(R.id.nav_grupo_selecionado).setIcon(null);
             nav_view.getMenu().setGroupEnabled(R.id.nav_menu_grupo, false);
         }
         bd.close();
@@ -276,7 +265,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     void guardar_definicoes_logado(boolean lembrar_login) {
         SharedPreferences.Editor definicoes = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (lembrar_login) {
-            definicoes.putBoolean("logado", lembrar_login);
+            definicoes.putBoolean("logado", true);
             definicoes.putString("username", username);
             definicoes.putString("token", token);
         } else {
@@ -291,15 +280,13 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     void iniciar_intente_extras(Intent intente) {
         intente.putExtra("grupo_selecionado", grupo_selecionado);
         intente.putExtra("logado", logado);
-
         if (logado) {
             intente.putExtra("username", username);
             intente.putExtra("token", token);
         }
 
         intente.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-        startActivityForResult(intente, 1);
+        startActivity(intente);
     }
 
 
