@@ -66,7 +66,7 @@ public class Login extends Base {
                                     token = result.getResult().get("token").getAsString();
 
                                     //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
-                                    guardar_definicoes_logado(((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
+                                    guardar_definicoes_logado(true, ((CheckBox) findViewById(R.id.chkbox_lembrar_login)).isChecked());
 
                                     iniciar_intente_extras(new Intent("estg.psi.folclore.AREAPESSOAL"));
 
@@ -86,6 +86,8 @@ public class Login extends Base {
     @Override
     protected void onStart() {
         super.onStart();
+
+        ((EditText) findViewById(R.id.login_password)).setText(null);
 
         //TERMINA A ATIVIDADE SE EXISTIR UM UTILIZADOR AUTENTICADO
         if (logado) {

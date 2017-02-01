@@ -1,5 +1,6 @@
 package estg.psi.folclore;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +32,26 @@ public class HomeNoticias extends Base {
         ViewStub viewstub = (ViewStub) findViewById(R.id.viewstub);
         viewstub.setLayoutResource(R.layout.listview_dados_api);
         viewstub.inflate();
+
+        //OBTÉM INFORMAÇÃO NO ARRANQUE DA APLICAÇÃO
+        if (getIntent().getAction().equals("android.intent.action.MAIN")) {
+            SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
+            if (definicoes.getBoolean("login_lembrar", false)) {
+                logado = true;
+                username = definicoes.getString("username", null);
+                token = definicoes.getString("token", null);
+            } else {
+                logado = false;
+                guardar_definicoes_logado(false, false);
+            }
+            if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
+                grupo_selecionado = definicoes.getInt("grupo_selecionado", -1);
+            } else {
+                grupo_selecionado = -1;
+                definicoes.edit().remove("grupo_selecionado").apply();
+            }
+            getIntent().setAction("estg.psi.folclore.NOTICIAS");
+        }
     }
 
 

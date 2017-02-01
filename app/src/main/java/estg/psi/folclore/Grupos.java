@@ -57,7 +57,7 @@ public class Grupos extends Base {
             @Override
             public void onClick(View v) {
                 grupo_selecionado = -1;
-                definicoes.edit().putInt("grupo_selecionado", grupo_selecionado).apply();
+                definicoes.edit().remove("grupo_selecionado").apply();
                 atualizar_nav_header_action_menu();
                 v.setEnabled(false);
             }

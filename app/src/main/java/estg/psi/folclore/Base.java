@@ -72,17 +72,14 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onStart() {
         super.onStart();
 
-        SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
-
         //ATUALIZA O ESTADO DA APLICAÇÃO PELAS PREFERENCES
-        if (logado = definicoes.getBoolean("logado", false)) {
-            username = definicoes.getString("username", null);
-            token = definicoes.getString("token", null);
-        }
-        if (definicoes.getBoolean("guardar_grupo_selecionado", false)) {
+        if (!getIntent().getAction().equals("android.intent.action.MAIN")) {
+            SharedPreferences definicoes = PreferenceManager.getDefaultSharedPreferences(this);
+            if (logado = definicoes.getBoolean("logado", false)) {
+                username = definicoes.getString("username", null);
+                token = definicoes.getString("token", null);
+            }
             grupo_selecionado = definicoes.getInt("grupo_selecionado", -1);
-        } else {
-            grupo_selecionado = -1;
         }
 
         atualizar_nav_header_action_menu();
@@ -157,7 +154,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
                                             token = null;
 
                                             //GUARDA NAS DEFINIÇÕES O ESTADO DO LOGIN E O TOKEN
-                                            guardar_definicoes_logado(false);
+                                            guardar_definicoes_logado(false, false);
 
                                             //SE O ECRÃ ATUAL FOR PRIVADO, CARREGA UMA NOVA ATIVIDADE
                                             if (nome_classe_actual.equals("AreaPessoal")) {
@@ -262,9 +259,14 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
-    void guardar_definicoes_logado(boolean lembrar_login) {
+    void guardar_definicoes_logado(boolean logado, boolean lembrar_login) {
         SharedPreferences.Editor definicoes = PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (lembrar_login) {
+            definicoes.putBoolean("login_lembrar", true);
+        } else {
+            definicoes.remove("login_lembrar");
+        }
+        if (logado) {
             definicoes.putBoolean("logado", true);
             definicoes.putString("username", username);
             definicoes.putString("token", token);
@@ -273,6 +275,7 @@ public class Base extends AppCompatActivity implements NavigationView.OnNavigati
             definicoes.remove("username");
             definicoes.remove("token");
         }
+
         definicoes.apply();
     }
 
